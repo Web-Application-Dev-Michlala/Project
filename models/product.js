@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 
 const productSchema = new mongoose.Schema({
-    Name: {
+    name: {
         type: String,
         required: true
     },
@@ -31,15 +31,15 @@ const productSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    Description: {
+    description: {
         type: String,
         required: true
     },
-    Price: {
+    price: {
         type: mongoose.Types.Decimal128,
         required: true
     },
-    Amount: {
+    amount: {
         type: Number,
         required: true
     },
