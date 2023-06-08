@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 
+
 const productSchema = require('./product.js');  //SubDocument schema
 
 const orderSchema = new mongoose.Schema({

@@ -8,14 +8,14 @@ const userSchema = new mongoose.Schema({
         required: true,
         maxlength: 24
     },
-    Password: {
+    password: {
         type: String,
         required: true,
     },
-    Age: {
+    age: {
         type: Number,
     },
-    Birthdate: {
+    birthdate: {
         type: Date,
     },
     email: {
@@ -30,5 +30,4 @@ const userSchema = new mongoose.Schema({
         type: [orderSchema],
     }],
 });
-
 module.exports = mongoose.model('User', userSchema);
