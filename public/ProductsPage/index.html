@@ -7,31 +7,47 @@
     </head>
     <body>
         <div class="container">
-            <div class="row justify-content-center rounded" id="content-box">
-                <div class="col-8 pos">
+            <div class="row justify-content-evenly">
+                <div class="col-5" id="content-box">
                     <div class="card h-100 p-3 d-flex flex-column">
                         <div class="card-body">
-                            <h2 class="card-title" id="productName">Product Name</h2>
+                            <h2 class="card-title" id="productName" style="border-bottom: 1px solid #00000038;">Product Name</h2>
                             <p class="card-text">
-                                <strong>Size:</strong> <span id="productSize">Medium</span><br>
-                                <strong>Category:</strong> <span id="productCategory">Electronics</span><br>
-                                <strong>Color:</strong> <span id="productColor">Red</span><br>
-                                <strong>Description:</strong> <span id="productDescription">Some description about the product</span><br>
+                                <br>
+                                <strong>Size:</strong> <span id="productSize">Medium</span>
+                                <br>
+                                <strong>Category:</strong> <span id="productCategory">Electronics</span>
+                                <br>
+                                <strong>Color:</strong> <span id="productColor">Red</span>
+                                <br>
+                                <p class="text-break" id="productDescription">
+                                    <strong>Description:</strong> <br>
+                                    Some description about the product<br>
+                                    Also some more text<br>
+                                    and here some more information about the product
+                                </p>
+                                <br>
                             </p> 
                         </div>
-                        <div class="input-group mb-5 mt-auto d-flex">
-                            <button class="btn btn-outline-secondary" type="button" id="button-decrease"><strong>-</strong></button>
-                            <input type="text" class="form-control form-control-sm bg-secondary-subtle" id="productQuantity" value="1" readonly style="max-width: 50px;">
-                            <button class="btn btn-outline-secondary" type="button" id="button-increase"><strong>+</strong></button>
+                        <div class="d-flex justify-content-between" style="border-bottom: 1px solid #00000038; padding: 10px;">
+                            <div class="input-group" style="width: 40%;">
+                                <button class="btn btn-outline-secondary" type="button" id="button-decrease"><strong>-</strong></button>
+                                <input type="text" class="form-control form-control-sm bg-secondary-subtle text-center" id="productQuantity" value="1" readonly style="max-width: 50px;">
+                                <button class="btn btn-outline-secondary" type="button" id="button-increase"><strong>+</strong></button>
+                            </div>
+                            <div>
+                                <span class="badge bg-success fs-4" id="productPrice">$99.99</span>
+                            </div>
                         </div>
-                        <div class="d-flex flex-column align-items-center">
-                            <h5><span class="badge bg-success" id="productPrice">$99.99</span></h5>
-                            <button class="btn btn-dark" id="addToCart">Add to Cart</button>
+                        <div class="d-flex flex-column align-items-center mt-2">
+                            <button class="btn btn-dark p-3" id="addToCart">Add to Cart</button>
                         </div>
                     </div>
-                </div>                
+                </div>
                 
-                <div class="col-4">
+                                
+                
+                <div class="col-7">
                     <div id="carouselExampleDark" class="carousel carousel-dark slide">
                         <div class="carousel-indicators">
                             <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -40,21 +56,21 @@
                         </div>
                         <div class="carousel-inner">
                             <div class="carousel-item active" data-bs-interval="10000">
-                                <img src="images/C-sharp.jpg" class="d-block w-100" alt="...">
+                                <img src="../images/Phones.jpg" class="d-block w-100" alt="...">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>C#</h5>
                                     <p class="text-white">First Addition</p>
                                 </div>
                             </div>
                             <div class="carousel-item" data-bs-interval="2000">
-                                <img src="images/java.png" class="d-block w-100" alt="...">
+                                <img src="../images/Phones.jpg" class="d-block w-100" alt="...">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Second slide label</h5>
                                     <p class="text-white">Some representative placeholder content for the second slide.</p>
                                 </div>
                             </div>
                             <div class="carousel-item">
-                                <img src="images/Lebron.jpg" class="d-block w-100" alt="...">
+                                <img src="../images/Phones.jpg" class="d-block w-100" alt="...">
                                 <div class="carousel-caption d-none d-md-block">
                                     <h5>Third slide label</h5>
                                     <p>Some representative placeholder content for the third slide.</p>
@@ -75,6 +91,6 @@
         </div>
         
         <!--   carousel product photos page       -->
-        
+        <script src="product.js"></script>
     </body>
 </html>
