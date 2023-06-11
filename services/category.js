@@ -3,7 +3,8 @@ const categoryModel = require('../models/category.js');
 const createCategory = async (categoryName) => {
     try {
         const category = new categoryModel({ categoryName });
-        return await category.save();;
+        await category.save();
+        return category;
     } catch (err) {
         console.error(err);
     }
@@ -28,7 +29,8 @@ const addProductToCategory = async (categoryName, product) => {
             console.error(`Category ${categoryName} not found`);
         }
         category.products.push(product);
-        return await category.save();;
+        await category.save();
+        return category;
     } catch (err) {
         console.error(err);
     }
@@ -41,7 +43,41 @@ const removeProductFromCategory = async (categoryName, productId) => {
             console.error(`Category ${categoryName} not found`);
         }
         category.products = category.products.filter(product => product.id !== productId);
-        return await category.save();;
+        await category.save();
+        return category;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+const getAllCategorys = async () => {
+    try {
+        const categories = await categoryModel.find();
+        return categories;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+const getCategoryByName = async (categoryName) => {
+    try {
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+        }
+        return category;
+    } catch (err) {
+        console.error(err);
+    }
+};
+
+const getAllProductsByCategory = async (categoryName) => {
+    try {
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+        }
+        return category.products;
     } catch (err) {
         console.error(err);
     }
@@ -51,5 +87,8 @@ module.exports = {
     createCategory, 
     deleteCategory, 
     addProductToCategory, 
-    removeProductFromCategory 
+    removeProductFromCategory, 
+    getAllCategorys, 
+    getCategoryByName,
+    getAllProductsByCategory
 };
