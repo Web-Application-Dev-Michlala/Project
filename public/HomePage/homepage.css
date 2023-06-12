@@ -1,0 +1,65 @@
+
+.c-img
+{
+    height:300px; 
+    width: 300px; 
+    object-fit: fill; 
+    margin: auto;
+}
+.c-slide
+{
+    padding-top:20px;
+    padding-bottom:20px;
+}
+
+
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
+   }
+   
+   .carousel-control-next-icon {
+     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
+   }
+   .cards-row
+   {
+    background-color: cadetblue;
+    margin-left: 0.39px;
+   }
+   .carousel-row
+   {
+    background-color: skyblue;
+    border-bottom: 1px solid black;
+    
+   }
+  
+  
+    .spacer
+    {
+        padding-top: 100px;
+        padding-bottom: 100px;
+        background-color: cadetblue;
+       
+        box-sizing: border-box;
+    }
+    .mainpage
+    {
+        max-width: 99.39%;
+    }
+    .card
+    {
+        margin-right: 7px;
+        margin-left: 7px;
+    }
+      
+    .login
+    {
+        background-color: rgb(213, 1, 1);
+        border-radius: 10px;
+        border: 2px solid black;
+        max-width:fit-content;
+    }
+    .c
+    {
+        margin-left:15px;
+        margin-right:15px;
+    }

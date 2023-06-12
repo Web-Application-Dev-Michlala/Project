@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const homepageRouter=require('./routes/homepageRoute')
 
 const app = express();
 
@@ -12,4 +13,6 @@ try{
 }catch(err){
     console.error('Error connecting to MongoDB', err);
 }
+app.use('/homepage', homepageRouter);
 app.listen(3000);
+console.log('listening to 3000');
