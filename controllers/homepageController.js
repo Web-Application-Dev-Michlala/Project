@@ -1,7 +1,13 @@
 const categoryService = require('../services/category')
+const path = require('path')
+
+
+const getHomePage = async (req,res) => {
+    res.sendFile(path.join(__dirname,"../public/HomePage/homepage.html"))
+
+}
 
 const getAllCategorys = async (req,res) => {
-    res.sendFile('../public/HomePage/homepage.html')
   const categories = await categoryService.getAllCategorys();
   res.json(categories);
 }
@@ -27,6 +33,7 @@ res.json(category);
 
 module.exports = 
 {
+    getHomePage,
     getAllCategorys,
     getCategoryByName,
     getAllProductsByCategory,

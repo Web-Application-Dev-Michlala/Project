@@ -3,7 +3,7 @@ $(function()
     
 $.ajax
     ({
-        url:'/',
+        url:'/getCategorys',
     }).done(function(data)
         {
             var counter=0;

@@ -13,6 +13,6 @@ try{
 }catch(err){
     console.error('Error connecting to MongoDB', err);
 }
-app.use('/homepage', homepageRouter);
+app.use('/', homepageRouter);
 app.listen(3000);
 console.log('listening to 3000');
