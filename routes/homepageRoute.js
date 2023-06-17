@@ -9,8 +9,14 @@ router.route('/')
 router.route('/getCategorys')
     .get(homepageController.getAllCategorys)
 
+router.route('/css')
+    .get(homepageController.getHomePageCss)
+
+router.route('/js')
+    .get(homepageController.getHomePageJs)
+   
 router.route('/:id')
     .get(homepageController.getAllProductsByCategory)
     .put(homepageController.getCategoryByName)
-    
-module.exports = router;
+
+    module.exports = router;

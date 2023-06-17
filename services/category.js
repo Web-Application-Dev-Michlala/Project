@@ -48,6 +48,7 @@ const removeProductFromCategory = async (categoryName, productId) => {
     } catch (err) {
         console.error(err);
     }
+    
 };
 
 const getAllCategorys = async () => {
@@ -81,6 +82,7 @@ const getAllProductsByCategory = async (categoryName) => {
     } catch (err) {
         console.error(err);
     }
+   
 };
 
 module.exports = { 
