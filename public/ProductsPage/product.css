@@ -1,0 +1,9 @@
+body {
+    display: flex;
+    align-items: center;
+}
+#content-box {
+    background-color: #f8f9fa;  /* Choose the color you prefer */
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);  /* Optional: Add a subtle shadow */
+}
