@@ -46,6 +46,10 @@ const productSchema = new mongoose.Schema({
     comments: [{
         type: String,
     }],
+    brand:{
+        type:String,
+        required: true
+    }
 });
 
 
