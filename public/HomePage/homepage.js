@@ -50,6 +50,24 @@
 // }
 $( document ).ready(function() 
 {
+const arr=[];
+    $.ajax
+        ({
+            url:'/Phones',
+        }).done(function(data)
+            {
+                data.forEach(product => {
+                    $.ajax({
+                        url:'/'+product,
+                        method: 'POST'
+                    }).done(function(dt)
+                    {
+                    if(product.hot)
+                    arr.push(product)
+                    });
+                });
+                createAndloadHotCarouselsFromDB(arr,1)
+            });
     donfil=1;
     bonfil=2;
     bon=1;
@@ -57,12 +75,12 @@ $( document ).ready(function()
     gon=1;
     const categoryArray=[bon,don,gon,bonfil,donfil]
     const hotArray=[donfil,bonfil,don]
-    createAndloadHotCarousels(hotArray,1);
-    createAndloadHotCarousels(hotArray,2);
-    createAndloadHotCarousels(hotArray,3)
+    //createAndloadHotCarousels(hotArray,1);
+   // createAndloadHotCarousels(hotArray,2);
+    //createAndloadHotCarousels(hotArray,3)
     loadCategories(categoryArray);
-    
-    
+    //
+    console.log(arr.length);
 function createAndloadHotCarousels(hotItems, carouselnum)//loading the carousels with items 
 {
 
@@ -101,6 +119,66 @@ function createAndloadHotCarousels(hotItems, carouselnum)//loading the carousels
             '</a>'+
             '<div class="carousel-caption d-none d-md-block" id="title">'+
                 '<h5>Second prodcut name</h5>'+//<!--TODO PULL hot product name-->
+            '</div>'+
+          '</div>';
+        }
+    }
+    carousel.innerHTML=
+    '<div class="carousel-inner" id="carousel">'+
+    '<div class="carousel-indicators" id="caroursel-ind">'+
+    data+
+    '</div>'+
+    '<div class="carousel-inner" id="carousel">'+
+    caritem+
+    '</div>'+
+    '<button class="carousel-control-prev" type="button" data-bs-target="#carousel'+carouselnum+'"data-bs-slide="prev">'+
+    '<span class="carousel-control-prev-icon" aria-hidden="true"></span>'+
+    '<span class="visually-hidden">Previous</span>'+
+    '</button>'+
+    '<button class="carousel-control-next" type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide="next">'+
+    '<span class="carousel-control-next-icon" aria-hidden="true"></span>'+
+    '<span class="visually-hidden">Next</span>'+
+    '</button>'+
+    '</div>';
+}
+function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the carousels with items 
+{
+
+    var carousel=document.createElement('div');
+    carousel.classList.add("carousel")
+    carousel.classList.add("slide")
+    carousel.classList.add("c-slide")
+    carousel.classList.add("container")
+
+    carousel.setAttribute("data-bs-ride", "carousel");
+    carousel.setAttribute("id","carousel"+(carouselnum));
+    var rowcon=document.getElementById('rowcon');
+    rowcon.appendChild(carousel);
+    var data;
+    var caritem;
+    for(let i=0;i<hotItems.length;i++)
+    {
+        if( i===0)
+        {
+            data='<button type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
+            caritem='<div class="carousel-item active c-item">'+
+            '<a href="file:///D:/College/Year_2_SemesterB/Application%20Dev/Project%20components/Homepage/Homepage.html">'+//<!--TODO PULL hot product IMAGE AND LINK-->
+            '<img src="https://images.pexels.com/photos/14918477/pexels-photo-14918477.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500" class="d-block  c-img" >'+
+            '</a>'+
+            '<div class="carousel-caption d-none d-md-block" id="title">'+
+                '<h5>'+"hotItems[i]"+'</h5>'+//<!--TODO PULL hot product name-->
+            '</div>'+
+          '</div>';
+        }
+        else
+        {
+            data+='<button type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide-to='+(i)+' aria-label="Slide '+(i+1)+'"></button>'
+            caritem+='<div class="carousel-item c-item">'+
+            '<a href="file:///D:/College/Year_2_SemesterB/Application%20Dev/Project%20components/Homepage/Homepage.html">'+//<!--TODO PULL hot product IMAGE AND LINK-->
+            '<img src="https://images.unsplash.com/photo-1472214103451-9374bd1c798e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MXx8cGljfGVufDB8fDB8fHww&w=1000&q=80" class="d-block  c-img">'+
+            '</a>'+
+            '<div class="carousel-caption d-none d-md-block" id="title">'+
+                '<h5>'+"dads"+'</h5>'+//<!--TODO PULL hot product name-->
             '</div>'+
           '</div>';
         }

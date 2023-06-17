@@ -6,6 +6,8 @@ const homepageController = require('../controllers/homepageController.js')
 router.route('/')
     .get(homepageController.getHomePage)
 
+
+
 router.route('/getCategorys')
     .get(homepageController.getAllCategorys)
 
@@ -18,5 +20,6 @@ router.route('/js')
 router.route('/:id')
     .get(homepageController.getAllProductsByCategory)
     .put(homepageController.getCategoryByName)
+    .post(homepageController.getProductById)
 
     module.exports = router;

@@ -15,7 +15,7 @@ try{
 
 async function loadDB(){
     console.log('insert to db')
-    const products = await product.createProduct('Iphone',100,'Phones','Red',14.2,'public/images/Phones.jpg','This is a phone',1000,5,"Apple",false,'Some more text');
+    const products = await product.createProduct('Iphone 6',115,'Phones','Red',14.2,'public/images/Phones.jpg','This is a phone',1000,5,"Apple",true,'Some more text');
 
     await category.createCategory('Phones');
 

@@ -1,6 +1,6 @@
 const productModel = require('./../models/product.js');
 
-const createProduct = async(name,id,category,color,size,image,description,price,amount,brend,hot = false,comments = []) => {
+const createProduct = async(name,id,category,color,size,image,description,price,amount,brend,hot,comments = []) => {
     try {
         const product = new productModel({
         name, 
@@ -83,6 +83,7 @@ const getProductByPrice = async (price) => {
     } catch (err) {
         console.error(err);
     }
+    
 };
 
 module.exports = {
