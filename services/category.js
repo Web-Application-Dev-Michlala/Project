@@ -62,7 +62,7 @@ const getAllCategorys = async () => {
 
 const getCategoryByName = async (categoryName) => {
     try {
-        const category = await categoryModel.findOne({ categoryName });
+        const category = await categoryModel.findOne({ categoryName }).populate(products);
         if (!category) {
             console.error(`Category ${categoryName} not found`);
         }
@@ -72,18 +72,6 @@ const getCategoryByName = async (categoryName) => {
     }
 };
 
-const getAllProductsByCategory = async (categoryName) => {
-    try {
-        const category = await categoryModel.findOne({ categoryName });
-        if (!category) {
-            console.error(`Category ${categoryName} not found`);
-        }
-        return category.products;
-    } catch (err) {
-        console.error(err);
-    }
-   
-};
 
 module.exports = { 
     createCategory, 
@@ -92,5 +80,5 @@ module.exports = {
     removeProductFromCategory, 
     getAllCategorys, 
     getCategoryByName,
-    getAllProductsByCategory
+    
 };

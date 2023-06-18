@@ -24,20 +24,14 @@ const getAllCategorys = async (req,res) => {
 }
 
 const getCategoryByName = async (req,res) => {
-  const category = await categoryService.getCategoryByName(req.params.categoryName);
+  const category = await categoryService.getCategoryByName(req.params.id);
   if (!category){
     return res.status(404).json({errors:['Category not found']});
   }
   res.json(category);
 }
 
-const getAllProductsByCategory = async (req,res) => {
-    const category = await categoryService.getAllProductsByCategory(req.params.id);
-    if (!category){
-        return res.status(404).json({errors:['Category not found']});
-};
-res.json(category);
-}
+
 const getProductById = async (req,res) => {
   const product = await productService.getProductById(req.params.id);
   if (!product) {
@@ -51,7 +45,7 @@ module.exports =
     getHomePage,
     getAllCategorys,
     getCategoryByName,
-    getAllProductsByCategory,
+  
     getHomePageJs,
     getHomePageCss,
     getProductById

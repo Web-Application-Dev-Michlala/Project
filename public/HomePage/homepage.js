@@ -54,17 +54,12 @@ const arr=[];
     $.ajax
         ({
             url:'/Phones',
+          
         }).done(function(data)
             {
                 data.forEach(product => {
-                    $.ajax({
-                        url:'/'+product,
-                        method: 'POST'
-                    }).done(function(dt)
-                    {
                     if(product.hot)
                     arr.push(product)
-                    });
                 });
                 createAndloadHotCarouselsFromDB(arr,1)
             });

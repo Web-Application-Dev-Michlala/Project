@@ -18,8 +18,7 @@ router.route('/js')
     .get(homepageController.getHomePageJs)
    
 router.route('/:id')
-    .get(homepageController.getAllProductsByCategory)
-    .put(homepageController.getCategoryByName)
+    .get(homepageController.getCategoryByName)
     .post(homepageController.getProductById)
 
     module.exports = router;
