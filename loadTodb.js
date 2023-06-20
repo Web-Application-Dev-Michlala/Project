@@ -1,11 +1,12 @@
 const mongoose = require('mongoose');
-const category = require('./services/category')
 
+const productService = require('./services/product.js')
 
 try{
-    mongoose.connect('mongodb+srv://shahargut2:eMNpX8KBONU5H324@cluster0.lctj22i.mongodb.net/');
+    mongoose.connect('mongodb+srv://shahargut2:u7Fsk8KLaJe4IzOi@cluster0.lctj22i.mongodb.net/');
     console.log('Connected to MongoDB');
-    loadDB();
+    //product.createProduct('TestPhone',100,'Phones','Red',14.2,'public/images/Phones.jpg','This is a phone',1000,5,"Apple",false,'Some more text');
+    ExampleToSortByColor();
     
     
 
@@ -15,24 +16,14 @@ try{
 }
 
 
-
-function loadDB(){
+async function ExampleToSortByColor(){
     console.log('insert to db')
-    category.createCategory('Phones');
-    
-    /*
-    const prodArray= getAllProducts();
+    //await category.createCategory('Phones');
+    const prodArray = await productService.getProductByColor('Phones','Black');
     for(const product of prodArray)
     {
-        category.addProductToCategory('Phones',product);
+        console.log(`${product.name} ${product.color}`);
     }
-    //const products = await product.createProduct('Iphone',100,'Phones','Red',14.2,'public/images/Phones.jpg','This is a phone',1000,5,"Apple",false,'Some more text');
-    //await category.addProductToCategory('Phones',products);
-    */
-    console.log('done')
-}
-function getAllProducts() {
     
-    const products = modelproduct.find();
-    return products;
+    console.log('done')
 }
