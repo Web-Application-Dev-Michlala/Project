@@ -34,7 +34,7 @@ const getAllCategorys = async () => {
 
 const getCategoryByName = async (categoryName) => {
     try {
-        const category = await categoryModel.findOne({ categoryName });
+        const category = await categoryModel.findOne({ categoryName }).populate(products);
         if (!category) {
             console.error(`Category ${categoryName} not found`);
         }

@@ -129,6 +129,7 @@ const getProductByPrice = async (categoryName,price) => {
     } catch (err) {
         console.error(err);
     }
+    
 };
 
 module.exports = {
