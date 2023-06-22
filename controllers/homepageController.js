@@ -5,7 +5,6 @@ const path = require('path')
 
 const getHomePage = async (req,res) => {
     res.sendFile(path.join(__dirname,"../public/HomePage/homepage.html"))
-
 }
 
 const getAllCategorys = async (req,res) => {

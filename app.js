@@ -16,7 +16,16 @@ try{
 app.use('/category',categoryRouter)
 app.use('/', homepageRouter);
 
+/*
+TODO tomorrow: finish session and register
 
+app.use(session({
+    secret: 'key',    
+    saveUninitialized: false,
+    resave: false
+}))
+*/
+ 
 
 app.listen(3000);
 console.log('listening to 3000');

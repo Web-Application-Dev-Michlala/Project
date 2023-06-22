@@ -10,10 +10,12 @@ router.route('/category')
   });
 router.route('/products')
     .get(productsListController.getProuductsListPage)
-router.route('/category/:name')
+
+router.route('/category/:id')
+.get(homepageController.getCategoryByName)
+router.route('/:category/:name')
     .get(productsListController.getProductsByName)
-// router.route('/:category')
-//     .get(homepageController.getAllProductsByCategory)
+
 router.route('/:id')
     .get(productsListController.getProductById)
 

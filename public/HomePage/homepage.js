@@ -1,25 +1,8 @@
 
 $( document ).ready(function() 
 {
-    /*
-FOR ODED:
+    
 
-var path=(window.location.href); gets path
-var queryParams = {};
-search
-  .slice(1)
-  .split('&')
-  .forEach(function(param) {
-    var parts = param.split('=');
-    var key = decodeURIComponent(parts[0]);
-    var value = decodeURIComponent(parts[1] || '');
-    if (key) {
-      queryParams[key] = value;
-    }
-  });
-console.log(path);
-
-*/
 carouselnum=1;
 var arr=[];
     $.ajax
