@@ -7,16 +7,6 @@ const getHomePage = async (req,res) => {
     res.sendFile(path.join(__dirname,"../public/HomePage/homepage.html"))
 
 }
-const getHomePageCss = async (req,res) => {
-  res.sendFile(path.join(__dirname,"../public/HomePage/homepage.css"))
-
-
-}
-const getHomePageJs = async (req,res) => {
-  res.sendFile(path.join(__dirname,"../public/HomePage/homepage.js"))
-
-}
-
 
 const getAllCategorys = async (req,res) => {
   const categories = await categoryService.getAllCategorys();
@@ -45,8 +35,6 @@ module.exports =
     getHomePage,
     getAllCategorys,
     getCategoryByName,
-    getHomePageJs,
-    getHomePageCss,
     getProductById
     
 }

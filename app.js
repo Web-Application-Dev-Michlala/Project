@@ -1,7 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const homepageRouter=require('./routes/homepageRoute')
-
+const categoryRouter=require('./routes/productsListRoute')
 const app = express();
 
 app.use("/public",express.static(__dirname + "/public"));
@@ -13,7 +13,10 @@ try{
 }catch(err){
     console.error('Error connecting to MongoDB', err);
 }
+app.use('/category',categoryRouter)
 app.use('/', homepageRouter);
+
+
 
 app.listen(3000);
 console.log('listening to 3000');
