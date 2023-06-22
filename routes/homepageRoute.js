@@ -17,20 +17,20 @@ router.route('/')
         res.sendFile('FAQ.html', { root: 'public/FAQ' });
       });
       router.route('/About').get((req, res) => {
-        res.sendFile('returnPolicy.html', { root: 'public/About' });
+        res.sendFile('about.html', { root: 'public/about-us' });
       });
     
 router.route('/getCategorys')
     .get(homepageController.getAllCategorys)
 
-router.route('/css')
-    .get(homepageController.getHomePageCss)
-
-router.route('/js')
-    .get(homepageController.getHomePageJs)
-   
+    router.route('/category')
+    .get((req, res) => {res.sendFile('productsList.html', { root: 'public/ProductsList'});
+    });
+    
 router.route('/:id')
     .get(homepageController.getCategoryByName)
     .post(homepageController.getProductById)
+    
 
-    module.exports = router;
+
+module.exports = router;
