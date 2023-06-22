@@ -1,0 +1,50 @@
+/* style.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+  }
+  
+  .container {
+    max-width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h2 {
+    margin-top: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  label {
+    font-weight: bold;
+  }
+  
+  input.form-control {
+    display: block;
+    width: 35%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    transition: width 0.2s ease-in-out;
+  }
+  
+  input.form-control:hover {
+    width: 100%;
+    transition: width 0.2s ease-in-out;
+  }
+  
+  button.btn-primary {
+    width: 100%;
+  }
+  
+  a {
+    color: #4caf50;
+    text-decoration: none;
+  }
+  

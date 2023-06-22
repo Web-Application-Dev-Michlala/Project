@@ -47,10 +47,9 @@ const productSchema = new mongoose.Schema({
         type: String,
     }],
     brand:{
-        type:String,
-        required: true
+        type:String
     }
 });
 
 
-module.exports = mongoose.model('Product', productSchema);
+module.exports = productSchema

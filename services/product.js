@@ -1,32 +1,61 @@
-const productModel = require('./../models/product.js');
+const categoryModel = require('../models/category.js');
 
-const createProduct = async(name,id,category,color,size,image,description,price,amount,brend,hot = false,comments = []) => {
+const createProduct = async(categoryName,name,id,color,size,image,description,price,amount,brand,hot = false,comments = []) => {
     try {
-        const product = new productModel({
-        name, 
-        id, 
-        category, 
-        color, 
-        image, 
-        size, 
-        hot, 
-        description, 
-        price, 
-        amount, 
-        comments,
-        brend
-        });
-        await product.save();
-        return product;
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+            return null;
+        }
+        category.products.push({
+            name, 
+            id, 
+            category:categoryName, 
+            color, 
+            image, 
+            size, 
+            hot, 
+            description, 
+            price, 
+            amount, 
+            comments,
+            brand
+        })
+        await category.save();
+        return category;
     } catch (err) {
         console.error(err);
+        return null;
     }
 }
-const deleteProduct = async (id) => {
+const deleteProduct = async (categoryName,id) => {
     try {
-        const product = await productModel.findOneAndDelete({ id });
-        if (!product) {
-            console.error(`Product with ID ${id} not found`);
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+            return null;
+        }
+        const index = category.products.findIndex(product => product.id === id);
+        category.products.
+        category.products.splice(index,1);
+        await category.save();
+        return category;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
+const getProductByName = async (categoryName,name) => {
+    try {
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+        }
+        const product = category.products.find(product=>product.name === name);
+        if(!product){
+            console.error(`Product ${name} not found`);
+            return null;
         }
         return product;
     } catch (err) {
@@ -34,11 +63,16 @@ const deleteProduct = async (id) => {
     }
 };
 
-const getProductByName = async (name) => {
+const getProductById = async (categoryName,id) => {
     try {
-        const product = await productModel.findOne({ name });
-        if (!product) {
-            console.error(`Product with name ${name} not found`);
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+        }
+        const product = category.products.find(product=>product.id === id);
+        if(!product){
+            console.error(`Product with ${id} not found`);
+            return null;
         }
         return product;
     } catch (err) {
@@ -46,11 +80,16 @@ const getProductByName = async (name) => {
     }
 };
 
-const getProductById = async (id) => {
+const getProductByColor = async (categoryName,color) => {
     try {
-        const product = await productModel.findOne({ id });
-        if (!product) {
-            console.error(`Product with ID ${id} not found`);
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+        }
+        const product = category.products.filter(product=>product.color === color);
+        if(!product){
+            console.error(`Product with ${color} not found`);
+            return null;
         }
         return product;
     } catch (err) {
@@ -58,31 +97,39 @@ const getProductById = async (id) => {
     }
 };
 
-const getProductByColor = async (color) => {
+const getProductBySize = async (categoryName,size) => {
     try {
-        const products = await productModel.find({ color });
-        return products;
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+        }
+        const product = category.products.filter(product=>product.size === size);
+        if(!product){
+            console.error(`Product with ${size} not found`);
+            return null;
+        }
+        return product;
     } catch (err) {
         console.error(err);
     }
 };
 
-const getProductBySize = async (size) => {
+const getProductByPrice = async (categoryName,price) => {
     try {
-        const products = await productModel.find({ size });
-        return products;
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+        }
+        const product = category.products.filter(product=>product.price === price);
+        if(!product){
+            console.error(`Product with ${price} not found`);
+            return null;
+        }
+        return product;
     } catch (err) {
         console.error(err);
     }
-};
-
-const getProductByPrice = async (price) => {
-    try {
-        const products = await productModel.find({ price });
-        return products;
-    } catch (err) {
-        console.error(err);
-    }
+    
 };
 
 module.exports = {
