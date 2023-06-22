@@ -4,7 +4,7 @@ const homepageRouter=require('./routes/homepageRoute')
 
 const app = express();
 
-
+app.use("/public",express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 try{
@@ -13,7 +13,6 @@ try{
 }catch(err){
     console.error('Error connecting to MongoDB', err);
 }
-homepageRouter.use(express.static('public/HomePage'));
 app.use('/', homepageRouter);
 
 app.listen(3000);

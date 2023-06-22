@@ -45,7 +45,6 @@ module.exports =
     getHomePage,
     getAllCategorys,
     getCategoryByName,
-  
     getHomePageJs,
     getHomePageCss,
     getProductById
