@@ -20,6 +20,9 @@ router.route('/')
       router.route('/About').get((req, res) => {
         res.sendFile('about.html', { root: 'public/about-us' });
       });
+      router.route('/googleMaps').get((req, res) => {
+        res.sendFile('map.html', { root: 'public/googleMap' });
+      });
     
 router.route('/getCategorys')
     .get(homepageController.getAllCategorys)
