@@ -24,10 +24,12 @@ app.use(session({
     saveUninitialized: false,
     resave: false
 }))
+
 app.use('/category',categoryRouter);
 app.use('/login', loginRouter);
 app.use('/register',registerRouter);
 app.use('/', homepageRouter);
+
 adminPageRoute.use(express.static('public/deleteProduct'));
 app.use('/adminPage/',adminPageRoute);
 

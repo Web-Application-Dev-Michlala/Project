@@ -15,12 +15,16 @@ $(document).ready(function() {
             alert("An error occurred while trying to fetch categories");
         }
     });
-    // Update the selected category when the select menu value changes
+    
     $("#categorySelect").change(function() {
         selectedCategory = $(this).val();
-        $("#confirmationSection").toggleClass("d-none", selectedCategory === "");
         $("#deletionSuccessMessage").addClass("d-none");
-        $("#confirmationText").text("Are you sure you want to delete " + selectedCategory + "?");
+        
+        if (selectedCategory === "") {
+            $("#confirmationSection").addClass("d-none");
+        } else {
+            fetchCategoryDetails(selectedCategory);
+        }
     });
 
     // Hide the confirmation devision and reset the selection
@@ -48,3 +52,24 @@ $(document).ready(function() {
         });
     });
 });
+function fetchCategoryDetails(categoryName) {
+    $.ajax({
+        url: "/adminPage/getCategoryDetails/" + categoryName,
+        type: "GET",
+        success: function(categoryDetails) {
+            // Update the confirmation section with category details
+            let productsName = "";
+            categoryDetails.products.forEach(product=>{
+                productsName += product.name+", ";
+            })
+            $("#confirmationText").html("Are you sure you want to delete the category: <strong>" + categoryName + "</strong>?<br>"
+                + "<u>Number of Products:</u> " + categoryDetails.products.length + "<br>"
+                + "<u>Products:</u> " + productsName);
+            
+            $("#confirmationSection").removeClass("d-none");
+        },
+        error: function() {
+            alert("An error occurred while trying to fetch category details");
+        }
+    });
+}

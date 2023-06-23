@@ -12,4 +12,7 @@ router.route('/adminPage/getCategorys')
 router.route('/adminPage/:categoryName')
     .delete(adminPageController.deleteCategory);
 
+router.route('/adminPage/getCategoryDetails/:categoryName')
+    .get(adminPageController.getCategoryDetails);
+
 module.exports = router;
