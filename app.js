@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+//require('custom-env').env('local','./config')
+
 const homepageRouter=require('./routes/homepageRoute')
+const adminPageRoute=require('./routes/adminPageRoute')
 
 const app = express();
 
@@ -15,6 +18,8 @@ try{
 }
 homepageRouter.use(express.static('public/HomePage'));
 app.use('/', homepageRouter);
+adminPageRoute.use(express.static('public/deleteProduct'));
+app.use('/adminPage/',adminPageRoute);
 
 app.listen(3000);
 console.log('listening to 3000');
