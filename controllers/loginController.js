@@ -1,6 +1,9 @@
 const userService=require('../services/user')
 
 const getLoginPage = async (req,res) => {
+  if(req.session.username!=null)
+    res.redirect('/');
+  else
     res.sendFile('login.html', { root: 'public/Login' });
 }
 
