@@ -10,8 +10,7 @@ $( document ).ready(function()
     {
         const navbar=$('#navbar');
         if(data.isConnected)
-        {
-            
+        { 
            navbar.load('public/NavBar/navBar.html')
         }
         else
@@ -22,30 +21,33 @@ $( document ).ready(function()
 
 carouselnum=1;
 var arr=[];
-    $.ajax
-        ({
-            url:'/Phones',
-          
-        }).done(function(data)
-            {
-                data.products.forEach(product => {
-                    if(product.hot)
-                    arr.push(product)
-                });
-                const length = arr.length;
-                const partSize = Math.floor(length / 3);
-                
-                const part1 = arr.slice(0, partSize);
-                const part2 = arr.slice(partSize, partSize * 2);
-                const part3 = arr.slice(partSize * 2);
-                createAndloadHotCarouselsFromDB(part1,carouselnum)
-                carouselnum++;
-                createAndloadHotCarouselsFromDB(part2,carouselnum)
-                carouselnum++;
-                createAndloadHotCarouselsFromDB(part3,carouselnum)
-                categoryArray=[data];
-                loadCategories(categoryArray);
-            });
+categoryArray=[];
+$.ajax({
+    url:'/getCategorys'
+}).done(function(cateogries)
+{
+    cateogries.forEach(category => {
+        category.products.forEach(product => {
+            if(product.hot)
+            arr.push(product)
+        });
+        categoryArray.push(category);
+
+    const length = arr.length;
+    const partSize = Math.floor(length / 3);
+              
+    const part1 = arr.slice(0, partSize);
+    const part2 = arr.slice(partSize, partSize * 2);
+    const part3 = arr.slice(partSize * 2);
+    createAndloadHotCarouselsFromDB(part1,carouselnum)
+    carouselnum++;
+    createAndloadHotCarouselsFromDB(part2,carouselnum)
+    carouselnum++;
+    createAndloadHotCarouselsFromDB(part3,carouselnum)
+    loadCategories(categoryArray);
+})
+});
+
    
 function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the carousels with items 
 {
