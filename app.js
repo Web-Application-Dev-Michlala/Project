@@ -1,6 +1,9 @@
 const express = require('express');
 const mongoose = require('mongoose');
+//require('custom-env').env('local','./config')
+
 const homepageRouter=require('./routes/homepageRoute')
+const adminPageRoute=require('./routes/adminPageRoute')
 const categoryRouter=require('./routes/productsListRoute')
 const loginRouter=require('./routes/loginRoute')
 const registerRouter=require('./routes/registerRoute')
@@ -25,6 +28,8 @@ app.use('/category',categoryRouter);
 app.use('/login', loginRouter);
 app.use('/register',registerRouter);
 app.use('/', homepageRouter);
+adminPageRoute.use(express.static('public/deleteProduct'));
+app.use('/adminPage/',adminPageRoute);
 
 
 

@@ -7,6 +7,7 @@ const createCategory = async (categoryName) => {
         return category;
     } catch (err) {
         console.error(err);
+        return null;
     }
 };
 
@@ -15,10 +16,12 @@ const deleteCategory = async (categoryName) => {
         const category = await categoryModel.findOneAndDelete({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
+            return null;
         }
         return category;
     } catch (err) {
         console.error(err);
+        return null;
     }
 };
 
@@ -29,6 +32,7 @@ const getAllCategorys = async () => {
         return categories;
     } catch (err) {
         console.error(err);
+        return null;
     }
 };
 
@@ -37,10 +41,12 @@ const getCategoryByName = async (categoryName) => {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
+            return null;
         }
         return category;
     } catch (err) {
         console.error(err);
+        return null;
     }
 };
 
