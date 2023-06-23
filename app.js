@@ -28,10 +28,8 @@ app.use(session({
 app.use('/category',categoryRouter);
 app.use('/login', loginRouter);
 app.use('/register',registerRouter);
-app.use('/', homepageRouter);
-
-adminPageRoute.use(express.static('public/deleteProduct'));
 app.use('/adminPage/',adminPageRoute);
+app.use('/', homepageRouter);
 
 
 

@@ -2,7 +2,7 @@
 $(document).ready(function() {
     var selectedCategory = "";
     $.ajax({
-        url: "/adminPage/getCategorys",
+        url: "/getCategorys",
         type: "GET",
         success: function(categories) {
             $("#categorySelect").empty();
@@ -36,7 +36,7 @@ $(document).ready(function() {
     // Deleting a selected category
     $("#confirmDeleteButton").click(function() {
         $.ajax({
-            url: "/adminPage/" + selectedCategory,
+            url: "/" + selectedCategory,
             type: "DELETE",
             success: function() {
                 $("#deletionSuccessText").text("Category " + selectedCategory + " has been deleted!");
@@ -54,7 +54,7 @@ $(document).ready(function() {
 });
 function fetchCategoryDetails(categoryName) {
     $.ajax({
-        url: "/adminPage/getCategoryDetails/" + categoryName,
+        url: "/getCategoryDetails/" + categoryName,
         type: "GET",
         success: function(categoryDetails) {
             // Update the confirmation section with category details
