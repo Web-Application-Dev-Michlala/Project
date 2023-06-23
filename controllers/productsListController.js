@@ -2,9 +2,11 @@ const productService = require('../services/product')
 const path = require('path')
 
 
+
 const getProuductsListPage = async (req,res) => {
     res.sendFile(path.join(__dirname,"../public/ProductsList/productsList.html"))
 }
+
 
 const getProductsByName = async (req,res) => {
     const products = await productService.getProductsByName(req.params.category,req.params.name);
@@ -58,5 +60,6 @@ module.exports =
     getProductById,
     getProductsByPriceRange,
     getProductsByColors,
-    getProductsBySizes
+    getProductsBySizes,
+   
 }

@@ -1,3 +1,6 @@
 node_modules
 package
 package-lock
+config
+package.json
+package-lock.json

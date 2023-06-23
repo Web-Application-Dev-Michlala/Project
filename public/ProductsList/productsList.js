@@ -5,7 +5,14 @@ var products = [];
 var curr_page_num = 1;
 
 $(document).ready(function(){
-    
+    /*
+    EXAMPLE FOR HOW TO USE QUERIES
+    var search = window.location.search;
+    var queryParams = search.split('?')[1];
+    console.log(queryParams);
+    now need to update html to load dynamically
+    */
+   
     //products = categoryService.categoryService.getAllProductsByCategory("phone"); //figure out how to know which category i am in
     let length = products.length;
     var num_pages

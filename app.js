@@ -4,10 +4,13 @@ const mongoose = require('mongoose');
 
 const homepageRouter=require('./routes/homepageRoute')
 const adminPageRoute=require('./routes/adminPageRoute')
-
+const categoryRouter=require('./routes/productsListRoute')
+const loginRouter=require('./routes/loginRoute')
+const registerRouter=require('./routes/registerRoute')
+const session = require('express-session')
 const app = express();
 
-
+app.use("/public",express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 try{
@@ -16,10 +19,22 @@ try{
 }catch(err){
     console.error('Error connecting to MongoDB', err);
 }
-homepageRouter.use(express.static('public/HomePage'));
+app.use(session({
+    secret: 'key',    
+    saveUninitialized: false,
+    resave: false
+}))
+app.use('/category',categoryRouter);
+app.use('/login', loginRouter);
+app.use('/register',registerRouter);
 app.use('/', homepageRouter);
 adminPageRoute.use(express.static('public/deleteProduct'));
 app.use('/adminPage/',adminPageRoute);
+
+
+
+
+ 
 
 app.listen(3000);
 console.log('listening to 3000');
