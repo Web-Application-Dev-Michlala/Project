@@ -4,17 +4,16 @@ const router = express.Router();
 const productsListController = require('../controllers/productsListController.js')
 const homepageController=require('../controllers/homepageController.js')
 
-router.route('/category')
-.get((req, res) => {
-    res.sendFile('productsList.html', { root: 'public/ProductsList' });
-  });
+router.route('/')
+.get(productsListController.getProuductsListPage)
+
 router.route('/products')
     .get(productsListController.getProuductsListPage)
 
 router.route('/category/:id')
 .get(homepageController.getCategoryByName)
 router.route('/:category/:name')
-    .get(productsListController.getProductsByName)
+    .get(productsListController.getProuductsListPage)
 
 router.route('/:id')
     .get(productsListController.getProductById)

@@ -2,6 +2,23 @@
 $( document ).ready(function() 
 {
     
+    $.ajax
+    ({
+        url:'/isLoggedIn',
+      
+    }).done(function(data)
+    {
+        const navbar=$('#navbar');
+        if(data.isConnected)
+        {
+            
+           navbar.load('public/NavBar/navBar.html')
+        }
+        else
+        {
+            navbar.load('public/NavBar/navBarLoggedOut.html')
+        }
+    });
 
 carouselnum=1;
 var arr=[];

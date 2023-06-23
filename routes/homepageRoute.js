@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 
 const homepageController = require('../controllers/homepageController.js')
+const loginController = require('../controllers/loginController.js')
 
 router.route('/')
     .get(homepageController.getHomePage)
@@ -23,10 +24,9 @@ router.route('/')
 router.route('/getCategorys')
     .get(homepageController.getAllCategorys)
 
-    router.route('/category')
-    .get((req, res) => {res.sendFile('productsList.html', { root: 'public/ProductsList'});
-    });
-    
+router.route('/isLoggedIn')
+.get(loginController.isLoggedInNav);
+   
 router.route('/:id')
     .get(homepageController.getCategoryByName)
     .post(homepageController.getProductById)

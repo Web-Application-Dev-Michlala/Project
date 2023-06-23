@@ -2,6 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const homepageRouter=require('./routes/homepageRoute')
 const categoryRouter=require('./routes/productsListRoute')
+const loginRouter=require('./routes/loginRoute')
+const registerRouter=require('./routes/registerRoute')
+const session = require('express-session')
 const app = express();
 
 app.use("/public",express.static(__dirname + "/public"));
@@ -13,18 +16,19 @@ try{
 }catch(err){
     console.error('Error connecting to MongoDB', err);
 }
-app.use('/category',categoryRouter)
-app.use('/', homepageRouter);
-
-/*
-TODO tomorrow: finish session and register
-
 app.use(session({
     secret: 'key',    
     saveUninitialized: false,
     resave: false
 }))
-*/
+app.use('/category',categoryRouter);
+app.use('/login', loginRouter);
+app.use('/register',registerRouter);
+app.use('/', homepageRouter);
+
+
+
+
  
 
 app.listen(3000);
