@@ -30,17 +30,21 @@ router.route('/googleMaps').get((req, res) => {
 });
 
 router.route('/adminPage/').get((req, res) => {
-    res.sendFile('deleteProduct.html', { root: 'public/deleteProduct' });
+    res.sendFile('deleteButtons.html', { root: 'public/adminPage' });
 });
 
-router.route('/:categoryName')
-    .delete(adminPageController.deleteCategory);
+
+router.route('/deleteProduct')
+    .delete(adminPageController.deleteProduct);
 
 router.route('/getCategoryDetails/:categoryName')
     .get(adminPageController.getCategoryDetails);
     
 router.route('/getCategorys')
     .get(homepageController.getAllCategorys)
+    
+router.route('/:categoryName')
+    .delete(adminPageController.deleteCategory);
 
 router.route('/isLoggedIn')
 .get(loginController.isLoggedInNav);

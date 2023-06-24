@@ -1,4 +1,5 @@
 const categoryService = require("../services/category");
+const productService = require("../services/product");
 const path = require('path')
 
 const getAllCategorys = async (req,res) => {
@@ -20,10 +21,21 @@ const getCategoryDetails = async (req,res) => {
     }
 
 }
+
 const deleteCategory = async (req, res) => {
     const deletedCategory = await categoryService.deleteCategory(req.params.categoryName);
     if(deletedCategory) {
         res.status(200).json(deletedCategory);
+    } else {
+        res.status(500).json({ error: 'An error occurred while trying to delete the category' });
+    }
+}
+
+const deleteProduct = async (req, res) => {
+    const { categoryName, productName } = await req.body;
+    const deletedProduct = await productService.deleteProduct(categoryName, productName);
+    if(deletedProduct) {
+        res.status(200).json(deletedProduct);
     } else {
         res.status(500).json({ error: 'An error occurred while trying to delete the category' });
     }
@@ -37,5 +49,6 @@ module.exports =
     deleteCategory,
     getAdminPage,
     getCategoryDetails,
-    
+    deleteProduct,
+
 }

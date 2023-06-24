@@ -36,7 +36,6 @@ const deleteProduct = async (categoryName,id) => {
             return null;
         }
         const index = category.products.findIndex(product => product.id === id);
-        category.products.
         category.products.splice(index,1);
         await category.save();
         return category;

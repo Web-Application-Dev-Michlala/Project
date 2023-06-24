@@ -19,8 +19,8 @@ try{
 
 async function ExampleToSortByColor() {
     try {
-        await productService.createProduct('Test','TestPhone',1630,'red',14.2,'public/images/TestPhone.jpg','asdfsadf',1000,2,'samsung',true,'asdfaf');
-      await category.createCategory('Radio', /* provide additional required arguments */);
+      await category.createCategory('Radio');
+      await productService.createProduct('Radio','TestPhone',1630,'red',14.2,'public/images/TestPhone.jpg','asdfsadf',1000,2,'samsung',true,'asdfaf');
       console.log('done');
     } catch (err) {
       console.error('Error creating category', err);
