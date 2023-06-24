@@ -7,6 +7,12 @@ const getAllCategorys = async (req,res) => {
     res.json(categories);
 
 }
+//***************ADDED
+const getAdminPage2 = async (req,res) => {
+    res.sendFile('deleteButtons.html', { root: 'public/adminPage' });
+
+}
+//*******************
 
 const getAdminPage = async (req,res) => {
     res.sendFile(path.join(__dirname,"../public/deleteProduct/deleteProduct.html"))
@@ -50,5 +56,6 @@ module.exports =
     getAdminPage,
     getCategoryDetails,
     deleteProduct,
+    getAdminPage2
 
 }

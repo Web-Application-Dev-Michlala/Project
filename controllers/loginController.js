@@ -19,6 +19,13 @@ const isLoggedInNav=async(req, res)=>
     res.json({isConnected});
     }
 }
+const isntLoggedInNav=async(req, res,next)=>
+{
+  if (req.session.username == null)
+    return next()
+else
+  res.redirect('/')
+}
 const isLoggedIn=async(req, res, next)=> 
 {
   if (req.session.username != null)
@@ -29,16 +36,18 @@ const isLoggedIn=async(req, res, next)=>
 
 const isAdmin=async(req, res, next)=> 
 {
-  if (req.session.username != null&&req.session.admin===true)
+  if (req.session.admin!=null)
     return next()
   else
-    res.redirect('/authenticationError.html')
+  res.sendFile('authenticationError.html', { root: 'public/LoginError' });
 }
 const login= async(req,res)=>
 {
     const { username, password }=req.body;
     const result = await userService.login(username, password)
   if (result) {
+    if(result.isAdmin===true)
+      req.session.admin=true;
     req.session.username = username
     res.redirect('/')
   }
@@ -70,6 +79,7 @@ module.exports=
     isAdmin,
     logout,
     login,
+    isntLoggedInNav
     
 
 }
