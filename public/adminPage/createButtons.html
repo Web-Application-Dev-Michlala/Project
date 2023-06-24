@@ -1,0 +1,194 @@
+<html>
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+</head>
+<body>
+ 
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createCategory" aria-controls="createCategory">Create category</button>
+
+    <!--Create category-->
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="createCategory" aria-labelledby="createCategoryLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="createCategoryLabel">Category creation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>Please enter category information:</p>
+            <form id="createCategoryForm">
+                <!--Category name-->
+                <div class="form-floating">
+                    <input id="categoryNameField" type="text" class="form-control" required>
+                    <label for="categoryNameField">Category name</label>
+                </div>
+                <br>
+                <!--Category image-->
+                <div class="form-floating">
+                    <input id="categoryImageField" type="text" class="form-control">
+                    <label for="categoryImageField">Category image path</label>
+                </div>
+                <br>
+                <button type="button" class="btn btn-secondary btn-sm" id="createCategorySubmit">Create category</button>
+                <div class="alert alert-danger d-none mt-3 " id="createCategoryAlert">
+                    <strong>
+                        Error:
+                    </strong>
+                    <p id="createCategoryError"></p>
+                </div>
+                <div class="alert alert-success d-none mt-3 " id="createCategorySuccess">
+                    <strong>
+                        Category created succesfuly!
+                    </strong>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--Create product-->
+
+    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createProduct" aria-controls="createProduct">Create product</button>
+
+
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="createProduct" aria-labelledby="createProductLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title" id="createProductLabel">Prouduct creation</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <p>Please enter product information:</p>
+            <form id="createProductForm">
+                <!--Product id-->
+                <div class="form-floating">
+                    <input id="productIdField" type="text" class="form-control" required>
+                    <label for="productIdField">Product id</label>
+                </div>
+                <br>
+                <!--Product name-->
+                <div class="form-floating">
+                    <input id="productNameField" type="text" class="form-control" required>
+                    <label for="productNameField">Product name</label>
+                </div>
+                <br>
+                <!--Product category-->
+                <select class="form-select" id="productCategoryField">
+                    <option value="0">Product category</option>
+                    <option>Category1</option>
+                </select>
+                <br>
+                <!--Product color-->
+                <div class="form-floating">
+                    <input id="productColorField" type="text" class="form-control" required>
+                    <label for="productColorField">Product color</label>
+                </div>
+                <br>
+                <!--Product image-->
+                <div class="form-floating">
+                    <input id="productImageField" type="text" class="form-control" required>
+                    <label for="productImageField">Product image path</label>
+                </div>
+                <br>
+                <!--Product size-->
+                <div class="form-floating">
+                    <input id="productSizeField" type="text" class="form-control" required>
+                    <label for="productSizeField">Product size</label>
+                </div>
+                <br>
+                <!--Product hot-->
+                <select class="form-select hotSelect" id="productHotField">
+                    <option value="0" >Is product hot</option>
+                    <option>Yes</option>
+                    <option>No</option>
+                </select>
+                <br>
+                <!--Product description-->
+                <div class="form-floating">
+                    <input id="productDescField" type="text" class="form-control" required>
+                    <label for="productDescField">Product description</label>
+                </div>
+                <br>
+                <!--Product price-->
+                <div class="form-floating">
+                    <input id="productPriceField" type="text" class="form-control" required>
+                    <label for="productPriceField">Product price</label>
+                </div>
+                <br>
+                <!--Product amount-->
+                <div class="form-floating">
+                    <input id="productAmountField" type="text" class="form-control" required>
+                    <label for="productAmountField">Product amount</label>
+                </div>
+                <br>
+                <!--Product brand-->
+                <div class="form-floating">
+                    <input id="productBrandField" type="text" class="form-control" required>
+                    <label for="productBrandField">Product brand</label>
+                </div>
+                <br>
+                <button type="button" class="btn btn-secondary btn-sm" id="createProductSubmit">Create Product</button>
+                <div class="alert alert-danger d-none mt-3 " id="createProductAlert">
+                    <strong>
+                        Error:
+                    </strong>
+                    <p id="createProductError"></p>
+                </div>
+                <div class="alert alert-success d-none mt-3 " id="createProductSuccess">
+                    <strong>
+                        Product created succesfuly!
+                    </strong>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="createButtons.js"></script>
+</body>
+</html>
+
+
+<!--name: {
+        type: String,
+        required: true
+    },
+    id: {
+        type: Number,
+        required: true,
+        unique: true
+    },
+    category: {
+        type: String,
+        required: true
+    },
+    color: {
+        type: String,
+        required: true
+    },
+    image: [{
+        type: String,
+    }],
+    size: {
+        type: mongoose.Types.Decimal128,
+        required: true
+    },
+    hot: {
+        type: Boolean,
+        default: false
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    price: {
+        type: mongoose.Types.Decimal128,
+        required: true
+    },
+    amount: {
+        type: Number,
+        required: true
+    },
+    comments: [{
+        type: String,
+    }],
+    brand:{
+        type:String
+    }-->
