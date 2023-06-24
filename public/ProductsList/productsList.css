@@ -1,20 +1,28 @@
-.aside{
-	position: sticky;
-	top:0;
-	left: 0;
-    
+aside{
+	position:sticky;
+    top: 60px;
 }
 
 #sorter{
     background-color: #f8f9fa;  /* Choose the color you prefer */
     box-shadow: 0 0 10px rgba(0,0,0,0.1);  /* Optional: Add a subtle shadow */
 }
-#content {
+
+.content {
     background-color: #f8f9fa;  /* Choose the color you prefer */
     padding: 20px;
     margin-top: 10px;
 	width: auto;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);  /* Optional: Add a subtle shadow */
+}
+
+
+.card{
+    background-color: antiquewhite;
+}
+
+.card-body{
+    background-color: antiquewhite;
 }
 
 

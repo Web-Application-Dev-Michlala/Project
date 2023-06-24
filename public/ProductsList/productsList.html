@@ -17,7 +17,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-2 col-md-3 col-sm-5 col-6">
-                    <aside class=" position-fixed start-0" >
+                    <aside>
                         <div class="accordion" id="product_search">
               
                             <!--id search-->
@@ -58,7 +58,8 @@
                                                 <label for="name">Name</label>
                                             </div>
                                             <br>
-                                            <button type="button" class="btn btn-primary btn-sm" for="name" id="name_submit">Search</button>                                        </form>
+                                            <button type="button" class="btn btn-primary btn-sm" for="name" id="name_submit">Search</button>                                        
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -87,7 +88,8 @@
                                                 <input type="checkbox" class="form-check-input" id="green"/>
                                             </div>
                                             <br>
-                                            <button type="button" class="btn btn-primary btn-sm" id="color_submit">Search</button>                                        </form>
+                                            <button type="button" class="btn btn-primary btn-sm" id="color_submit">Search</button>                                        
+                                        </form>
                                     </div>
                                 </div>
                              </div>
@@ -122,15 +124,45 @@
                                 </div>
                              </div>
 
+                             <!--brand search-->
+              
+                             <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="true" aria-controls="panelsStayOpen-collapseFive">
+                                        Search by brand
+                                    </button>
+                                </h2>
+                                <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse">
+                                    <div class="accordion-body">
+                                        <form id="brand_search" novalidate>
+                                            <div class="form-check">
+                                                <label for="iphone" class="form-label" required>Ipone</label>
+                                                <input type="checkbox" class="form-check-input" id="iphone"/>
+                                            </div>
+                                            <div class="form-check">            
+                                                <label for="galaxy" class="form-label">Galaxy</label>
+                                                <input type="checkbox" class="form-check-input" id="galaxy"/>
+                                            </div>
+                                            <div class="form-check">    
+                                                <label for="nokia" class="form-label">Nokia</label>
+                                                <input type="checkbox" class="form-check-input" id="nokia"/>
+                                            </div>
+                                            <br>
+                                            <button type="button" class="btn btn-primary btn-sm" id="size_submit">Search</button>                                        
+                                        </form>
+                                    </div>
+                                </div>
+                             </div>
+
                             <!--price search-->
               
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFive" aria-expanded="false" aria-controls="panelsStayOpen-collapseFive">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
                                         Search by price
                                     </button>
                                 </h2>
-                                <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse">
+                                <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse">
                                     <div class="accordion-body">
                                         <p>
                                             <label for="price">Price range:</label>
@@ -138,7 +170,8 @@
                                         </p>
                                         <div id="price_range"></div>
                                         <br>
-                                        <button type="button" class="btn btn-primary btn-sm" for="price_range" id="price_submit">Search</button>                                    </div>
+                                        <button type="button" class="btn btn-primary btn-sm" for="price_range" id="price_submit">Search</button>                                    
+                                    </div>
                                 </div>
                             </div>
       
@@ -146,17 +179,16 @@
               
                             <div class="accordion-item">
                                 <h2 class="accordion-header">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSix" aria-expanded="false" aria-controls="panelsStayOpen-collapseSix">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseSeven" aria-expanded="false" aria-controls="panelsStayOpen-collapseSeven">
                                         Advanced search
                                     </button>
                                 </h2>
-                                <div id="panelsStayOpen-collapseSix" class="accordion-collapse collapse">
+                                <div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse">
                                     <div class="accordion-body">   
                                     </div>
                                 </div>
                             </div>
                         </div>
-            
                     </aside>
                 </div>
                 <div class="col-lg-10 col-md-9 col-sm-7 col-6">
@@ -179,7 +211,7 @@
                     <nav aria-label="...">
                         <ul class="pagination">
                         </ul>
-                      </nav>
+                    </nav>
                 </div>
             </div>
         </div>
