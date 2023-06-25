@@ -4,6 +4,7 @@ const path = require('path')
 
 
 const getProuductsListPage = async (req,res) => {
+ 
     res.sendFile(path.join(__dirname,"../public/ProductsList/productsList.html"))
 }
 

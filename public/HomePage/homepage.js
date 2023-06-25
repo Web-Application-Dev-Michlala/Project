@@ -70,7 +70,7 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
         {
             data='<button type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
             caritem='<div class="carousel-item active c-item">'+
-            '<a href="/public/Product/product.html?id='+hotItems[i].id+'">'+//<!--TODO PULL hot product IMAGE AND LINK-->
+            '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'">'+//<!--TODO PULL hot product IMAGE AND LINK-->
             '<img src="./'+hotItems[i].image+'" class="d-block  c-img" >'+
             '</a>'+
             '<div class="carousel-caption d-none d-md-block" id="title">'+
@@ -82,7 +82,7 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
         {
             data+='<button type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide-to='+(i)+' aria-label="Slide '+(i+1)+'"></button>'
             caritem+='<div class="carousel-item c-item">'+
-            '<a href="/public/Product/product.html?id='+hotItems[i].id+'">'+//<!--TODO PULL hot product IMAGE AND LINK-->
+            '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'">'+//<!--TODO PULL hot product IMAGE AND LINK-->
             '<img src="./'+hotItems[i].image+'" class="d-block  c-img">'+
             '</a>'+
             '<div class="carousel-caption d-none d-md-block" id="title">'+
