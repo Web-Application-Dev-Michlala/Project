@@ -27,7 +27,8 @@ $.ajax({
 }).done(function(cateogries)
 {
     cateogries.forEach(category => {
-        category.products.forEach(product => {
+        category.products.forEach(product => 
+        {
             if(product.hot)
             arr.push(product)
         });
