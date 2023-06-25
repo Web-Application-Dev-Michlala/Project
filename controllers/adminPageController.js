@@ -47,7 +47,38 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+const getCategoryByName = async (req,res) => {
+    const category = await categoryService.getCategoryByName(req.params.categoryName);
+    if (!category){
+      return res.status(404).json({errors:['Category not found']});
+    }
+    res.json(category);
+}
 
+const getProductById = async (req,res) => {
+    const product = await productService.getProductById(req.params.categoryNane,req.params.id);
+    if (!product) {
+        return res.status(404).json({errors:['Product not found']});
+    }
+    res.json(product);
+}
+
+const createCategory = async(req,res) => {
+    const category = await categoryService.createCategory(req.params.categoryName,req.body.image);
+    if(!category){
+        return res.status(404).json({errors:["Category wasn't created"]});
+    }
+    res.json(category);
+}
+
+const createProduct = async(req,res) => {
+    const {categoryName,productName,color,size,image,description,price,amount,brand,hot} = await req.body;
+    const product = await productService.createProduct(categoryName,productName,req.params.id,color,size,image,description,price,amount,brand,hot = false)
+    if(!product){
+        return res.status(404).json({errors:["Product wasn't created"]});
+    }
+    res.json(product);
+}
 
 module.exports = 
 {
@@ -56,6 +87,10 @@ module.exports =
     getAdminPage,
     getCategoryDetails,
     deleteProduct,
-    getAdminPage2
+    getAdminPage2,
+    getCategoryByName,
+    getProductById,
+    createCategory,
+    createProduct
 
 }

@@ -12,9 +12,16 @@ router.route('/getCategorys')
     .get(adminPageController.getAllCategorys);
 
 router.route('/:categoryName')
-    .delete(adminPageController.deleteCategory);
+    .delete(adminPageController.deleteCategory)
+    .get(adminPageController.getCategoryByName)
+    .post(adminPageController.createCategory)
 
 router.route('/getCategoryDetails/:categoryName')
     .get(adminPageController.getCategoryDetails);
 
+router.route('/:categoryName/:id')
+    .get(adminPageController.getProductById);
+
+router.route('/:id')
+    //.post(adminPageController.createProduct);
 module.exports = router;
