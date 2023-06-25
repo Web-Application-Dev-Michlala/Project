@@ -1,0 +1,33 @@
+body {
+    display: flex;
+    align-items: center;
+}
+
+#HeaderMaps {
+    display: inline;
+    border-bottom: 1px solid #00000038;
+    
+}
+
+#map{
+    background-color: #f8f9fa; 
+    padding: 20px;
+    box-shadow: 0 0 30px rgba(0,0,0,0.1); 
+    border-radius: 20px;
+}
+
+.info-window {
+    background-color: #ffffff;
+    color: #333333;
+    padding: 10px;
+    max-width: 250px;
+}
+
+.info-window h3 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.info-window p {
+    margin-bottom: 10px;
+}

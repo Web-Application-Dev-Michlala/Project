@@ -1,0 +1,14 @@
+#HeaderFAQ {
+    display: inline;
+    border-bottom: 1px solid #00000038;
+    
+}
+#accordionFAQ{
+    background-color: #f8f9fa; 
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+    border-radius: 20px;
+}
+.accordionBody{
+    background-color: #dbdbdbf1;
+}
