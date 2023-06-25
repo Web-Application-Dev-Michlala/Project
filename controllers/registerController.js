@@ -10,7 +10,6 @@ const register=async(req,res)=>{
     const result=await userService.createUser(username,password,birthdate,email);
     if(result)
     {
-        req.session.username = username
         res.redirect('/login');
     }
     else
