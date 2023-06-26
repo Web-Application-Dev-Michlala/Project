@@ -5,9 +5,14 @@
     margin-right:15px;
 }
 
-.search-bar
-{
-    width: 50%; /* Adjust the width as desired */
+
+.search-bar {
+    transition: ease-in-out 1s;
+   width: 200px;
+}
+
+.search-bar:hover {
+    width: 50%;
 }
 
 .underline
