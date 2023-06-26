@@ -29,22 +29,11 @@ router.route('/googleMaps').get((req, res) => {
     res.sendFile('map.html', { root: 'public/googleMap' });
 });
 
-router.route('/adminPage/').get((req, res) => {
-    res.sendFile('deleteButtons.html', { root: 'public/adminPage' });
-});
 
 
-router.route('/deleteProduct')
-    .delete(adminPageController.deleteProduct);
-
-router.route('/getCategoryDetails/:categoryName')
-    .get(adminPageController.getCategoryDetails);
-    
+  
 router.route('/getCategorys')
     .get(homepageController.getAllCategorys)
-    
-router.route('/:categoryName')
-    .delete(adminPageController.deleteCategory);
 
 router.route('/isLoggedIn')
 .get(loginController.isLoggedInNav);

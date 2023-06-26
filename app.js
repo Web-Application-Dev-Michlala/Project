@@ -28,7 +28,7 @@ app.use(session({
 app.use('/category',categoryRouter);
 app.use('/login', loginRouter);
 app.use('/register',registerRouter);
-app.use('/adminPage/',adminPageRoute);
+app.use('/adminPage',adminPageRoute);
 app.use('/', homepageRouter);
 
 
