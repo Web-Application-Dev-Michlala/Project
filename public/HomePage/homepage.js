@@ -1,4 +1,5 @@
 
+
 $( document ).ready(function() 
 {
     
@@ -9,16 +10,22 @@ $( document ).ready(function()
     }).done(function(data)
     {
         const navbar=$('#navbar');
-        if(data.isConnected)
+        if(data.isConnected!=false)
         { 
-           navbar.load('public/NavBar/navBar.html')
+           navbar.load('public/NavBar/navBar.html',function()
+           { $('#userGreet').text('Hello '+data.isConnected);
+           var userLink=$('#userLink')
+           userLink.attr('href','/users?username='+data.isConnected)
+        })
+           
         }
         else
         {
             navbar.load('public/NavBar/navBarLoggedOut.html')
         }
     });
-
+    const span=$('#userGreet');
+    span.text('Hello');
 carouselnum=1;
 var arr=[];
 categoryArray=[];
