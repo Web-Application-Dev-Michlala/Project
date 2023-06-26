@@ -1,6 +1,6 @@
 
 
-$( document ).ready(function() 
+$(document).ready(function() 
 {
     
     $.ajax
@@ -12,7 +12,7 @@ $( document ).ready(function()
         const navbar=$('#navbar');
         if(data.isConnected!=false)
         { 
-           navbar.load('public/NavBar/navBar.html',function()
+           navbar.load('public/Navbar/navBar.html',function()
            { $('#userGreet').text('Hello '+data.isConnected);
            var userLink=$('#userLink')
            userLink.attr('href','/users?username='+data.isConnected)
@@ -21,11 +21,10 @@ $( document ).ready(function()
         }
         else
         {
-            navbar.load('public/NavBar/navBarLoggedOut.html')
+            navbar.load('public/Navbar/navBarLoggedOut.html')
         }
     });
-    const span=$('#userGreet');
-    span.text('Hello');
+   
 carouselnum=1;
 var arr=[];
 categoryArray=[];

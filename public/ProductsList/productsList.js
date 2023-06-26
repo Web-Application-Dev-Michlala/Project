@@ -12,15 +12,20 @@ $(document).ready(function(){
     }).done(function(data)
     {
         const navbar=$('#navbar');
-        if(data.isConnected)
+        if(data.isConnected!=false)
         { 
-           navbar.load('./public/Navbar/navBar.html')
+           navbar.load('public/Navbar/navBar.html',function()
+           { $('#userGreet').text('Hello '+data.isConnected);
+           var userLink=$('#userLink')
+           userLink.attr('href','/users?username='+data.isConnected)
+        })
+           
         }
         else
         {
-            navbar.load('./public/Navbar/navBarLoggedOut.html')
+            navbar.load('public/Navbar/navBarLoggedOut.html')
         }
-    });
+    
    
     //products = categoryService.categoryService.getAllProductsByCategory("phone"); //figure out how to know which category i am in
     let length = products.length;
@@ -148,7 +153,10 @@ function addProduct(i){
     newProduct.appendChild(productBody);
     productCol.appendChild(newProduct);
     page.appendChild(productCol);
+
+
 }
+});
 
 /*$("#id_search").submit(function(e){
     if(!$("#id")[0].checkValidity() || !isValidId($("#id")[0].val)){
