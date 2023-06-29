@@ -11,7 +11,7 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top w-100" id="navbar">
+        <nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top w-100 custom-navbar" id="navbar">
            
         </nav>
         <div class="container">
@@ -74,22 +74,7 @@
                                 </h2>
                                 <div id="panelsStayOpen-collapseThree" class="accordion-collapse collapse">
                                     <div class="accordion-body">
-                                        <form id="color_search" novalidate>
-                                            <div class="form-check">
-                                                <label for="blue" class="form-label" required>Blue</label>
-                                                <input type="checkbox" class="form-check-input" id="blue"/>
-                                            </div>
-                                            <div class="form-check">            
-                                                <label for="red" class="form-label">Red</label>
-                                                <input type="checkbox" class="form-check-input" id="red"/>
-                                            </div>
-                                            <div class="form-check">    
-                                                <label for="green" class="form-label">Green</label>
-                                                <input type="checkbox" class="form-check-input" id="green"/>
-                                            </div>
-                                            <br>
-                                            <button type="button" class="btn btn-primary btn-sm" id="color_submit">Search</button>                                        
-                                        </form>
+                                        <form id="color_search" novalidate></form>
                                     </div>
                                 </div>
                              </div>
@@ -104,22 +89,7 @@
                                 </h2>
                                 <div id="panelsStayOpen-collapseFour" class="accordion-collapse collapse">
                                     <div class="accordion-body">
-                                        <form id="size_search" novalidate>
-                                            <div class="form-check">
-                                                <label for="size_15" class="form-label" required>15 inch</label>
-                                                <input type="checkbox" class="form-check-input" id="size_15"/>
-                                            </div>
-                                            <div class="form-check">            
-                                                <label for="size_17" class="form-label">17 inch</label>
-                                                <input type="checkbox" class="form-check-input" id="size_17"/>
-                                            </div>
-                                            <div class="form-check">    
-                                                <label for="size_21" class="form-label">21 inch</label>
-                                                <input type="checkbox" class="form-check-input" id="size_21"/>
-                                            </div>
-                                            <br>
-                                            <button type="button" class="btn btn-primary btn-sm" id="size_submit">Search</button>                                        
-                                        </form>
+                                        <form id="size_search" novalidate></form>
                                     </div>
                                 </div>
                              </div>
@@ -134,22 +104,7 @@
                                 </h2>
                                 <div id="panelsStayOpen-collapseFive" class="accordion-collapse collapse">
                                     <div class="accordion-body">
-                                        <form id="brand_search" novalidate>
-                                            <div class="form-check">
-                                                <label for="iphone" class="form-label" required>Ipone</label>
-                                                <input type="checkbox" class="form-check-input" id="iphone"/>
-                                            </div>
-                                            <div class="form-check">            
-                                                <label for="galaxy" class="form-label">Galaxy</label>
-                                                <input type="checkbox" class="form-check-input" id="galaxy"/>
-                                            </div>
-                                            <div class="form-check">    
-                                                <label for="nokia" class="form-label">Nokia</label>
-                                                <input type="checkbox" class="form-check-input" id="nokia"/>
-                                            </div>
-                                            <br>
-                                            <button type="button" class="btn btn-primary btn-sm" id="size_submit">Search</button>                                        
-                                        </form>
+                                        <form id="brand_search" novalidate></form>
                                     </div>
                                 </div>
                              </div>
@@ -170,7 +125,7 @@
                                         </p>
                                         <div id="price_range"></div>
                                         <br>
-                                        <button type="button" class="btn btn-primary btn-sm" for="price_range" id="price_submit">Search</button>                                    
+                                        <button type="button" class="btn btn-primary btn-sm" id="price_submit">Search</button>                                    
                                     </div>
                                 </div>
                             </div>
@@ -197,13 +152,14 @@
                         <label>Sort by:</label>
                         <nav aria-label="breadcrumb">
                             <ol class="breadcrumb">
-                                <li class="breadcrumb-item active"><button class="btn btn-light" disabled>Oldest</button></li>
-                                <li class="breadcrumb-item"><button class="btn btn-light">Newest</button></li>
-                                <li class="breadcrumb-item"><button class="btn btn-light">Cheapest</button></li>
-                              <li class="breadcrumb-item"><button class="btn btn-light">Most expensive</button></li>
+                                <li class="breadcrumb-item active"><button class="btn btn-light" id="oldestSorter" disabled>Oldest</button></li>
+                                <li class="breadcrumb-item"><button class="btn btn-light" id="newestSorter">Newest</button></li>
+                                <li class="breadcrumb-item"><button class="btn btn-light" id="cheapestSorter">Cheapest</button></li>
+                              <li class="breadcrumb-item"><button class="btn btn-light" id="expensiveSorter">Most expensive</button></li>
                             </ol>
                           </nav>
                     </div>
+                    
                     <div class="content">
                         
                     </div>

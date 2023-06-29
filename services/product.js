@@ -86,7 +86,7 @@ const getProductById = async (categoryName,id) => {
         if (!category) {
             console.error(`Category ${categoryName} not found`);
         }
-        const product = category.products.find(product=>product.id === id);
+        const product = category.products.filter(product=>product.id == id);
         if(!product){
             console.error(`Product with ${id} not found`);
             return null;
@@ -155,7 +155,7 @@ const getProductsByName = async (categoryName,name) => {
         if (!category) {
             console.error(`Category ${categoryName} not found`);
         }
-        const products = category.products.find(product=>product.name.includes(name));
+        const products = category.products.filter(product=>product.name.includes(name));
         if(!products){
             console.error(`Product ${name} not found`);
             return null;
