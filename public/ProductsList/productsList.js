@@ -288,6 +288,9 @@ function addProduct(products,i,j){
     const productCol = document.createElement("div")
     productCol.className = "col"
     
+    const link = document.createElement("a");
+    link.href = "/public/ProductsPage/index.html?id=" + products[j].id + "&name=" + categoryName;
+
     const newProduct = document.createElement("div");
     newProduct.className = "card"
     //newProduct.onclick = "window.location.href = /"
@@ -329,6 +332,8 @@ function addProduct(products,i,j){
     productPrice.className = "card-text";
     productPrice.id = "product-price";
     productPrice.innerText = "Price: "+ products[j].price.$numberDecimal;
+
+    
     
     productBody.appendChild(productTitle);
     productBody.appendChild(productId);
@@ -337,7 +342,8 @@ function addProduct(products,i,j){
     productBody.appendChild(productColor);
     productBody.appendChild(productSize);
     productBody.appendChild(productPrice);
-    newProduct.appendChild(productImage);
+    link.appendChild(productImage);
+    newProduct.appendChild(link);
     newProduct.appendChild(productBody);
     productCol.appendChild(newProduct);
     page.appendChild(productCol);
