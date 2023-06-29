@@ -18,7 +18,8 @@ var curr_price_range;
 var categoryName;
 
 
-$(document).ready(function(){
+$(document).ready(function()
+{
     $.ajax
     ({
         url:'/isLoggedIn',
@@ -39,7 +40,7 @@ $(document).ready(function(){
         {
             navbar.load('public/Navbar/navBarLoggedOut.html')
         }
-    });
+    })
     
 
     categoryName = new URLSearchParams(window.location.search).get('name'); // get category name from url
