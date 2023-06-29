@@ -91,7 +91,7 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
             data+='<button type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide-to='+(i)+' aria-label="Slide '+(i+1)+'"></button>'
             caritem+='<div class="carousel-item c-item">'+
             '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'&name='+hotItems[i].category+'">'+
-            '<img src="./'+hotItems[i].image+'" class="d-block  c-img">'+
+            '<img src="/'+hotItems[i].image+'" class="d-block  c-img">'+
             '</a>'+
             '<div class="carousel-caption d-none d-md-block" id="title">'+
                 '<h5>'+hotItems[i].name+'</h5>'+//<!--TODO PULL hot product name-->
@@ -158,7 +158,7 @@ function loadCategories(categoryArray) //load categories into cards
         {
         card3=
         "<div onclick=\"window.location.href='/category?name="+categoryArray[i+2].categoryName+"'\" class=\"card text-center flex-fill\" style=\"width: 18rem;\">"+
-        '<img class="card-img-top" src="./'+categoryArray[i+2].image+'" alt="Card image cap">'+
+        '<img class="card-img-top" src="/'+categoryArray[i+2].image+'" alt="Card image cap">'+
         '<div class="card-body">'+
         '<h5 class="card-titletext-md h1">'+categoryArray[i+2].categoryName+'</h5>'+//<!--pull text from category-->
         '</div>'+
