@@ -9,36 +9,43 @@ const getProuductsListPage = async (req,res) => {
 }
 
 const getAllProductsByCategory = async (req,res) => {
-    const products = await productService.getAllProductsByCategory(req.params.category);
+    const categoryName = req.params.categoryName;
+    const products = await productService.getAllProductsByCategory(categoryName);
     if(!products){
-        return res.status(404).json({errors:['product not found']});
+        return res.status(404).json({errors:['products not found']});
     }
     res.json(products);
 }
 
+const getCurrentCategory = async(req,res) => {
+    console.error(req.path.name);
+}
+
 const getProductsByName = async (req,res) => {
-    const products = await productService.getProductsByName(req.params.category,req.params.name);
+    const products = await productService.getProductsByName(req.params.categoryName,req.params.name);
     if (!products) {
         return res.status(404).json({errors:['products not found']});
     }
-    if(products.length == 1){
-        //get to page of product
-    }
-    else{
+    //if(products.length == 1){
+    //    get to page of product
+    //}
+    //else{
         res.json(products);
-    }
+    //}
 };
 
 const getProductById = async (req,res) => {
-    const product = await productService.getProductById(req.params.category,req.params.id);
+    const product = await productService.getProductById(req.params.categoryName,req.params.id);
     if (!product) {
         return res.status(404).json({errors:['product not found']});
     }
+    res.json(product);
     //send product page
 };
 
 const getProductsByPriceRange = async (req,res) => {
-    const products = await productService.getProductsByPriceRange(req.params.category,req.params.min,req.params.max);
+    const priceRange = req.params.priceRange;
+    const products = await productService.getProductsByPriceRange(req.params.categoryName,parseFloat(priceRange.split(",")[0]),parseFloat(priceRange.split(",")[1]));
     if (!products) {
         return res.status(404).json({errors:['products not found']});
     }
@@ -46,7 +53,7 @@ const getProductsByPriceRange = async (req,res) => {
 };
 
 const getProductsByColors = async (req,res) => {
-    const products = await productService.getProductByColors(req.params.category,req.params.colors.split(','));
+    const products = await productService.getProductsByColors(req.params.categoryName,req.params.colors);
     if (!products) {
         return res.status(404).json({errors:['products not found']});
     }
@@ -54,7 +61,8 @@ const getProductsByColors = async (req,res) => {
 };
 
 const getProductsBySizes = async (req,res) => {
-    const products = await productService.getProductsBySizes(req.params.category,req.params.sizes.split(','));
+    console.error(req.params.sizes);
+    const products = await productService.getProductsBySizes(req.params.categoryName,req.params.sizes);
     if (!products) {
         return res.status(404).json({errors:['products not found']});
     }
@@ -62,7 +70,7 @@ const getProductsBySizes = async (req,res) => {
 };
 
 const getProductsByBrands = async (req,res) => {
-    const products = await productService.getProductsByBrands(req.params.category,req.params.brands.split(','));
+    const products = await productService.getProductsByBrands(req.params.categoryName,req.params.brands);
     if (!products) {
         return res.status(404).json({errors:['products not found']});
     }
@@ -71,6 +79,7 @@ const getProductsByBrands = async (req,res) => {
 
 module.exports = 
 {
+    getCurrentCategory,
     getAllProductsByCategory,
     getProuductsListPage,
     getProductsByName,

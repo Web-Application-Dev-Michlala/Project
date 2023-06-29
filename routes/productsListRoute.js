@@ -2,33 +2,39 @@ const express = require('express');
 const router = express.Router();
 
 const productsListController = require('../controllers/productsListController.js')
-const homepageController=require('../controllers/homepageController.js')
 
 router.route('/')
 .get(productsListController.getProuductsListPage)
 
-router.route('/products')
-    .get(productsListController.getProuductsListPage)
+//router.route('/products')
+//    .get(productsListController.getProuductsListPage)
 
-router.route('/category/:id')
-.get(homepageController.getCategoryByName)
-router.route('/:category/:name')
-    .get(productsListController.getProuductsListPage)
+//router.route('/:category/:name')
+//    .get(productsListController.getProuductsListPage)
 
-router.route('/:id')
+router.route('/getCurrentCategory')
+    .get(productsListController.getCurrentCategory)
+
+router.route('/getAllProductsByCategory/:categoryName')
+    .get(productsListController.getAllProductsByCategory)
+    
+router.route('/getProductById/:categoryName/:id')
     .get(productsListController.getProductById)
 
+router.route('/getProductsByName/:categoryName/:name')
+    .get(productsListController.getProductsByName)
 
-
-
-router.route('/:category/:min/:max')
+router.route('/getProductsByPriceRange/:categoryName/:priceRange')
     .get(productsListController.getProductsByPriceRange)
 
-router.route('/:category/:colors')
+router.route('/getProductsByColors/:categoryName/:colors')
     .get(productsListController.getProductsByColors)
 
-router.route('/:category/:sizes')
+router.route('/getProductsBySizes/:categoryName/:sizes')
     .get(productsListController.getProductsBySizes)
+
+router.route('/getProductsByBrands/:categoryName/:brands')
+    .get(productsListController.getProductsByBrands)
 
 
 
