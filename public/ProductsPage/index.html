@@ -6,25 +6,27 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
     </head>
     <body>
-        <div class="container">
+        <!------------- nav bar item --------------->
+        <nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top w-100 custom-navbar" id="navbar">
+           
+        </nav>
+
+
+        <div class="container p-5">
             <div class="row justify-content-evenly">
                 <div class="col-5" id="content-box">
                     <div class="card h-100 p-3 d-flex flex-column">
                         <div class="card-body">
-                            <h2 class="card-title" id="productName" style="border-bottom: 1px solid #00000038;">Product Name</h2>
+                            <h2 class="card-title" id="productName" style="border-bottom: 1px solid #00000038;"></h2>
                             <p class="card-text">
                                 <br>
-                                <strong>Size:</strong> <span id="productSize">Medium</span>
+                                <strong>Size:</strong> <span id="productSize"></span>
                                 <br>
-                                <strong>Category:</strong> <span id="productCategory">Electronics</span>
+                                <strong>Category:</strong> <span id="productCategory"></span>
                                 <br>
-                                <strong>Color:</strong> <span id="productColor">Red</span>
+                                <strong>Color:</strong> <span id="productColor"></span>
                                 <br>
                                 <p class="text-break" id="productDescription">
-                                    <strong>Description:</strong> <br>
-                                    Some description about the product<br>
-                                    Also some more text<br>
-                                    and here some more information about the product
                                 </p>
                                 <br>
                             </p> 
@@ -36,7 +38,7 @@
                                 <button class="btn btn-outline-secondary" type="button" id="button-increase"><strong>+</strong></button>
                             </div>
                             <div>
-                                <span class="badge bg-success fs-4" id="productPrice">$99.99</span>
+                                <span class="badge bg-success fs-4" id="productPrice"></span>
                             </div>
                         </div>
                         <div class="d-grid col-6 mx-auto mt-2">

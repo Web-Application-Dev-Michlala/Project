@@ -3,6 +3,7 @@ const router = express.Router();
 
 const productsListController = require('../controllers/productsListController.js')
 
+
 router.route('/')
 .get(productsListController.getProuductsListPage)
 

@@ -13,6 +13,9 @@ router.route('/getCategorys')
     .get(adminPageController.getAllCategorys);
 
 
+
+    
+
 //---------------------------------------------------------->
 router.route('/profile')
 .get( adminPageController.getUserProfile);
