@@ -1,4 +1,27 @@
+
 $(document).ready(function(){
+
+    $.ajax
+    ({
+        url:'/isLoggedIn',
+      
+    }).done(function(data)
+    {
+        const navbar=$('#navbar');
+        if(data.isConnected!=false)
+        { 
+           navbar.load('/public/Navbar/navBar.html',function()
+           { $('#userGreet').text('Hello '+data.isConnected);
+           var userLink=$('#userLink')
+           userLink.attr('href','/users?username='+data.isConnected)
+        })
+           
+        }
+        else
+        {
+            navbar.load('/public/Navbar/navBarLoggedOut.html')
+        }
+    })
 
     categoryName = new URLSearchParams(window.location.search).get('name'); 
     productId = new URLSearchParams(window.location.search).get('id'); 
@@ -15,6 +38,7 @@ $(document).ready(function(){
         $('#productDescription').html("<strong>Description:</strong><br>"+data[0].description);
         $('#productPrice').text(data[0].price.$numberDecimal+'$');
     })
+
     $('#button-increase').click(function(){
         var value = parseInt($('#productQuantity').val());
         value = isNaN(value) ? 0 : value;
@@ -30,4 +54,29 @@ $(document).ready(function(){
         }
         $('#productQuantity').val(value);
     });
+
 });
+
+function AddNavBar() {
+    $.ajax
+    ({
+        url:'/isLoggedIn',
+      
+    }).done(function(data)
+    {
+        const navbar=$('#navbar');
+        if(data.isConnected!=false)
+        { 
+           navbar.load('/public/Navbar/navBar.html',function()
+           { $('#userGreet').text('Hello '+data.isConnected);
+           var userLink=$('#userLink')
+           userLink.attr('href','/users?username='+data.isConnected)
+        })
+           
+        }
+        else
+        {
+            navbar.load('/public/Navbar/navBarLoggedOut.html')
+        }
+    })
+}

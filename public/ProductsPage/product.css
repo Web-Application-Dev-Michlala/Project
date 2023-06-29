@@ -1,7 +1,4 @@
-body {
-    display: flex;
-    align-items: center;
-}
+
 #content-box {
     background-color: #f8f9fa;  /* Choose the color you prefer */
     padding: 20px;
