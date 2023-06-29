@@ -22,7 +22,8 @@
 
 @media (min-width: 576px) {
     /* Modify the existing CSS rule within the media query */
-    #navbar .offcanvas {
+    #navbar .offcanvas 
+    {
       visibility: hidden !important;
       display: none !important;
     }
