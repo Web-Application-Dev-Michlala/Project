@@ -1,5 +1,6 @@
 
-$( document ).ready(function() 
+
+$(document).ready(function() 
 {
     
     $.ajax
@@ -9,16 +10,21 @@ $( document ).ready(function()
     }).done(function(data)
     {
         const navbar=$('#navbar');
-        if(data.isConnected)
+        if(data.isConnected!=false)
         { 
-           navbar.load('public/NavBar/navBar.html')
+           navbar.load('public/Navbar/navBar.html',function()
+           { $('#userGreet').text('Hello '+data.isConnected);
+           var userLink=$('#userLink')
+           userLink.attr('href','/users?username='+data.isConnected)
+        })
+           
         }
         else
         {
-            navbar.load('public/NavBar/navBarLoggedOut.html')
+            navbar.load('public/Navbar/navBarLoggedOut.html')
         }
     });
-
+   
 carouselnum=1;
 var arr=[];
 categoryArray=[];
@@ -27,7 +33,8 @@ $.ajax({
 }).done(function(cateogries)
 {
     cateogries.forEach(category => {
-        category.products.forEach(product => {
+        category.products.forEach(product => 
+        {
             if(product.hot)
             arr.push(product)
         });

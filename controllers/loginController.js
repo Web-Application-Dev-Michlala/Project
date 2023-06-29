@@ -13,7 +13,7 @@ const isLoggedInNav=async(req, res)=>
 {
     if (req.session.username != null)
     {
-    isConnected=true;
+    var isConnected=req.session.username;
     res.json({isConnected});
     }
     else{

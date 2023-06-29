@@ -4,3 +4,29 @@
     margin-left:15px;
     margin-right:15px;
 }
+
+
+.search-bar {
+    transition: ease-in-out 1s;
+   width: 200px;
+}
+
+.search-bar:hover {
+    width: 50%;
+}
+
+.underline
+{
+    border-bottom: solid 1px;
+}
+
+@media (min-width: 576px) {
+    /* Modify the existing CSS rule within the media query */
+    #navbar .offcanvas {
+      visibility: hidden !important;
+      display: none !important;
+    }
+  }
+  
+
+  

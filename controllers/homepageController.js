@@ -21,9 +21,11 @@ const getCategoryByName = async (req,res) => {
 }
 
 
-const getProductById = async (req,res) => {
+const getProductById = async (req,res) => 
+{
   const product = await productService.getProductById(req.params.id);
-  if (!product) {
+  if (!product) 
+  {
       return res.status(404).json({errors:['product not found']});
   }
 }
