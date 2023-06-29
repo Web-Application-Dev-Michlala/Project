@@ -1,14 +1,12 @@
 const mongoose = require('mongoose');
-
-const productService = require('./services/product.js')
-const category = require('./services/category.js')
+const category = require('./services/category')
+const product = require('./services/product')
 
 try{
-    mongoose.connect('mongodb+srv://shahargut2:u7Fsk8KLaJe4IzOi@cluster0.lctj22i.mongodb.net/');
+    mongoose.connect('mongodb+srv://shahargut2:u7Fsk8KLaJe4IzOieMNpX8KBONU5H324@cluster0.lctj22i.mongodb.net/');
     console.log('Connected to MongoDB');
-    //productService.createProduct('TestPhone',100,'Phones','Red',14.2,'public/images/Phones.jpg','This is a phone',1000,5,"Apple",false,'Some more text');
-    ExampleToSortByColor();
-    
+    loadDB();
+   
     
 
 
@@ -16,13 +14,12 @@ try{
     console.error('Error connecting to MongoDB', err);
 }
 
+async function loadDB(){
+    console.log('insert to db')
+    const products = await product.createProduct('Iphone',100,'Phones','Red',14.2,'public/images/Phones.jpg','This is a phone',1000,5,"Apple",false,'Some more text');
 
-async function ExampleToSortByColor() {
-    try {
-      await category.createCategory('Radio');
-      await productService.createProduct('Radio','TestPhone',1630,'red',14.2,'public/images/TestPhone.jpg','asdfsadf',1000,2,'samsung',true,'asdfaf');
-      console.log('done');
-    } catch (err) {
-      console.error('Error creating category', err);
-    }
-  }
+    await category.createCategory('Phones');
+
+    await category.addProductToCategory('Phones',products);
+    console.log('done')
+}

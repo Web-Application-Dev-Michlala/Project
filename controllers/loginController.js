@@ -1,4 +1,6 @@
+const { schema } = require('../models/category');
 const userService=require('../services/user')
+
 
 const getLoginPage = async (req,res) => {
   if(req.session.username!=null)
@@ -61,6 +63,10 @@ const logout=async(req, res)=> {
       res.redirect('/');
     });
   }
+
+
+
+  
 
 
 

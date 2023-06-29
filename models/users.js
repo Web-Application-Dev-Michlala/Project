@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const { orderSchema } = require('./order.js');  //SubDocument schema
+const  orderSchema  = require('./order.js');  //SubDocument schema
 
 const userSchema = new mongoose.Schema({
     userName: {
@@ -24,8 +24,6 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    purchaseHistory: [{ 
-        type: [orderSchema],
-    }],
+    purchaseHistory: [orderSchema],
 });
 module.exports = mongoose.model('User', userSchema);
