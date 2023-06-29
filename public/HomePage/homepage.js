@@ -1,5 +1,6 @@
 
-$( document ).ready(function() 
+
+$(document).ready(function() 
 {
     
     $.ajax
@@ -9,16 +10,21 @@ $( document ).ready(function()
     }).done(function(data)
     {
         const navbar=$('#navbar');
-        if(data.isConnected)
+        if(data.isConnected!=false)
         { 
-           navbar.load('public/NavBar/navBar.html')
+           navbar.load('public/Navbar/navBar.html',function()
+           { $('#userGreet').text('Hello '+data.isConnected);
+           var userLink=$('#userLink')
+           userLink.attr('href','/users?username='+data.isConnected)
+        })
+           
         }
         else
         {
-            navbar.load('public/NavBar/navBarLoggedOut.html')
+            navbar.load('public/Navbar/navBarLoggedOut.html')
         }
     });
-
+   
 carouselnum=1;
 var arr=[];
 categoryArray=[];
@@ -27,24 +33,26 @@ $.ajax({
 }).done(function(cateogries)
 {
     cateogries.forEach(category => {
-        category.products.forEach(product => {
+        category.products.forEach(product => 
+        {
             if(product.hot)
             arr.push(product)
         });
         categoryArray.push(category);
 
     const length = arr.length;
-    const partSize = Math.floor(length / 3);
+    const partSize = Math.floor(length / 3);//split array to 3 parts
               
     const part1 = arr.slice(0, partSize);
     const part2 = arr.slice(partSize, partSize * 2);
     const part3 = arr.slice(partSize * 2);
-    createAndloadHotCarouselsFromDB(part1,carouselnum)
+    createAndloadHotCarouselsFromDB(part1,carouselnum)//fill each carousel with asplit of the array
     carouselnum++;
     createAndloadHotCarouselsFromDB(part2,carouselnum)
     carouselnum++;
     createAndloadHotCarouselsFromDB(part3,carouselnum)
-    loadCategories(categoryArray);
+
+    loadCategories(categoryArray);//load categories into cards
 })
 });
 
@@ -70,7 +78,7 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
         {
             data='<button type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
             caritem='<div class="carousel-item active c-item">'+
-            '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'">'+//<!--TODO PULL hot product IMAGE AND LINK-->
+            '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'&name='+hotItems[i].category+'">'+//<!--TODO PULL hot product IMAGE AND LINK-->
             '<img src="./'+hotItems[i].image+'" class="d-block  c-img" >'+
             '</a>'+
             '<div class="carousel-caption d-none d-md-block" id="title">'+
@@ -82,7 +90,7 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
         {
             data+='<button type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide-to='+(i)+' aria-label="Slide '+(i+1)+'"></button>'
             caritem+='<div class="carousel-item c-item">'+
-            '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'">'+//<!--TODO PULL hot product IMAGE AND LINK-->
+            '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'&name='+hotItems[i].category+'">'+
             '<img src="./'+hotItems[i].image+'" class="d-block  c-img">'+
             '</a>'+
             '<div class="carousel-caption d-none d-md-block" id="title">'+
@@ -110,7 +118,7 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
     '</div>';
     
 }
-function loadCategories(categoryArray)
+function loadCategories(categoryArray) //load categories into cards
 {
     var cardRow
     

@@ -1,5 +1,6 @@
 const categoryService = require("../services/category");
 const productService = require("../services/product");
+const userService=require('../services/user')
 const path = require('path')
 
 const getAllCategorys = async (req,res) => {
@@ -7,11 +8,14 @@ const getAllCategorys = async (req,res) => {
     res.json(categories);
 
 }
-//***************ADDED
+//***************ADDED------->
 const getAdminPage2 = async (req,res) => {
-    res.sendFile('deleteButtons.html', { root: 'public/adminPage' });
+    res.sendFile('userPage.html', { root: 'public/adminPage' });
 
 }
+
+
+
 //*******************
 
 const getAdminPage = async (req,res) => {
@@ -63,6 +67,7 @@ const getProductById = async (req,res) => {
     res.json(product);
 }
 
+
 const createCategory = async(req,res) => {
     const category = await categoryService.createCategory(req.params.categoryName,req.body.image);
     if(!category){
@@ -79,6 +84,38 @@ const createProduct = async(req,res) => {
     }
     res.json(product);
 }
+//----------------------------------------------------->
+
+const getUserProfile = async(req, res) => {
+    const user = req.session.username; 
+    const schemauser = await userService.getUserById(user);
+    res.json({schemauser});
+    
+  };
+  
+
+
+const getAllOrders = async(req, res) => {
+    try {
+        const username = req.session.username; 
+       const orders= await userService.getAllorders(username);
+       res.json({orders});
+    } catch (error) {
+      console.error('Error fetching orders:', error);
+      throw error;
+    }
+  }
+
+  const getAllUsernames = async(req, res) => {
+    try {
+        const username = req.session.username; 
+       const users= await userService.getAllUsernames(username);
+       res.json({users});
+    } catch (error) {
+      console.error('Error fetching usernames:', error);
+      throw error;
+    }
+  }
 
 module.exports = 
 {
@@ -91,6 +128,11 @@ module.exports =
     getCategoryByName,
     getProductById,
     createCategory,
-    createProduct
+    createProduct,
+    getUserProfile,
+    getAllUsernames,
+    getAllOrders
+    
+   
 
 }

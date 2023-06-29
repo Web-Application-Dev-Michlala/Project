@@ -26,13 +26,18 @@ $(document).ready(function(){
     }).done(function(data)
     {
         const navbar=$('#navbar');
-        if(data.isConnected)
+        if(data.isConnected!=false)
         { 
-           navbar.load('./public/Navbar/navBar.html')
+           navbar.load('public/Navbar/navBar.html',function()
+           { $('#userGreet').text('Hello '+data.isConnected);
+           var userLink=$('#userLink')
+           userLink.attr('href','/users?username='+data.isConnected)
+        })
+           
         }
         else
         {
-            navbar.load('./public/Navbar/navBarLoggedOut.html')
+            navbar.load('public/Navbar/navBarLoggedOut.html')
         }
     });
     
@@ -335,7 +340,10 @@ function addProduct(products,i,j){
     newProduct.appendChild(productBody);
     productCol.appendChild(newProduct);
     page.appendChild(productCol);
+
+
 }
+
 
 //removes all pages
 function removePages(){

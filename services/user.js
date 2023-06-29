@@ -93,10 +93,45 @@ const setAdmin = async(userName,isAdmin)=>{
 }
 
 
+const getAllUsernames = async(userName)=>{
+    try {
+      
+        const userNames = await usersModel.find({}, 'userName'); 
+        return userNames;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+
+}
+
+const getAllorders = async(userName)=>{
+    try {
+        const user = await usersModel.findOne({ userName });
+
+        if (!user  ) {
+            console.error(`User with this username:${userName} not found or dont have permissions`);
+            return null;
+        }
+
+        return  user.purchaseHistory; 
+      
+
+        
+  
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+
+}
 module.exports = { 
     createUser,
     getUserById,
     ChangePassword,
     login,
     setAdmin,
+    getAllUsernames,
+    getAllorders
+
 };
