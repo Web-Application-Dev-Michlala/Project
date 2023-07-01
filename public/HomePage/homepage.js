@@ -79,7 +79,7 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
             data='<button type="button" data-bs-target="#carousel'+carouselnum+'" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>'
             caritem='<div class="carousel-item active c-item">'+
             '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'&name='+hotItems[i].category+'">'+//<!--TODO PULL hot product IMAGE AND LINK-->
-            '<img src="./'+hotItems[i].image+'" class="d-block  c-img" >'+
+            '<img src="/'+hotItems[i].image+'" class="d-block  c-img" >'+
             '</a>'+
             '<div class="carousel-caption d-none d-md-block" id="title">'+
                 '<h5>'+hotItems[i].name+'</h5>'+//<!--TODO PULL hot product name-->

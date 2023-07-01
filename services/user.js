@@ -1,7 +1,7 @@
 const usersModel = require('../models/users.js');
 
 
-const createUser = async( userName,password,birthdate,email,isAdmin,purchaseHistory = []) => {
+const createUser = async( userName,password,birthdate,email,isAdmin=false,purchaseHistory = []) => {
     try {
        
     const user= new usersModel({
@@ -15,7 +15,7 @@ const createUser = async( userName,password,birthdate,email,isAdmin,purchaseHist
         await user.save();
         return user;
     } catch (err) {
-        console.error(err);
+            console.error(err);
         return null;
     }
 }

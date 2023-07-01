@@ -16,22 +16,22 @@
     <div class="loginbox">
       <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTma4HEc7mkRWvZipMAKS-2YROF7fqKoFSS0A&usqp=CAU" class="avatar">
       <h1>Register Here</h1>
-      <form action="/register" method="post">
+      <form action="/register" method="post" id="form">
         <h2>Create an Account</h2>
        <p>Username</p>
-        <input type="text" name="username" placeholder="Enter Username">
+        <input type="text" name="username" placeholder="Enter Username" required>
         <p>Password</p>
-        <input type="password" name="password" placeholder="Enter Password">
+        <input type="password" name="password" placeholder="Enter Password" required>
         <p>Birthdate</p>
         <input type="date" name="birthdate" placeholder="Enter birthdate">
         <p>Email</p>
-        <input type="email" name="email" placeholder="Enter email">
+        <input type="email" name="email" placeholder="Enter email" required>
         <input type="submit" value="Register">
         
       </form>
       <p>Already a member? <a  href="/login" method="get">Sign in</a></p>
     </div>
-
+    
   </body>
 </html>
 
