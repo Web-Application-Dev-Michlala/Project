@@ -4,7 +4,7 @@
 <head>
 
   <link rel="stylesheet" href="/public/Navbar/navBar.css">
-  
+  <script src="public/Navbar/navBar.js"></script>
 </head>
 <body>
   
@@ -52,9 +52,10 @@
         </ul>
        </div>
        </div>
-       <form class="d-flex align-items-start-lg search-bar">
-        <input type="text" class="form-control me-2" placeholder="search...">
-        <button type="submit" class="btn btn-primary">Search</button>
+       <form class="d-flex align-items-start-lg search-bar" method="GET">
+        <input type="text" id="search-bar" class="form-control me-2" placeholder="search...">
+        <button type="submit" id="searchbut" class="btn btn-primary" >Search</button>
+        
     </form>
        <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ms-auto">

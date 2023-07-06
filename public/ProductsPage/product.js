@@ -1,27 +1,27 @@
 
 $(document).ready(function(){
 
-    $.ajax
-    ({
-        url:'/isLoggedIn',
-      
-    }).done(function(data)
-    {
-        const navbar=$('#navbar');
-        if(data.isConnected!=false)
-        { 
-           navbar.load('/public/Navbar/navBar.html',function()
-           { $('#userGreet').text('Hello '+data.isConnected);
-           var userLink=$('#userLink')
-           userLink.attr('href','/users?username='+data.isConnected)
-        })
-           
+    $.ajax({
+        url: '/isLoggedIn',
+    }).done(function(data) {
+        const navbar = $('#navbar');
+        if (data.isConnected != false) {
+            $.ajax({
+                url: '/public/Navbar/navBar.html',
+                dataType: 'html'
+            }).done(function(html) {
+                const navBarContent = $('<div>').html(html);
+                navbar.empty().append(navBarContent);
+    
+                $('#userGreet').text('Hello ' + data.isConnected);
+                var userLink = $('#userLink');
+                userLink.attr('href', '/users?username=' + data.isConnected);
+            });
+        } else {
+            navbar.load('/public/Navbar/navBarLoggedOut.html');
         }
-        else
-        {
-            navbar.load('/public/Navbar/navBarLoggedOut.html')
-        }
-    })
+    });
+    
 
     categoryName = new URLSearchParams(window.location.search).get('name'); 
     productId = new URLSearchParams(window.location.search).get('id'); 
@@ -57,26 +57,4 @@ $(document).ready(function(){
 
 });
 
-function AddNavBar() {
-    $.ajax
-    ({
-        url:'/isLoggedIn',
-      
-    }).done(function(data)
-    {
-        const navbar=$('#navbar');
-        if(data.isConnected!=false)
-        { 
-           navbar.load('/public/Navbar/navBar.html',function()
-           { $('#userGreet').text('Hello '+data.isConnected);
-           var userLink=$('#userLink')
-           userLink.attr('href','/users?username='+data.isConnected)
-        })
-           
-        }
-        else
-        {
-            navbar.load('/public/Navbar/navBarLoggedOut.html')
-        }
-    })
-}
+
