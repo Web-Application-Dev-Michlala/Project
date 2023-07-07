@@ -5,15 +5,20 @@
     margin-right:15px;
 }
 
-
+.ui-autocomplete {
+   
+    z-index: 9999;
+  }
 .search-bar {
     transition: ease-in-out 1s;
-   width: 200px;
+    width: 200px;
+ 
 }
 
-.search-bar:hover {
+.c:hover .search-bar{
     width: 50%;
 }
+
 
 .underline
 {

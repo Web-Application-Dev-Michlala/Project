@@ -1,6 +1,5 @@
 $(document).ready(function() 
 {
-    const serachbut=$('searchbut');
     const searchbar = $('#search-bar');
     const prods=[];
     const cats=[];
@@ -18,11 +17,46 @@ $(document).ready(function()
                
             });
         })
-        searchbar.autocomplete({
-            source: prodname,
-            minLength: 2,
+        var searchbar = $("#search-bar");
+        var autocompleteOptions = searchbar.autocomplete({
+          source: prodname,
+          minLength: 2
+        }).data("ui-autocomplete").menu.element;
+        
+        searchbar.on("focus", function() {
+          adjustAutocompleteDropdown();
         });
-    });
+        
+        searchbar.on("autocompleteopen", function() {
+          adjustAutocompleteDropdown();
+        });
+        
+        $(window).on("resize", function() {
+          adjustAutocompleteDropdown();
+        });
+        
+        function adjustAutocompleteDropdown() {
+          var searchBarWidth = searchbar.outerWidth();
+          var searchBarOffset = searchbar.offset();
+        
+          autocompleteOptions.css({
+            width: searchBarWidth,
+            left: searchBarOffset.left
+          });
+        }
+        
+        // Use MutationObserver to handle width changes of the search bar
+        var observer = new MutationObserver(function(mutationsList) {
+          for (var mutation of mutationsList) {
+            if (mutation.type === 'attributes' && mutation.attributeName === 'style') {
+              adjustAutocompleteDropdown();
+            }
+          }
+        });
+        
+        observer.observe(searchbar.get(0), { attributes: true });
+        
+   
 
 
     document.getElementById("searchbut").addEventListener("click", function(event) {
@@ -36,4 +70,5 @@ $(document).ready(function()
       //  window.location.href = '/public/ProductsPage/index.html?id='+ searchbar.val()+'&name='+cats[prods.indexOf(searchbar.val())]+'">'
     })
 
+    });
 });

@@ -12,7 +12,7 @@ $(document).ready(function()
         const navbar=$('#navbar');
         if(data.isConnected!=false)
         { 
-           navbar.load('public/Navbar/navBar.html',function()
+           navbar.load('/public/Navbar/navBar.html',function()
            { $('#userGreet').text('Hello '+data.isConnected);
            var userLink=$('#userLink')
            userLink.attr('href','/users?username='+data.isConnected)
@@ -21,7 +21,7 @@ $(document).ready(function()
         }
         else
         {
-            navbar.load('public/Navbar/navBarLoggedOut.html')
+            navbar.load('/public/Navbar/navBarLoggedOut.html')
         }
     });
    
