@@ -7,7 +7,7 @@
 
 .ui-autocomplete {
    
-    z-index: 9999;
+    z-index: 9998;
   }
 .search-bar {
     transition: ease-in-out 1s;
@@ -33,6 +33,8 @@
       display: none !important;
     }
   }
-  
+  .offcanvas {
+    z-index: 9999; /* Adjust this value as needed */
+  }
 
   
