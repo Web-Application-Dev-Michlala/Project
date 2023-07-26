@@ -1,9 +1,12 @@
+var categories;
+
 $(document).ready(function(){
     $.ajax({
-        url: "/getCategorys",
+        url: "/adminPage/getCategorys",
         type: "GET",
-        success: function(categories) {
-            var categoryField = $("#productCategoryField");
+        success: function(data) {
+            var categoryField =document.getElementById("productCategoryField");
+            categories = data;
             categories.forEach((category) =>{
                 const option = document.createElement("option");
                 option.innerText = category.categoryName;
@@ -15,7 +18,7 @@ $(document).ready(function(){
         }
     });
     $("#createCategorySubmit").click(function(){
-        var alertMessage = $("#createCategoryAlert");
+        var alertMessage = document.getElementById("createCategoryAlert");
         if(!alertMessage.classList.contains("d-none")){
             alertMessage.classList.add("d-none"); //cant use addClass
         }
@@ -26,14 +29,17 @@ $(document).ready(function(){
             },4000);
         }
         else{
-            var categoryName = $("#categoryNameField").value;
-            var categoryImage = $("#categoryImageField").value;
+            var categoryName = document.getElementById("categoryNameField").value;
+            var categoryImage = document.getElementById("categoryImageField").value;
             $.ajax({
-                url: "/" + categoryName,
+                url: "/adminPage/createCategory",
                 type: "POST",
-                data: { image : categoryImage},
+                data: {
+                    categoryName: categoryName,
+                    image : categoryImage
+                },
                 success: () =>{
-                    var successMessage = $("#createCategorySuccess");
+                    var successMessage = document.getElementById("createCategorySuccess");
                     successMessage.classList.remove("d-none");
                     setTimeout(() => {
                         successMessage.classList.add("d-none");
@@ -41,7 +47,7 @@ $(document).ready(function(){
                     resetCategoryFields();
                 },
                 error: () =>{
-                    var errorMessage = $("#createCategoryError");
+                    var errorMessage = document.getElementById("createCategoryError");
                     errorMessage.innerText = "An error occurred while trying to create the category";
                     alertMessage.classList.remove("d-none");
                     setTimeout(() => {
@@ -49,11 +55,13 @@ $(document).ready(function(){
                     },3000);
                 }
             })
+            
+            
         }
     })
 
     $("#createProductSubmit").click(function(){
-        var alertMessage = $("#createProductAlert");
+        var alertMessage = document.getElementById("createProductAlert");
         if(!alertMessage.classList.contains("d-none")){
             alertMessage.classList.add("d-none");//cant use addClass
         }
@@ -66,29 +74,31 @@ $(document).ready(function(){
                 },3000);
         }
         else{
-            var productId = $("#productIdField").value;
-            var productCategory = $("#productCategoryField").value;
-            var name = $("#productNameField").value;
-            var productColor = $("#productColorField").value;
-            var productSize = $("#productSizeField").value;
-            var productImage = $("#productImageField").value;
-            var productDesc = $("#productDescField").value;
-            var productPrice = $("#productPriceField").value;
-            var productAmount = $("#productAmountField").value;
-            var productBrand = $("#productBrandField").value;
-            var productHot = $("#productHotField").value;
-            if(productHot.length == 0 || productHot == "No"){
+            var productId = $("#productIdField").val();
+            var productCategory = $("#productCategoryField").val();
+            var productName = $("#productNameField").val();
+            var productColor = $("#productColorField").val();
+            var productSize = $("#productSizeField").val();
+            var productImage = $("#productImageField").val();
+            var productDesc = $("#productDescField").val();
+            var productPrice = $("#productPriceField").val();
+            var productAmount = $("#productAmountField").val();
+            var productBrand = $("#productBrandField").val();
+            var productHot = $("#productHotField").val();
+            if(productHot == "0" || productHot == "No"){
                 productHot = false;
             }
             else {
                 productHot = true;
             }
+            
             $.ajax({
-                url: "/" + productId,
+                url: "/adminPage/createProduct",
                 type: "POST",
                 data: { 
+                    Id: productId, 
                     categoryName: productCategory,
-                    productName: name,
+                    productName: productName,
                     color: productColor,
                     size: productSize,
                     image: productImage,
@@ -99,7 +109,7 @@ $(document).ready(function(){
                     hot: productHot
                 },
                 success: () =>{
-                    var successMessage = $("#createProductSuccess");
+                    var successMessage = document.getElementById("createProductSuccess");
                     successMessage.classList.remove("d-none");
                     setTimeout(() => {
                         successMessage.classList.add("d-none");
@@ -107,7 +117,7 @@ $(document).ready(function(){
                     resetProductFields();
                 },
                 error: () =>{
-                    var errorMessage = $("#createProductError");
+                    var errorMessage = document.getElementById("createProductError");
                     errorMessage.innerText = "An error occurred while trying to create the product";
                     alertMessage.classList.remove("d-none");
                     setTimeout(() => {
@@ -115,11 +125,7 @@ $(document).ready(function(){
                     },3000);
                 }
             })
-            successMessage.classList.remove("d-none");
-            setTimeout(() => {
-                successMessage.classList.add("d-none");
-            },4000);
-            resetProductFields();        
+            
         }
     })
 })
@@ -128,26 +134,29 @@ $(document).ready(function(){
     //================== Functions =============================
 
     function categoryNameValidate(){
-        var name = $("#categoryNameField");
-        var errorMessage = $("#createCategoryError");
+        var name = document.getElementById("categoryNameField");
+        var errorMessage = document.getElementById("createCategoryError");
         if(name.value.length == 0){
             errorMessage.innerText = "Name field is empty";
             return false;
         }
+        var boolean;
         $.ajax({
-            url: "/" + name.value,
+            url: "/adminPage/" + name.value,
+            async:false,
             type: "GET",
             success: () => {
                 errorMessage.innerText = "Category with this name already exists";
-                return false;
+                boolean =  false;
             },
-            error: () => {return true;}
+            error: () => {boolean = true;}
         }); 
+        return boolean;
     }
 
     function categoryImageValidate(){ //check if image is in path instead
-        var image = $("#categoryImageField");
-        var errorMessage = $("#createCategoryError");
+        var image = document.getElementById("categoryImageField");
+        var errorMessage = document.getElementById("createCategoryError");
         if(image.value.length != 0){
             var linkParts = image.value.split('/');
             if(linkParts.length != 3 || linkParts[0] != "public" || linkParts[1] != "images"){
@@ -169,8 +178,8 @@ $(document).ready(function(){
     }
 
     function productIdValidate(){
-        var id = $("#productIdField");
-        var errorMessage = $("#createProductError");
+        var id = document.getElementById("productIdField");
+        var errorMessage = document.getElementById("createProductError");
         if(id.value.length == 0){
             errorMessage.innerText = "Id field is empty";
             return false;
@@ -184,21 +193,25 @@ $(document).ready(function(){
             errorMessage.innerText = "Id is not a positive number";
             return false;
         }
-        var categoryName = $("#productCategoryField").value;
-        $.ajax({
-            url:"/" + categoryName + "/" + id,
-            type: "GET",
-            success: () => {
-                errorMessage.innerText = "Product with the same id already exists";
-                return false;
-            },
-            error: () => {return true;} 
-        });
+        var boolean = true;
+        categories.forEach((category)=>{
+            $.ajax({
+                url:"/adminPage/" + category.categoryName + "/" + id.value,
+                async: false,
+                type: "GET",
+                success: (data) => {
+                    errorMessage.innerText = "Product with the same id already exists";
+                    boolean = false;
+                },
+                error: (data) => {} 
+            });
+        })
+        return boolean;
     }
 
     function productNameValidate(){
-        var name = $("#productNameField");
-        var errorMessage = $("#createProductError");
+        var name = document.getElementById("productNameField");
+        var errorMessage = document.getElementById("createProductError");
         if(name.value.length == 0){
             errorMessage.innerText = "Name field is empty";
             return false;
@@ -207,8 +220,8 @@ $(document).ready(function(){
     }
 
     function productCategoryValidate(){
-        var category = $("#productCategoryField");
-        var errorMessage = $("#createProductError");
+        var category = document.getElementById("productCategoryField");
+        var errorMessage = document.getElementById("createProductError");
         if(category.value == "0"){
             errorMessage.innerText = "Category hasn't been chosen";
             return false;
@@ -217,8 +230,8 @@ $(document).ready(function(){
     }
 
     function productColorValidate(){
-        var color = $("#productColorField");
-        var errorMessage = $("#createProductError");
+        var color = document.getElementById("productColorField");
+        var errorMessage = document.getElementById("createProductError");
         if(color.value.length == 0){
             errorMessage.innerText = "Color field is empty";
             return false;
@@ -227,8 +240,8 @@ $(document).ready(function(){
     }
 
     function productImageValidate(){
-        var image = $("#productImageField");
-        var errorMessage = $("#createProductError");
+        var image = document.getElementById("productImageField");
+        var errorMessage = document.getElementById("createProductError");
         if(image.value.length != 0){
             var linkParts = image.value.split('/');
             if(linkParts.length != 3 || linkParts[0] != "public" || linkParts[1] != "images"){
@@ -245,8 +258,8 @@ $(document).ready(function(){
     }
 
     function productSizeValidate(){
-        var size = $("#productSizeField");
-        var errorMessage = $("#createProductError");
+        var size = document.getElementById("productSizeField");
+        var errorMessage = document.getElementById("createProductError");
         if(size.value.length == 0){
             errorMessage.innerText = "Size field is empty";
             return false;
@@ -259,8 +272,8 @@ $(document).ready(function(){
     }
 
     function productDescValidate(){
-        var description = $("#productDescField");
-        var errorMessage = $("#createProductError");
+        var description = document.getElementById("productDescField");
+        var errorMessage = document.getElementById("createProductError");
         if(description.value.length == 0){
             errorMessage.innerText = "Description field is empty";
             return false;
@@ -269,8 +282,8 @@ $(document).ready(function(){
     }
 
     function productPriceValidate(){
-        var price = $("#productPriceField");
-        var errorMessage = $("#createProductError");
+        var price = document.getElementById("productPriceField");
+        var errorMessage = document.getElementById("createProductError");
         if(price.value.length == 0){
             errorMessage.innerText = "Price field is empty";
             return false;
@@ -283,27 +296,27 @@ $(document).ready(function(){
     }
 
     function productAmountValidate(){
-        var amount = $("#productAmountField");
-        var errorMessage = $("#createProductError");
+        var amount = document.getElementById("productAmountField");
+        var errorMessage = document.getElementById("createProductError");
         if(amount.value.length == 0){
             errorMessage.innerText = "Amount field is empty";
             return false;
         }
         var number = +(amount.value);
-        if(!number){
-            errorMessage.innerText = "Amount is not a number";
+        if(number < 0){
+            errorMessage.innerText = "Amount is not a positive number";
             return false;
         }
-        if(number <= 0){
-            errorMessage.innerText = "Amount is not a positive number";
+        else if(!number){
+            errorMessage.innerText = "Amount is not a number";
             return false;
         }
         return true;
     }
 
     function productBrandValidate(){
-        var brand = $("#productBrandField");
-        var errorMessage = $("#createProductError");
+        var brand = document.getElementById("productBrandField");
+        var errorMessage = document.getElementById("createProductError");
         if(brand.value.length == 0){
             errorMessage.innerText = "Brand field is empty";
             return false;

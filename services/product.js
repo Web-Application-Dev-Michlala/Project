@@ -28,14 +28,14 @@ const createProduct = async(categoryName,name,id,color,size,image,description,pr
         return null;
     }
 }
-const deleteProduct = async (categoryName,id) => {
+const deleteProduct = async (categoryName,productName) => {
     try {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
             return null;
         }
-        const index = category.products.findIndex(product => product.id === id);
+        const index = category.products.findIndex(product => product.name === productName);
         category.products.splice(index,1);
         await category.save();
         return category;
@@ -87,7 +87,7 @@ const getProductById = async (categoryName,id) => {
             console.error(`Category ${categoryName} not found`);
         }
         const product = category.products.filter(product=>product.id == id);
-        if(!product){
+        if(!product || product.length == 0){
             console.error(`Product with ${id} not found`);
             return null;
         }
@@ -207,7 +207,7 @@ const getProductsBySizes = async (categoryName,sizes) => {
         if (!category) {
             console.error(`Category ${categoryName} not found`);
         }
-        const products = category.products.filter(product=>sizes.includes(product.size));
+        const products = category.products.filter(product=>sizes.includes(product.size.toString()));//changing to string because of decimal128 having problems
         if(!products){
             console.error(`Product with ${size} not found`);
             return null;

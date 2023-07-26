@@ -59,17 +59,27 @@ const getCategoryByName = async (req,res) => {
     res.json(category);
 }
 
+const isCategoryExist = async(req,res) => {
+    var isExist;
+    const category = await categoryService.getCategoryByName(req.params.categoryName);
+    if(!category)
+        isExist = false;
+    else
+        isExist = true;
+    res.json(isExist);
+}
+
 const getProductById = async (req,res) => {
-    const product = await productService.getProductById(req.params.categoryNane,req.params.id);
+    const product = await productService.getProductById(req.params.categoryName,req.params.id);
     if (!product) {
-        return res.status(404).json({errors:['Product not found']});
+        return res.status(404).json({errors:['product not found']});
     }
     res.json(product);
 }
 
 
 const createCategory = async(req,res) => {
-    const category = await categoryService.createCategory(req.params.categoryName,req.body.image);
+    const category = await categoryService.createCategory(req.body.categoryName,req.body.image);
     if(!category){
         return res.status(404).json({errors:["Category wasn't created"]});
     }
@@ -77,8 +87,8 @@ const createCategory = async(req,res) => {
 }
 
 const createProduct = async(req,res) => {
-    const {categoryName,productName,color,size,image,description,price,amount,brand,hot} = await req.body;
-    const product = await productService.createProduct(categoryName,productName,req.params.id,color,size,image,description,price,amount,brand,hot = false)
+    const product = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
+        req.body.size,req.body.image,req.body.description,req.body.price,req.body.amount,req.body.brand,req.body.hot);
     if(!product){
         return res.status(404).json({errors:["Product wasn't created"]});
     }
@@ -131,8 +141,6 @@ module.exports =
     createProduct,
     getUserProfile,
     getAllUsernames,
-    getAllOrders
-    
-   
-
+    getAllOrders,
+    isCategoryExist
 }
