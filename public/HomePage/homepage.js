@@ -39,7 +39,7 @@ $.ajax({
             arr.push(product)
         });
         categoryArray.push(category);
-
+    })
     const length = arr.length;
     const partSize = Math.floor(length / 3);//split array to 3 parts
               
@@ -54,7 +54,7 @@ $.ajax({
 
     loadCategories(categoryArray);//load categories into cards
 })
-});
+
 
    
 function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the carousels with items 
