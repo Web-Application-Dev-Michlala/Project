@@ -61,8 +61,7 @@ const getProductsByColors = async (req,res) => {
 };
 
 const getProductsBySizes = async (req,res) => {
-    console.error(req.params.sizes);
-    const products = await productService.getProductsBySizes(req.params.categoryName,req.params.sizes);
+    const products = await productService.getProductsBySizes(req.params.categoryName,req.params.sizes.split(','));
     if (!products) {
         return res.status(404).json({errors:['products not found']});
     }
