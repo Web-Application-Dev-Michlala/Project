@@ -24,10 +24,22 @@ router.route('/users')
 router.route('/orders')
 .get( adminPageController.getAllOrders);
 //--------------------------------------------------------->
+
+router.route('/checkCategory/:categoryName')
+    .get(adminPageController.isCategoryExist);
+
+router.route('/createCategory')
+    .post(adminPageController.createCategory);
+
+router.route('/createProduct')
+    .post(adminPageController.createProduct);
+
+router.route('/deleteProduct')
+    .delete(adminPageController.deleteProduct);
+
 router.route('/:categoryName')
     .delete(adminPageController.deleteCategory)
-    .get(adminPageController.getCategoryByName)
-    .post(adminPageController.createCategory)
+    .get(adminPageController.getCategoryByName);
 
 router.route('/getCategoryDetails/:categoryName')
     .get(adminPageController.getCategoryDetails);

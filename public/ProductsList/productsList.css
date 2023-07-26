@@ -3,6 +3,25 @@ aside{
     top: 60px;
 }
 
+#price{
+    border:0;
+    color:crimson;
+    font-weight:bold;
+}
+
+.ui-slider-range{
+    background-color: rgb(55, 219, 192);
+}
+
+.ui-slider .ui-slider-handle {
+    border-radius: 20px;
+    background-color: rgb(71, 144, 226);
+}
+
+option{
+    border-radius: 20;
+}
+
 #sorter{
     background-color: #f8f9fa;  /* Choose the color you prefer */
     box-shadow: 0 0 10px rgba(0,0,0,0.1);  /* Optional: Add a subtle shadow */

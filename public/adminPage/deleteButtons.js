@@ -37,7 +37,7 @@ $(document).ready(function() {
     // Deleting a selected category
     $("#confirmDeleteButton").click(function() {
         $.ajax({
-            url: "/" + selectedCategory,
+            url: "/adminPage/" + selectedCategory,
             type: "DELETE",
             success: function() {
                 $("#deletionSuccessText").html("Category <strong>" + selectedCategory + "</strong> has been deleted!");
@@ -92,7 +92,7 @@ $(document).ready(function() {
         }
     
         $.ajax({
-            url: "/deleteProduct",
+            url: "/adminPage/deleteProduct",
             type: "DELETE",
             data: {
                 categoryName: selectedCategory,
@@ -115,7 +115,7 @@ $(document).ready(function() {
 //=============== Functions ====================
 function fetchCategoryDetails(categoryName) {
     $.ajax({
-        url: "/getCategoryDetails/" + categoryName,
+        url: "/adminPage/getCategoryDetails/" + categoryName,
         type: "GET",
         success: function(categoryDetails) {
             let productsName = "";
@@ -136,7 +136,7 @@ function fetchCategoryDetails(categoryName) {
 
 function fetchProducts(categoryName) {
     $.ajax({
-        url: "/getCategoryDetails/" + categoryName,
+        url: "/adminPage/getCategoryDetails/" + categoryName,
         type: "GET",
         success: function(categoryDetails) {
 

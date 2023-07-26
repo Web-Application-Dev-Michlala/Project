@@ -52,7 +52,7 @@ $(document).ready(function()
             curr_products = products;
             colors = getAllColors(products).sort();
             sizes = getAllSizes(products);
-            sizes.sort((size1,size2) => parseFloat(size1.$numberDecimal) - parseFloat(size2.$numberDecimal));
+            sizes.sort((size1,size2) => size1 - size2);
             brands = getAllBrands(products).sort();
             price_range = [getMinPrice(products),getMaxPrice(products)];
             curr_price_range = price_range;
@@ -95,7 +95,7 @@ $(document).ready(function()
                 var checkBoxes = size_search.querySelectorAll("input");
                 checkBoxes.forEach((checkBox) => {
                     if($(checkBox).is(':checked')){
-                        sizePicks.push(checkBox.id);
+                        sizePicks.push(parseFloat(checkBox.id.split(' ')[0]));
                     }
                 })
                 $.ajax({
@@ -207,13 +207,15 @@ function clearChoices(){
 function createPages(products){
     let length = products.length;
     let num_pages;
+    let last_page_num_products;
     if(length % 9 === 0){
         num_pages = length/9 - (length%9)/9;
+        last_page_num_products = 9;
     }
     else{
         num_pages =  length/9 - (length%9)/9 + 1;
+        last_page_num_products = length % 9;
     }
-    let last_page_num_products = length % 9;
     addPageNumbers(num_pages);
     for(let i = 1 ; i<=num_pages ; i++){
         addPage(i);
@@ -293,10 +295,15 @@ function addProduct(products,i,j){
 
     const newProduct = document.createElement("div");
     newProduct.className = "card"
-    //newProduct.onclick = "window.location.href = /"
         
     const productImage = document.createElement("img");
-    productImage.src = products[j].image;
+    if(products[j].amount == 0)
+        productImage.src = "public/images/soldout.png";
+    else{
+        productImage.src = products[j].image;
+        const link = document.createElement("a");
+        link.href = "/public/ProductsPage/index.html?id=" + products[j].id + "&name=" + categoryName;
+    }
     productImage.className = "card-img-top";
     productImage.alt = "...";
     
@@ -342,8 +349,12 @@ function addProduct(products,i,j){
     productBody.appendChild(productColor);
     productBody.appendChild(productSize);
     productBody.appendChild(productPrice);
-    link.appendChild(productImage);
-    newProduct.appendChild(link);
+    if(products[j].amount != 0){
+        link.appendChild(productImage);
+        newProduct.appendChild(link);
+    }
+    else
+        newProduct.appendChild(productImage);
     newProduct.appendChild(productBody);
     productCol.appendChild(newProduct);
     page.appendChild(productCol);
@@ -409,11 +420,11 @@ function createSizes(){
         const checkBox = document.createElement("input");
         checkBox.type = "checkbox";
         checkBox.className = "form-check-input";
-        checkBox.id = "" + size.$numberDecimal + " Inch";
+        checkBox.id = "" + size + " Inch";
         const sizeLabel = document.createElement("label");
-        sizeLabel.for = "" + size.$numberDecimal + " Inch" ;
+        sizeLabel.for = "" + size + " Inch" ;
         sizeLabel.className = "form-label";
-        sizeLabel.innerText = "" + size.$numberDecimal + " Inch";
+        sizeLabel.innerText = "" + size + " Inch";
         sizeCheck.appendChild(sizeLabel);
         sizeCheck.appendChild(checkBox);
         sizeList.appendChild(sizeCheck);
@@ -491,7 +502,7 @@ function getAllSizes(){
     products.forEach( product => {
         if(!sizes.includes(product.size.$numberDecimal))
         {
-            sizes.push(product.size);
+            sizes.push(product.size.$numberDecimal);
         }
     });
     return sizes;
