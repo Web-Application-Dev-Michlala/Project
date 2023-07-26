@@ -35,6 +35,27 @@ $(document).ready(function(){
             $('#productColor').text(data[0].color);
             $('#productDescription').html("<strong>Description:</strong><br>"+data[0].description);
             $('#productPrice').text(data[0].price.$numberDecimal+'$');
+            
+            const carouselInner = $('.carousel-inner');
+            carouselInner.empty(); 
+            const carouselIndicators = $('.carousel-indicators');
+            // Loop through the image paths and add them to the carousel
+            data[0].image.forEach((picturePath, index) => {
+                const carouselItemClass = index === 0 ? 'carousel-item active' : 'carousel-item';
+                const carouselItem = `
+                    <div class="${carouselItemClass}" data-bs-interval="10000">
+                        <img src="${"../../"+picturePath}" class="d-block w-100" alt="Product Image">
+                        <div class="carousel-caption d-none d-md-block">
+                        </div>
+                    </div>
+                `;
+                let carouselInd;
+                if(index > 0){
+                    carouselInd = `<button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="${index}" aria-label="Slide ${index}"></button>`;
+                }
+                carouselInner.append(carouselItem);
+                carouselIndicators.append(carouselInd);
+            });
         })
     
         $('#button-increase').click(function(){
