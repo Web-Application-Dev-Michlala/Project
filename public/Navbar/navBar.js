@@ -69,6 +69,12 @@ $(document).ready(function()
         window.location.href = "/public/ProductsPage/index.html?id=" +prods[prodname.indexOf(inputValue)]+'&name='+cats[prodname.indexOf(inputValue)];
       //  window.location.href = '/public/ProductsPage/index.html?id='+ searchbar.val()+'&name='+cats[prods.indexOf(searchbar.val())]+'">'
     })
-
+    $("#search-bar").on("keydown", function(event) {
+      // Check if the Enter key is pressed (keyCode 13)
+      if (event.keyCode === 13) {
+        // Trigger the click event on the search button
+        $("#searchbut").click();
+      }
+    });
     });
 });
