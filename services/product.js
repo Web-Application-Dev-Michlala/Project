@@ -68,6 +68,7 @@ const getProductByName = async (categoryName,name) => {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
+            return null;
         }
         const product = category.products.find(product=>product.name === name);
         if(!product){

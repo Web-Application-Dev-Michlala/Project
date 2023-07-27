@@ -56,6 +56,7 @@ $(document).ready(function(){
                 carouselInner.append(carouselItem);
                 carouselIndicators.append(carouselInd);
             });
+            
         })
     
         $('#button-increase').click(function(){
@@ -73,7 +74,64 @@ $(document).ready(function(){
             }
             $('#productQuantity').val(value);
         });
+        
+      
+          
+        $('#addToCart').click(function() 
+        {   
+            if(data.isConnected!=false){
+            var cart=null;
+            const prodname=$('#productName').text();
+            const prodamount=parseInt($('#productQuantity').val());
+            const categoryName= $('#productCategory').text();
+            const JSONedcart=sessionStorage.getItem('categories');
+            if(JSONedcart===null)
+            {
+             const categoriesArray=[ {
+                    category:categoryName,
+                    items:
+                    [
+                        {name:prodname,amount:prodamount}
+                    ]
+                }
+                ]
+                const categoriesJsonString=JSON.stringify(categoriesArray);
+                cart=categoriesArray;
+                sessionStorage.setItem('categories',categoriesJsonString);
+            }
+           else
+           {
+            cart=JSON.parse(JSONedcart);
+            const existingCategoryIndex = cart.findIndex((item) => item.category === categoryName);
+            if (existingCategoryIndex === -1) {
+                // Category doesn't exist, so create a new category with the name-amount pair
+                const newCategory = {
+                  category:categoryName,
+                  items: [{ name:prodname, amount:prodamount }],
+                };
+                cart.push(newCategory);
+            }
+                else{
+            const existingCategory = cart[existingCategoryIndex];
+            const existingKeyIndex = existingCategory.items.findIndex((item) => item.name === prodname);
+            if (existingKeyIndex === -1) 
+            {
+                existingCategory.items.push({ name:prodname, amount:prodamount });
+            }
+            else
+            {
+                existingCategory.items[existingKeyIndex].amount += prodamount;
+            }
+        };
+        const updatedCategoriesJsonString = JSON.stringify(cart);
+        sessionStorage.setItem('categories', updatedCategoriesJsonString);
     
+        }
+        console.log(cart);
+        window.location.href ='/category?name='+categoryName;
+    }
+    else
+    window.location.href ='/login'
     });
     
     
@@ -81,4 +139,4 @@ $(document).ready(function(){
     });
     
 
-   
+})

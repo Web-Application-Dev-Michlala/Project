@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 //require('custom-env').env('local','./config')
 
+const cartRouter=require('./routes/cartRoute')
 const homepageRouter=require('./routes/homepageRoute')
 const adminPageRoute=require('./routes/adminPageRoute')
 const categoryRouter=require('./routes/productsListRoute')
@@ -25,7 +26,7 @@ app.use(session({
     saveUninitialized: false,
     resave: false
 }))
-
+app.use('/cart',cartRouter);
 app.use('/category',categoryRouter);
 app.use('/login', loginRouter);
 app.use('/register',registerRouter);

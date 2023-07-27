@@ -50,6 +50,7 @@ const login= async(req,res)=>
   if (result) {
     if(result.isAdmin===true)
       req.session.admin=true;
+    req.session.cart=[];
     req.session.username = username
     res.redirect('/')
   }
