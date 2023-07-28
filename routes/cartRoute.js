@@ -6,4 +6,18 @@ const cartController=require('../controllers/cartController.js');
 router.route('/')
     .get(loginController.isLoggedIn,cartController.getCartPage);
 
+router.route('/validate')
+    .post(loginController.isLoggedIn,cartController.validateItem)
+
+router.route('/purchaseValidate')
+    .post(loginController.isLoggedIn,cartController.validateAll)
+router.route('/removeItems')
+.post(loginController.isLoggedIn,cartController.removeItems)
+
+
+
+
+
+
+
 module.exports = router;

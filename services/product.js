@@ -235,7 +235,97 @@ const getProductsByBrands = async (categoryName,brands) => {
         console.error(err);
     }
 };
+const validateAmount = async (categoryName,name,amount)=>
+{
+    const category = await categoryModel.findOne({ categoryName });
+    if (!category) 
+    {
+        console.error(`Category ${categoryName} not found`);
+        return 0;
+    }
+    const product = category.products.find(product=>product.name === name);
+    if(!product){
+        console.error(`Product ${name} not found`);
+        return 0;
+    }
+  
+    if(product.amount<amount)
+    {
+    console.error(`Amount of ${name} is too high`)
+        return 1
+    }
+    return 2
+}
+const validateAll = async (cart) => {
+    var toRemove = [];
+  
+    if (!cart || cart.length === 0) {
+      return toRemove;
+    }
+  
+    for (const category of cart) {
+      for (const item of category.items) {
+        const flag = await validateAmount(category.category, item.name, item.amount);
+        console.log("this is flag" + flag);
+  
+        if (flag === 0) {
+          const newItem = {
+            category:category.category,
+            name:item.name,
+            amount:0
+          };
+          toRemove.push(newItem);
+        } else if (flag === 1) {
+          const product = await getProductByName(category.category, item.name)
+          const updatedAmount = product.amount
+            console.log("this is updated amount " + updatedAmount);
+          const newItem = {
+            category:category.category,
+            name:item.name,
+            amount:updatedAmount
+          };
+          
+          toRemove.push(newItem);
+        }
+      }
+    }
+  
+    return toRemove;
+  };
 
+const removeItems = async (cart)=>{
+  
+    for (const category of cart) {
+        for (const item of category.items)
+        {
+            console.log("now at reduceAmount "+category.category,item.name,item.amount)
+            const check = await reduceAmount(category.category,item.name,item.amount);
+            
+        }
+  }
+  return 1;
+}
+const reduceAmount=async (categoryName,productName,amountToRemove)=>
+{
+try {
+    const category = await categoryModel.findOne({ categoryName });
+    if (!category) {
+        console.error(`Category ${categoryName} not found`);
+        return null;
+    }
+    const index = category.products.findIndex(product => product.name === productName);
+    category.products[index].amount -= amountToRemove;
+    await category.save();
+    return category;
+} 
+catch (err) {
+    console.error(err);
+    return null;
+}
+};
+
+
+ 
 module.exports = {
     createProduct,
     deleteProduct,
@@ -249,5 +339,8 @@ module.exports = {
     getProductsByColors,
     getProductsBySizes,
     getProductsByBrands,
-    getAllProductsByCategory
+    getAllProductsByCategory,
+    validateAmount,
+    validateAll,
+    removeItems
 };
