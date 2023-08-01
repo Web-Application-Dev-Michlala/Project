@@ -45,6 +45,36 @@ const deleteProduct = async (categoryName,productName) => {
     }
 };
 
+const updateProduct = async (categoryName,id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot) => {
+    try{
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+            return null;
+        }
+        const index = category.products.findIndex(product => product.id === parseInt(id));
+        if(index < 0){
+            console.error(`Product in category ${categoryName} not found`);
+            return null;
+        }
+        category.products[index].name = newName;
+        category.products[index].id = newId;
+        category.products[index].color = newColor;
+        category.products[index].size = newSize;
+        category.products[index].image = newImage;
+        category.products[index].description = newDescription;
+        category.products[index].price = newPrice;
+        category.products[index].amount = newAmount;
+        category.products[index].brand = newBrand;
+        category.products[index].hot = newHot;
+        category.save();
+        return category.products[index];
+   } catch(err){
+    console.error(err);
+    return null;
+    }
+}
+
 const getAllProductsByCategory = async (categoryName) => {
     try{
         const category = await categoryModel.findOne({categoryName});
@@ -88,7 +118,7 @@ const getProductById = async (categoryName,id) => {
             console.error(`Category ${categoryName} not found`);
         }
         const product = category.products.filter(product=>product.id == id);
-        if(!product || product.length == 0){
+        if(product.length === 0){
             console.error(`Product with ${id} not found`);
             return null;
         }
@@ -139,7 +169,7 @@ const getProductByPrice = async (categoryName,price) => {
             console.error(`Category ${categoryName} not found`);
         }
         const product = category.products.filter(product=>product.price === price);
-        if(!product){
+        if(product.length === 0){
             console.error(`Product with ${price} not found`);
             return null;
         }
@@ -155,9 +185,10 @@ const getProductsByName = async (categoryName,name) => {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
+            return null;
         }
         const products = category.products.filter(product=>product.name.includes(name));
-        if(!products){
+        if(products.length === 0){
             console.error(`Product ${name} not found`);
             return null;
         }
@@ -172,9 +203,10 @@ const getProductsByPriceRange = async (categoryName,minPrice,maxPrice) => {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
+            return null;
         }
         const products = category.products.filter(product=> product.price >= minPrice && product.price <= maxPrice);
-        if(!products){
+        if(!products.length === 0){
             console.error(`Product between ${minPrice} and ${maxPrice} not found`);
             return null;
         }
@@ -190,10 +222,11 @@ const getProductsByColors = async (categoryName,colors) => {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
+            return null;
         }
         const products = category.products.filter(product=> colors.includes(product.color));
-        if(!products){
-            console.error(`Product with ${color} not found`);
+        if(products.length === 0){
+            console.error(`Product with ${colors} not found`);
             return null;
         }
         return products;
@@ -207,10 +240,11 @@ const getProductsBySizes = async (categoryName,sizes) => {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
+            return null;
         }
         const products = category.products.filter(product=>sizes.includes(product.size.toString()));//changing to string because of decimal128 having problems
-        if(!products){
-            console.error(`Product with ${size} not found`);
+        if(products.length === 0){
+            console.error(`Product with ${sizes} not found`);
             return null;
         }
         return products;
@@ -224,10 +258,11 @@ const getProductsByBrands = async (categoryName,brands) => {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
+            return null;
         }
         const products = category.products.filter(product=>brands.includes(product.brand));
-        if(!products){
-            console.error(`Product with ${size} not found`);
+        if(products.length === 0){
+            console.error(`Product with ${brands} not found`);
             return null;
         }
         return products;
@@ -235,6 +270,45 @@ const getProductsByBrands = async (categoryName,brands) => {
         console.error(err);
     }
 };
+
+const getProductsByColorsSizesBrands = async (categoryName,colors,sizes,brands) => {
+    try {
+        const category = await categoryModel.findOne({categoryName});
+        if(!category) {
+            console.error(`Category ${categoryName} not found`);
+            return null;
+        }
+        const products = category.products.filter(product => colors.includes(product.color) && sizes.includes(product.size.toString())
+        && brands.includes(product.brand));
+        if(products.length === 0){
+            console.error(`Product not found`);
+            return null;
+        }
+        return products;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+const getProductsByColorsBrandsPriceRange = async (categoryName,colors,brands,minPrice,maxPrice) => {
+    try {
+        const category = await categoryModel.findOne({categoryName});
+        if(!category) {
+            console.error(`Category ${categoryName} not found`);
+            return null;
+        }
+        const products = category.products.filter(product => colors.includes(product.color) && brands.includes(product.brand) 
+        && product.price >= minPrice && product.price <= maxPrice);
+        if(products.length === 0){
+            console.error(`Product not found`);
+            return null;
+        }
+        return products;
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 const validateAmount = async (categoryName,name,amount)=>
 {
     const category = await categoryModel.findOne({ categoryName });
@@ -324,11 +398,31 @@ catch (err) {
 }
 };
 
-
+const addProductAmount = async(categoryName,productName,amount)=>{
+    try {
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+            return null;
+        }
+        const product = category.products.filter(product=>product.name == productName);
+        if(!product){
+            console.error(`Product with name ${productName} not found`);
+            return null;
+        }
+        product[0].amount += parseInt(amount);
+        category.save();
+        return product;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+}
  
 module.exports = {
     createProduct,
     deleteProduct,
+    updateProduct,
     getProductByName,
     getProductById,
     getProductByColor,
@@ -339,8 +433,11 @@ module.exports = {
     getProductsByColors,
     getProductsBySizes,
     getProductsByBrands,
+    getProductsByColorsSizesBrands,
+    getProductsByColorsBrandsPriceRange,
     getAllProductsByCategory,
     validateAmount,
     validateAll,
-    removeItems
+    removeItems,
+    addProductAmount
 };
