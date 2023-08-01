@@ -18,7 +18,12 @@
                 <div class="col-lg-2 col-md-3 col-sm-5 col-6">
                     <aside>
                         <div class="accordion" id="product_search">
-              
+                            
+                            <br>
+                            <button type="button" class="btn btn-secondary btn-sm" id="resetFilters">Reset Filters</button>
+                            <br>
+                            <br>
+
                             <!--id search-->
       
                             <div class="accordion-item">
@@ -120,7 +125,7 @@
                                     <div class="accordion-body">
                                         <p>
                                             <label for="price">Price range:</label>
-                                            <input type="text" id="price" readonly>
+                                            <label id="price"></label>
                                         </p>
                                         <div id="price_range"></div>
                                         <br>
@@ -139,34 +144,14 @@
                                 </h2>
                                 <div id="panelsStayOpen-collapseSeven" class="accordion-collapse collapse">
                                     <div class="accordion-body">
-                                        <div class="dropdown">
-                                            <button id="advanced-type" class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                              Search type
-                                            </button>
-                                            <ul class="dropdown-menu">
-                                              <li><a class="dropdown-item" href="#">Color,size and price</a></li>
-                                              <li><a class="dropdown-item" href="#">Color,brand and price</a></li>
-                                            </ul>
-                                        </div>
-                                        <br>
-                                        <form id="advanced1">
-                                            <select id="advanced1-color" class="form-select" aria-label="Default select example">
-                                                <option value="0" selected>Color</option>
-                                            </select>
-                                            <br>
-                                            <select id="advanced1-size" class="form-select" aria-label="Default select example">
-                                                <option value="0" selected>Size</option>
-                                            </select>
-                                        </form>
-                                        <form id="advanced2" hidden>
-                                            <select id="advanced2-color" class="form-select" aria-label="Default select example">
-                                                <option value="0" selected>Color</option>
-                                            </select>
-                                            <br>
-                                            <select id="advanced2-size" class="form-select" aria-label="Default select example">
-                                                <option value="0" selected>Size</option>
-                                            </select>
-                                        </form>   
+                                        <label>Search by:</label>
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Advanced1">
+                                            Color,size,brand
+                                        </button>
+                                        <br></br>
+                                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#Advanced2">
+                                            Color,brand,price
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -195,6 +180,93 @@
                         <ul class="pagination">
                         </ul>
                     </nav>
+                </div>
+
+                <!-- Advanced search by color size and brand  -->
+
+                <div class="modal fade" id="Advanced1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-md-down">
+                        <div class="modal-content"> 
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Advanced search by color, size and brand </h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Colors:</strong>
+                                        <br></br>
+                                        <form id="advanced1_color_search">
+
+                                        </form>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Sizes:</strong>
+                                        <br></br>
+                                        <form id="advanced1_size_search">
+                                            
+                                        </form>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Brands:</strong>
+                                        <br></br>
+                                        <form id="advanced1_brand_search">
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="advanced1_submit">Search</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!--Advanced search by color brand and price-->
+
+                <div class="modal fade" id="Advanced2" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-md-down">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Advanced search by color brand and price</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="row">
+                                    <div class="col">
+                                        <strong>Colors:</strong>
+                                        <br></br>
+                                        <form id="advanced2_color_search">
+
+                                        </form>
+                                    </div>
+                                    <div class="col">
+                                        <strong>Brands:</strong>
+                                        <br></br>
+                                        <form id="advanced2_brand_search">
+                                            
+                                        </form>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <strong>Price:</strong>
+                                        <label id="advanced2_price"></label>
+                                        <br></br>
+                                        <div id="advanced2_price_range">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="button" class="btn btn-primary" id="advanced2_submit">Search</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

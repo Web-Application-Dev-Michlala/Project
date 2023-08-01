@@ -9,6 +9,16 @@ aside{
     font-weight:bold;
 }
 
+.modal-content{
+    background-color:aliceblue;
+}
+
+#advanced2_price{
+    border:0;
+    color:crimson;
+    font-weight:bold;
+}
+
 .ui-slider-range{
     background-color: rgb(55, 219, 192);
 }

@@ -1,11 +1,5 @@
-/*
-    To do:
-     understand how to erase duplicate sizes
-     do advanced search
-     connect id to page
-*/
-
 var curr_page_num = 1;
+var current_accord = null;
 var curr_sorter = document.getElementById("oldestSorter");
 var products;
 var colors;
@@ -15,6 +9,7 @@ var price_range;
 var names;
 var curr_products;
 var curr_price_range;
+var advanced_curr_price_range;
 var categoryName;
 
 
@@ -55,7 +50,10 @@ $(document).ready(function()
             sizes.sort((size1,size2) => size1 - size2);
             brands = getAllBrands(products).sort();
             price_range = [getMinPrice(products),getMaxPrice(products)];
+            $( "#price" ).text( "$" + price_range[0] + " - $" + price_range[1] );
+            $( "#advanced2_price" ).text( "$" + price_range[0] + " - $" + price_range[1] );
             curr_price_range = price_range;
+            advanced_curr_price_range = price_range;
             names = getAllNames(products).sort();
             createPages(products);
             createFilters();
@@ -64,9 +62,6 @@ $(document).ready(function()
                 source: getAllNames(products),
                 minLength: 2,
             });
-
-
-            //figure out how to use jquery each function 
 
 
             //searchinh colors
@@ -79,14 +74,19 @@ $(document).ready(function()
                         colorPicks.push(checkBox.id);
                     }
                 })
+                if(colorPicks.length === 0){
+                    alert("No colors were picked");
+                    return;
+                }
                 $.ajax({
                     url:"/category/getProductsByColors/" + categoryName + "/" + colorPicks,
-                }).done(function(data){
-                    curr_products = data;
-                    $("#oldestSorter").click();
+                    success: function(data){
+                        curr_products = data;
+                        $("#oldestSorter").click();
+                    },
+                    error: () =>{alert("No products were found");} 
                 })
             })
-
 
             //searching sizes
             $("#size_submit").click(function(){
@@ -98,11 +98,17 @@ $(document).ready(function()
                         sizePicks.push(parseFloat(checkBox.id.split(' ')[0]));
                     }
                 })
+                if(sizePicks.length === 0){
+                    alert("No sizes were picked");
+                    return;
+                }
                 $.ajax({
                     url:"/category/getProductsBySizes/" + categoryName + "/" + sizePicks,
-                }).done(function(data){
-                    curr_products = data;
-                    $("#oldestSorter").click();
+                    success: function(data){
+                        curr_products = data;
+                        $("#oldestSorter").click();
+                    },
+                    error: () =>{alert("No products were found");} 
                 })
             })
 
@@ -116,13 +122,21 @@ $(document).ready(function()
                         brandPicks.push(checkBox.id);
                     }
                 })
+                if(brandPicks.length === 0){
+                    alert("No brands were picked");
+                    return;
+                }
                 $.ajax({
                     url:"/category/getProductsByBrands/" + categoryName + "/" + brandPicks,
-                }).done(function(data){
-                    curr_products = data;
-                    $("#oldestSorter").click();
+                    success: function(data){
+                        curr_products = data;
+                        $("#oldestSorter").click();
+                    },
+                    error: () =>{alert("No products were found");}
                 })
             })
+
+            
 
 
             //search price range
@@ -130,11 +144,110 @@ $(document).ready(function()
                 var priceRangePicks = curr_price_range;
                 $.ajax({
                     url:"/category/getProductsByPriceRange/" + categoryName + "/" + priceRangePicks,
-                }).done(function(data){
-                    curr_products = data;
-                    $("#oldestSorter").click();
+                    success: function(data){
+                        curr_products = data;
+                        $("#oldestSorter").click();
+                    },
+                    error: () => {alert("No products were found");}
                 })
             })
+
+            $("#advanced1_submit").click(function(){
+                var color_picks = [];
+                var size_picks = [];
+                var brand_picks = [];
+                $("#advanced1_color_search input").each(function(){
+                    if($(this).is(':checked')){
+                        color_picks.push($(this).attr('id'));
+                    }
+                })
+                if(color_picks.length === 0){
+                    alert("No colors were picked");
+                    return;
+                }
+
+                $("#advanced1_size_search input").each(function(){
+                    if($(this).is(':checked')){
+                        size_picks.push(parseFloat($(this).attr('id').split(' ')[0]));
+                    }
+                })  
+                if(size_picks.length === 0){
+                    alert("No sizes were picked");
+                    return;
+                }
+
+                $("#advanced1_brand_search input").each(function(){
+                    if($(this).is(':checked')){
+                        brand_picks.push($(this).attr('id'));
+                    }
+                })
+                if(brand_picks.length === 0){
+                    alert("No brands were picked");
+                    return;
+                }
+                $.ajax({
+                    url:"/category/getProductsByColorsSizesBrands/" + categoryName +"/"+color_picks+"/"+size_picks+"/"+brand_picks,
+                    type: "GET",
+                    success: function(data){
+                        $("#Advanced1").modal('toggle');          
+                        curr_products = data;
+                        $("#oldestSorter").click();
+                    },
+                    error: () => {alert("No products were found");}
+                })
+            })
+
+            $("#advanced2_submit").click(function(){
+                var color_picks = [];
+                var brand_picks = [];
+                var price_range_picks = advanced_curr_price_range;
+                $("#advanced2_color_search input").each(function(){
+                    if($(this).is(':checked')){
+                        color_picks.push($(this).attr('id'));
+                    }
+                })
+                if(color_picks.length === 0){
+                    alert("No colors were picked");
+                    return;
+                }
+
+                $("#advanced2_brand_search input").each(function(){
+                    if($(this).is(':checked')){
+                        brand_picks.push($(this).attr('id'));
+                    }
+                })
+                if(brand_picks.length === 0){
+                    alert("No brands were picked");
+                    return;
+                }
+
+                $.ajax({
+                    url:"/category/getProductsByColorsBrandsPriceRange/" + categoryName+"/"+color_picks+"/"+brand_picks+"/"+price_range_picks,
+                    type: "GET",
+                    success: function(data){
+                        $("#Advanced2").modal('toggle');          
+                        curr_products = data;
+                        $("#oldestSorter").click();
+                    },
+                    error: () => {alert("No products were found");}
+                })
+
+            })
+
+            $("#resetFilters").click(function(){
+                $("input[type=checkbox]").each(function(){
+                    $(this).prop("checked",false);
+                })
+                $("#id").val("");
+                $("#name").val("");
+                var options = $("#price_range").slider('option');
+                $("#price_range").slider('values',[options.min,options.max]);
+                $("#advanced2_price_range").slider('values',[options.min,options.max]);
+                $( "#price" ).text( "$" + options.min + " - $" + options.max);
+                $( "#advanced2_price" ).text( "$" + options.min + " - $" + options.max);
+                curr_products = products;
+                $("#oldestSorter").click();
+            });
         })
     
 
@@ -145,9 +258,11 @@ $(document).ready(function()
             }
             $.ajax({
                 url:"/category/getProductById/" + categoryName + "/" + $("#id").val(),
-            }).done(function(data){
-                curr_products = data;
-                $("#oldestSorter").click();
+                success: function(data){
+                    curr_products = data;
+                    $("#oldestSorter").click();
+                },
+                error: () => {alert("No products were found");}
             })
         })
 
@@ -158,9 +273,11 @@ $(document).ready(function()
             }
             $.ajax({
                 url:"/category/getProductsByName/" + categoryName + "/" + $("#name").val(),
-            }).done(function(data){
-                curr_products = data;
-                $("#oldestSorter").click();
+                success: function(data){
+                    curr_products = data;
+                    $("#oldestSorter").click();
+                },
+                error: () => {alert("No products were found");}
             })
         })
 
@@ -196,12 +313,17 @@ $(document).ready(function()
             curr_sorter = this;
             sortByMostExpensive();
         })
-
+        
+        $(".accordion-button").click(function(){
+            if(current_accord === this)
+                current_accord = null;
+            else{
+                if(current_accord !== null)
+                    current_accord.click();
+                current_accord = this;
+            }
+        })
 })
-
-function clearChoices(){
-
-}
 
 //create page numbers and products
 function createPages(products){
@@ -244,7 +366,7 @@ function createPages(products){
             });
         }
     }
-    curr_page = 1;
+    curr_page_num = 1;
 }
 
 
@@ -289,9 +411,8 @@ function addProduct(products,i,j){
     const page = document.querySelector("#content-box-" + i);
     const productCol = document.createElement("div")
     productCol.className = "col"
-    
+
     const link = document.createElement("a");
-    link.href = "/public/ProductsPage/index.html?id=" + products[j].id + "&name=" + categoryName;
 
     const newProduct = document.createElement("div");
     newProduct.className = "card"
@@ -301,7 +422,6 @@ function addProduct(products,i,j){
         productImage.src = "public/images/soldout.png";
     else{
         productImage.src = products[j].image;
-        const link = document.createElement("a");
         link.href = "/public/ProductsPage/index.html?id=" + products[j].id + "&name=" + categoryName;
     }
     productImage.className = "card-img-top";
@@ -314,6 +434,7 @@ function addProduct(products,i,j){
     productTitle.className = "card-title";
     productTitle.innerText = products[j].name;
 
+    
     const productId = document.createElement("p");
     productId.className = "card-text"
     productId.innerText = "Id: " + products[j].id;
@@ -329,7 +450,7 @@ function addProduct(products,i,j){
     const productBrand = document.createElement("p");
     productBrand.className = "card-text"
     productBrand.innerText = "Brand: " + products[j].brand;
-
+    
 
     const productDesc = document.createElement("p");
     productDesc.className = "card-text"
@@ -402,6 +523,8 @@ function createColors(){
         colorCheck.appendChild(checkBox);
         colorList.appendChild(colorCheck);
     })
+    $("#color_search").clone().appendTo("#advanced1_color_search");
+    $("#color_search").clone().appendTo("#advanced2_color_search");
     const colorButton = document.createElement("button");
     colorButton.type = "button";
     colorButton.className = "btn btn-primary btn-sm";
@@ -429,6 +552,7 @@ function createSizes(){
         sizeCheck.appendChild(checkBox);
         sizeList.appendChild(sizeCheck);
     })
+    $("#size_search").clone().appendTo("#advanced1_size_search");
     const sizeButton = document.createElement("button");
     sizeButton.type = "button";
     sizeButton.className = "btn btn-primary btn-sm";
@@ -456,6 +580,8 @@ function createBrands(){
         brandCheck.appendChild(checkBox);
         brandList.appendChild(brandCheck);
     })
+    $("#brand_search").clone().appendTo("#advanced1_brand_search");
+    $("#brand_search").clone().appendTo("#advanced2_brand_search");
     const brandButton = document.createElement("button");
     brandButton.type = "button";
     brandButton.className = "btn btn-primary btn-sm";
@@ -473,7 +599,7 @@ function createPriceRange(){
         max: parseFloat(price_range[1]),
         values: [parseFloat(price_range[0]) , parseFloat(price_range[1])],
         slide: function( event,ui) {
-        $( "#price" ).val( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+        $( "#price" ).text( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
         curr_price_range = [ui.values[0].toString(),ui.values[1].toString()];
         }
     });
@@ -481,9 +607,21 @@ function createPriceRange(){
     $( "#price" ).val( "$" + $( "#price_range" ).slider( "values", 0 ) +
     " - $" + $( "#price_range" ).slider( "values", 1 ) );
 
-    $("#color_pick input").checkboxradio({
-        icon:false
+    $("#advanced2_price_range").slider({
+        range: true,
+        min: parseFloat(price_range[0]),
+        max: parseFloat(price_range[1]),
+        values: [parseFloat(price_range[0]) , parseFloat(price_range[1])],
+        slide: function( event,ui) {
+        $( "#advanced2_price" ).text( "$" + ui.values[ 0 ] + " - $" + ui.values[ 1 ] );
+        advanced_curr_price_range = [ui.values[0].toString(),ui.values[1].toString()];
+        }
     });
+
+    $( "#advanced2_price" ).val( "$" + $( "#advanced2_price_range" ).slider( "values", 0 ) +
+    " - $" + $( "#advanced2_price_range" ).slider( "values", 1 ) );
+
+
 }
 
 function getAllColors(products){

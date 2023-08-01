@@ -53,7 +53,7 @@ const getProductsByPriceRange = async (req,res) => {
 };
 
 const getProductsByColors = async (req,res) => {
-    const products = await productService.getProductsByColors(req.params.categoryName,req.params.colors);
+    const products = await productService.getProductsByColors(req.params.categoryName,req.params.colors.split(','));
     if (!products) {
         return res.status(404).json({errors:['products not found']});
     }
@@ -69,12 +69,35 @@ const getProductsBySizes = async (req,res) => {
 };
 
 const getProductsByBrands = async (req,res) => {
-    const products = await productService.getProductsByBrands(req.params.categoryName,req.params.brands);
+    const products = await productService.getProductsByBrands(req.params.categoryName,req.params.brands.split(','));
     if (!products) {
         return res.status(404).json({errors:['products not found']});
     }
     res.json(products);
 };
+
+const getProductsByColorsSizesBrands = async (req,res) => {
+    var colors = req.params.colors;
+    var sizes = req.params.sizes;
+    var brands = req.params.brands;
+    const products = await productService.getProductsByColorsSizesBrands(req.params.categoryName,colors.split(','),sizes.split(','),brands.split(','));
+    if(!products){
+        return res.status(404).json({errors:['products not found']});
+    }
+    res.json(products);
+}
+
+const getProductsByColorsBrandsPriceRange = async (req,res) => {
+    var colors = req.params.colors;
+    var brands = req.params.brands;
+    var priceRange = req.params.priceRange;
+    const products = await productService.getProductsByColorsBrandsPriceRange(req.params.categoryName,colors.split(','),brands.split(','),
+    parseFloat(priceRange.split(',')[0]),parseFloat(priceRange.split(',')[1]));
+    if(!products){
+        return res.status(404).json({errors:['products not found']});
+    }
+    res.json(products);
+}
 
 module.exports = 
 {
@@ -86,5 +109,7 @@ module.exports =
     getProductsByPriceRange,
     getProductsByColors,
     getProductsBySizes,
-    getProductsByBrands
+    getProductsByBrands,
+    getProductsByColorsSizesBrands,
+    getProductsByColorsBrandsPriceRange
 }

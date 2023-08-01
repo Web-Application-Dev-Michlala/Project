@@ -37,6 +37,11 @@ router.route('/getProductsBySizes/:categoryName/:sizes')
 router.route('/getProductsByBrands/:categoryName/:brands')
     .get(productsListController.getProductsByBrands)
 
+router.route('/getProductsByColorsSizesBrands/:categoryName/:colors/:sizes/:brands')
+    .get(productsListController.getProductsByColorsSizesBrands);
+
+router.route('/getProductsByColorsBrandsPriceRange/:categoryName/:colors/:brands/:priceRange')
+    .get(productsListController.getProductsByColorsBrandsPriceRange);
 
 
 module.exports = router;
