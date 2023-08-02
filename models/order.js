@@ -18,10 +18,12 @@ const orderSchema = new mongoose.Schema({
         type: Number,
         required: true
     },
-    userId: {
-        type: Number,
-        required: true
+    userName: {
+        type: String,
+        required: true,
+        unique: true,
+        maxlength: 24
     },
 });
 
-module.exports = orderSchema;
+module.exports = mongoose.model('Order', orderSchema);

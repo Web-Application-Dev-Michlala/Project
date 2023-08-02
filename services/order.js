@@ -1,0 +1,98 @@
+const orderModel = require('../models/order.js');
+const userModel = require('../models/users.js');
+
+const createOrder = async (date, orderId, price, userName,...products) => {
+    try {
+        const order = new orderModel({
+            date,
+            id: orderId,
+            products,
+            price,
+            userName
+        });
+        await order.save();
+
+        //update user purchase history
+        const user = await userModel.findOne({ userName });
+        if (!user) {
+            console.error(`User with the name:${userName} not found`);
+            return null;
+        }
+        
+        user.purchaseHistory.push(order);
+        await user.save();
+
+        return order;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
+const getOrderById = async (orderId) => {
+    try {
+        const order = await orderModel.findOne({ id:orderId });
+        if (!order) {
+            console.error(`Order with the id:${orderId} not found`);
+            return null;
+        }
+        return order;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
+const addProductToOrder = async (orderId,product) => {
+    try {
+        const order = await orderModel.findOne({ id:orderId });
+        if (!order) {
+            console.error(`Order with the id:${orderId} not found`);
+            return null;
+        }
+        order.products.push(product);
+        await order.save();
+        return order;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
+const removeProductFromOrder = async (orderId,product) => {
+    try {
+        const order = await orderModel.findOne({ id:orderId });
+        if (!order) {
+            console.error(`Order with the id:${orderId} not found`);
+            return null;
+        }
+        order.products.pop(product);
+        await order.save();
+        return order;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
+const getAllOrdersByUserName = async (userName) => {
+    try {
+        const orders = await orderModel.find({ userName });
+        if (!orders || orders.length === 0) {
+            console.error(`${userName} has no orders`);
+            return null;
+        }
+        return orders;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
+module.exports = {
+    createOrder,
+    getOrderById,
+    addProductToOrder,
+    removeProductFromOrder,
+    getAllOrdersByUserName,
+}
