@@ -1,17 +1,11 @@
-
 const productService=require('../services/product')
-<<<<<<< HEAD
-const orderService=require('../services/order.js');
-=======
 const orderService=require('../services/order')
->>>>>>> 3dca042b9bbadd8102bee8166a1aec45205e17b6
 
 
 const getCartPage = async (req,res) => 
 {
     res.sendFile('ShoppingCart.html', { root: 'public/ShoppingCart' });
 }
-
 const validateItem =async(req,res)=>
 {
     const {categoryName,name,amount}=req.body;
@@ -40,16 +34,9 @@ const validateAll =async(req,res)=>
         itemsToRemove= await productService.validateAll(arrayToSend)
         res.status(200).json(itemsToRemove)
     }
-
 }
 const removeItems=async(req,res)=>
 {
-<<<<<<< HEAD
-    var {arrayToSend}=req.body;
-    const check= await productService.removeItems(arrayToSend)
-    console.log("check in Controller "+check)
-    if(check===1)
-=======
     var {arrayToSend,totalPrice}=req.body;
     const username=req.session.username
    const check= await productService.removeItems(arrayToSend)
@@ -62,18 +49,16 @@ const removeItems=async(req,res)=>
        orderArray.push(product);
     }
 }
-    
+
     console.log("order Array in controller "+orderArray)
    const order=await orderService.createOrder(new Date,totalPrice,username)
    console.log("check in Controller "+check)
 
    orderArray.forEach(product => {orderService.addProductToOrder(order._id,product)})
    if(check===1)
->>>>>>> 3dca042b9bbadd8102bee8166a1aec45205e17b6
     res.status(200).json(check)
 
 }
-
 module.exports=
 {
     getCartPage,
