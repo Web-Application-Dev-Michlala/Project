@@ -1,5 +1,6 @@
 
 const productService=require('../services/product')
+const orderService=require('../services/order')
 
 
 const getCartPage = async (req,res) => 
@@ -39,9 +40,24 @@ const validateAll =async(req,res)=>
 }
 const removeItems=async(req,res)=>
 {
-    var {arrayToSend}=req.body;
+    var {arrayToSend,totalPrice}=req.body;
+    const username=req.session.username
    const check= await productService.removeItems(arrayToSend)
+   console.log("total price in controller "+totalPrice)
+   var orderArray=[]
+   for (const category of arrayToSend) {
+    for (const item of category.items)
+    {
+       var product=await productService.getProductByName(category.category,item.name)
+       orderArray.push(product);
+    }
+}
+    
+    console.log("order Array in controller "+orderArray)
+   const order=await orderService.createOrder(new Date,totalPrice,username)
    console.log("check in Controller "+check)
+
+   orderArray.forEach(product => {orderService.addProductToOrder(order._id,product)})
    if(check===1)
     res.status(200).json(check)
 

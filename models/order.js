@@ -8,11 +8,7 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-    id: {
-        type: Number,
-        required: true,
-        unique: true
-    },
+
     products: [productSchema],
     price: {
         type: Number,

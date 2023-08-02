@@ -1,11 +1,10 @@
 const orderModel = require('../models/order.js');
 const userModel = require('../models/users.js');
 
-const createOrder = async (date, orderId, price, userName,...products) => {
+const createOrder = async (date, price, userName,...products) => {
     try {
         const order = new orderModel({
             date,
-            id: orderId,
             products,
             price,
             userName
@@ -31,7 +30,7 @@ const createOrder = async (date, orderId, price, userName,...products) => {
 
 const getOrderById = async (orderId) => {
     try {
-        const order = await orderModel.findOne({ id:orderId });
+        const order = await orderModel.findOne({ _id:orderId });
         if (!order) {
             console.error(`Order with the id:${orderId} not found`);
             return null;
@@ -45,7 +44,7 @@ const getOrderById = async (orderId) => {
 
 const addProductToOrder = async (orderId,product) => {
     try {
-        const order = await orderModel.findOne({ id:orderId });
+        const order = await orderModel.findOne({ _id:orderId });
         if (!order) {
             console.error(`Order with the id:${orderId} not found`);
             return null;
@@ -61,7 +60,7 @@ const addProductToOrder = async (orderId,product) => {
 
 const removeProductFromOrder = async (orderId,product) => {
     try {
-        const order = await orderModel.findOne({ id:orderId });
+        const order = await orderModel.findOne({ _id:orderId });
         if (!order) {
             console.error(`Order with the id:${orderId} not found`);
             return null;
