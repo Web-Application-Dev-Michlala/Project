@@ -372,9 +372,7 @@ const removeItems = async (cart)=>{
     for (const category of cart) {
         for (const item of category.items)
         {
-            console.log("now at reduceAmount "+category.category,item.name,item.amount)
             const check = await reduceAmount(category.category,item.name,item.amount);
-            
         }
   }
   return 1;
@@ -411,7 +409,7 @@ const addProductAmount = async(categoryName,productName,amount)=>{
             return null;
         }
         product[0].amount += parseInt(amount);
-        category.save();
+       await category.save();
         return product;
     } catch (err) {
         console.error(err);

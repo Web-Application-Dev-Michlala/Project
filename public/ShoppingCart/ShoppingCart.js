@@ -97,7 +97,8 @@ purchaseButton.addEventListener('click', function() {
     return;
   }
   var dataToSend=cart
-  
+ const totalPriceElement = document.getElementById('total-price');
+  const totalPrice = parseFloat(totalPriceElement.innerText.replace('$', '')); 
   
   
  
@@ -116,7 +117,7 @@ purchaseButton.addEventListener('click', function() {
             console.log('entering successful buy start')
             $.ajax({
               contentType: 'application/json',
-              data: JSON.stringify({arrayToSend:dataToSend}), 
+              data: JSON.stringify({arrayToSend:dataToSend,totalPrice:totalPrice}), 
               url:'/cart/removeItems',
               type: 'POST',
 
