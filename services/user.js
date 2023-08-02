@@ -125,47 +125,6 @@ const getAllorders = async(userName)=>{
     }
 
 }
-const createOrder = async (date, orderId, products, price, userName) => {
-    try {
-        const order = new orderModel({
-            date,
-            id: orderId,
-            products,
-            price,
-            userName
-        });
-        await order.save();
-
-        // Now update the user's purchase history
-        const user = await usersModel.findOne({ userName });
-        if (!user) {
-            console.error(`User with the Name:${userName} not found`);
-            return null;
-        }
-        
-        user.purchaseHistory.push(order);
-        await user.save();
-
-        return order;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-};
-
-const getUserOrders = async (userName) => {
-    try {
-        const user = await usersModel.findOne({ userName });
-        if (!user) {
-            console.error(`User with the Name:${userName} not found`);
-            return null;
-        }
-        return user.purchaseHistory;
-    } catch (err) {
-        console.error(err);
-        return null;
-    }
-};
 
 
 module.exports = { 
@@ -176,7 +135,5 @@ module.exports = {
     setAdmin,
     getAllUsernames,
     getAllorders,
-    createOrder,
-    getUserOrders
 
 };

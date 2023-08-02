@@ -24,6 +24,9 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    purchaseHistory: [orderSchema],
+    purchaseHistory: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Order'
+    }],
 });
 module.exports = mongoose.model('User', userSchema);

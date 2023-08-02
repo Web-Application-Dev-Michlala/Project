@@ -109,7 +109,7 @@ var decimalprice=null
                 sessionStorage.setItem('categories',categoriesJsonString);
                 
             }
-           else
+            else
            {
             cart=JSON.parse(JSONedcart);
             const existingCategoryIndex = cart.findIndex((item) => item.category === categoryName);
