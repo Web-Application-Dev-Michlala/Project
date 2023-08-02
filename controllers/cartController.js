@@ -1,5 +1,6 @@
 
 const productService=require('../services/product')
+const orderService=require('../services/order.js');
 
 
 const getCartPage = async (req,res) => 
@@ -40,9 +41,9 @@ const validateAll =async(req,res)=>
 const removeItems=async(req,res)=>
 {
     var {arrayToSend}=req.body;
-   const check= await productService.removeItems(arrayToSend)
-   console.log("check in Controller "+check)
-   if(check===1)
+    const check= await productService.removeItems(arrayToSend)
+    console.log("check in Controller "+check)
+    if(check===1)
     res.status(200).json(check)
 
 }

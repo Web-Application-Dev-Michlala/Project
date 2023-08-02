@@ -12,7 +12,7 @@ router.route('/validate')
 router.route('/purchaseValidate')
     .post(loginController.isLoggedIn,cartController.validateAll)
 router.route('/removeItems')
-.post(loginController.isLoggedIn,cartController.removeItems)
+    .post(loginController.isLoggedIn,cartController.removeItems)
 
 
 
