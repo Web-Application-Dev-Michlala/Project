@@ -115,7 +115,7 @@ purchaseButton.addEventListener('click', function()
           if(toRemove.length===0)//all items exist and have sufficient amount
           {
             sessionStorage.removeItem('categories')//clean storage
-            console.log('entering successful buy start')
+           
             $.ajax({
               contentType: 'application/json',
               data: JSON.stringify({arrayToSend:dataToSend,totalPrice:totalPrice}), 

@@ -340,7 +340,7 @@ const validateAll = async (cart) => {
     for (const category of cart) {
       for (const item of category.items) {
         const flag = await validateAmount(category.category, item.name, item.amount);
-        console.log("this is flag" + flag);
+        
   
         if (flag === 0) {
           const newItem = {
@@ -352,7 +352,7 @@ const validateAll = async (cart) => {
         } else if (flag === 1) {
           const product = await getProductByName(category.category, item.name)
           const updatedAmount = product.amount
-            console.log("this is updated amount " + updatedAmount);
+            
           const newItem = {
             category:category.category,
             name:item.name,

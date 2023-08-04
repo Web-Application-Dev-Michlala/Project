@@ -9,7 +9,6 @@ const getCartPage = async (req,res) =>
 const validateItem =async(req,res)=>
 {
     const {categoryName,name,amount}=req.body;
-    console.log(categoryName,name,amount)
     const flag= await productService.validateAmount(categoryName,name,amount)
     if(flag===0)
     res.status(200).json(flag);
@@ -40,7 +39,6 @@ const removeItems=async(req,res)=>
     var {arrayToSend,totalPrice}=req.body;
     const username=req.session.username
     const check= await productService.removeItems(arrayToSend)
-    console.log("total price in controller "+totalPrice)
     var orderArray=[]
     for (const category of arrayToSend) {
     for (const item of category.items)
