@@ -126,6 +126,47 @@ const getAllOrders = async(req, res) => {
       throw error;
     }
   }
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+  const getPassword = async(req, res) => {
+    try {
+        const username = req.session.username; 
+       const user= await userService.getUserById(username);
+       const password=user.password;
+
+       res.json({password});
+    } catch (error) {
+      console.error('Error fetching The user password:', error);
+      throw error;
+    }
+  }
+
+
+  const changePassword = async(req,res) => {
+    try {
+        console.log("hi there!");
+        const username = req.session.username; 
+        const oldpassword=req.body.oldPassword;
+        const newpassword=req.body.newPassword;
+        const user= await userService.getUserById(username);
+        console.log(`oldpassword ${oldpassword}, newpassword ${newpassword}, user password ${await user.password}`);
+        console.log("its camming dont worry----->");
+        if(oldpassword===(await user.password)){
+             v=(oldpassword===(await user.password));
+            console.log(`the password comp are: ${v}`);
+
+            console.log("its camming dont worry2");
+            await userService.ChangePassword(username,newpassword);
+            res.json({ success: true });
+        }else{
+            return res.status(404).json({errors:["The old password is incorrect"]});
+
+        }
+    } catch (error) {
+      console.error('Error change The user password:', error);
+      throw error;
+    }
+    }
 
 module.exports = 
 {
@@ -142,5 +183,7 @@ module.exports =
     getUserProfile,
     getAllUsernames,
     getAllOrders,
-    isCategoryExist
+    isCategoryExist,
+    getPassword,
+    changePassword
 }

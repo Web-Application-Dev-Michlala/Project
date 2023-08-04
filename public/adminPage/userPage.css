@@ -10,4 +10,7 @@ h1{
     cursor: pointer;
     outline: none;
   }
-  
+ 
+.form-control {
+    max-width: 450px; 
+}

@@ -1,3 +1,17 @@
+/*const express = require('express');
+const mongoose = require('mongoose');
+const session = require('express-session')
+
+
+*/
+
+
+//const adminPageController = require('../controllers/adminPageController.js')
+
+//const session = require('express-session');
+//const userService=require('../services/user')
+
+
 
 
 function toggleGraphsTab() {
@@ -76,7 +90,7 @@ $(document).ready(function () {
       }
     });
   });
-
+/*
   $(document).ready(function () {
     $.ajax({
       url: "/adminPage/orders",
@@ -102,3 +116,41 @@ $(document).ready(function () {
       }
     });
   });
+*/
+  //-------------------------------------------------------------------------->***************************************************************************************************************
+  $(document).ready(function() {
+     $("#submit").click(function(event) {
+        event.preventDefault();
+        const oldPassword = $("#exampleInputPassword1").val();
+        const newPassword = $("#exampleInputPassword2").val();
+       // const user=userService.getUserById(session.userName)
+        console.log(`oldPassword ${oldPassword} ,newPassword ${newPassword}`);
+
+        
+        changePassword(oldPassword,newPassword);
+    })});
+
+function changePassword(oldPassword, newPassword) {
+  fetch('/adminPage/changePassword', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ oldPassword, newPassword})
+  }).then(response => {
+    if (!response.ok) {
+    throw new Error('Password change failed. Incorrect old password1111.');
+  }
+   return response.json();
+}).then(responseData => {
+  if (responseData.success) {
+   alert('Password change successful!');
+  } else {
+   alert('Password change failed. Incorrect old password2222.');
+  }
+})
+.catch(error => {
+  console.error('Error:', error);
+  alert('An error occurred while changing the password. Please try again later.');
+});
+}

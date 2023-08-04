@@ -1,5 +1,6 @@
 const categoryModel = require('../models/category.js');
 
+
 const createCategory = async (categoryName,image) => { // added image
     try {
         const category = new categoryModel({ categoryName,image });
