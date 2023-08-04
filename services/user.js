@@ -42,7 +42,29 @@ const ChangePassword = async(userName,password)=>{
             console.error(`User with this username:${userName} not found`);
             return null;
         }
-        user.password= password;
+        user.password=password;
+        await user.save();
+        return user;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+
+}
+
+const ChangeProfile = async(userName,newUerName,email,birthday)=>{
+    try {
+        const user = await usersModel.findOne({ userName });
+
+        if (!user) {
+            console.error(`User with this username:${userName} not found`);
+            return null;
+        }
+        
+        user.userName=newUerName;
+        user.email=email;
+        user.birthday=birthday;
+        await user.save();
         return user;
     } catch (err) {
         console.error(err);
@@ -135,5 +157,6 @@ module.exports = {
     setAdmin,
     getAllUsernames,
     getAllorders,
+    ChangeProfile
 
 };

@@ -49,7 +49,7 @@ function updateTotalPrice() //goes over all items and sums total price
   
 }
 
-const JSONedcart=sessionStorage.getItem('categories');//items[0]=name,items[1]=amount,items[2]=price,items[3]=imageSrc
+const JSONedcart=sessionStorage.getItem('categories');//loads items from sessionStorage into page
     if(JSONedcart!=null)
     {
       cart=JSON.parse(JSONedcart);
@@ -90,7 +90,8 @@ removeButtons.forEach(function(button) {
 var purchaseButton = document.querySelector('.purchase-button');
 var backButton = document.querySelector('.back-button');
 
-purchaseButton.addEventListener('click', function() {
+purchaseButton.addEventListener('click', function()
+ {
   if(cart===undefined||cart===null||cart.length===0)
   {
     alert('Cart is empty')
@@ -105,7 +106,7 @@ purchaseButton.addEventListener('click', function() {
     $.ajax({
         contentType: 'application/json',
         data: JSON.stringify({arrayToSend:dataToSend}), 
-        url:'/cart/purchaseValidate',
+        url:'/cart/purchaseValidate',//validates items in purchase
         type: 'POST',
         // Set the content type header to JSON
         success: function (toRemove) 
@@ -113,7 +114,7 @@ purchaseButton.addEventListener('click', function() {
          
           if(toRemove.length===0)//all items exist and have sufficient amount
           {
-            sessionStorage.removeItem('categories')
+            sessionStorage.removeItem('categories')//clean storage
             console.log('entering successful buy start')
             $.ajax({
               contentType: 'application/json',
@@ -121,9 +122,9 @@ purchaseButton.addEventListener('click', function() {
               url:'/cart/removeItems',
               type: 'POST',
 
-              success: function () //items removed successfullu
+              success: function () //items removed successfully and order created
               {
-                //TODO another ajax to create an order under username
+                
                 alert('Purchase successful!');
                 window.location.href ='/'
               }
@@ -183,10 +184,11 @@ purchaseButton.addEventListener('click', function() {
 
 backButton.addEventListener('click', function() {
  
-  // Redirect to the shopping site or perform the desired action
+  // Redirect to homepage
   window.location.href ='/';
 });
-function addItemToCart(name, price, quantity, imageSrc,categoryName) {
+function addItemToCart(name, price, quantity, imageSrc,categoryName)//create HTML item in page
+ {
   var cartItems = document.querySelector('.cart-items');
 
   var newItem = document.createElement('li');
@@ -225,7 +227,7 @@ function addItemToCart(name, price, quantity, imageSrc,categoryName) {
 function attachQuantityButtonListeners() {
 var quantityMinusButtons = document.querySelectorAll('.quantity-minus');
 var quantityPlusButtons = document.querySelectorAll('.quantity-plus');
-
+//increament decreament buttons and their logic
 quantityMinusButtons.forEach(function (button) {
   button.addEventListener('click', function () {
 

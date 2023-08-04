@@ -9,7 +9,9 @@ const createOrder = async (date, price, userName,products) => {
             price,
             userName
         });
+
         await order.save();
+       
 
         //update user purchase history
         const user = await userModel.findOne({ userName });

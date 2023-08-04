@@ -36,6 +36,7 @@ app.use('/adminPage',adminPageRoute);
 app.use('/ProductsPage',productRouter);
 app.use('/', homepageRouter);
 
+//app.post('/adminPage/changePassword', adminPageController.changePassword);
 
 app.listen(3000);
 console.log('listening to 3000');
