@@ -41,6 +41,15 @@ router.route('/createProduct')
 router.route('/deleteProduct')
     .delete(adminPageController.deleteProduct);
 
+router.route('/updateCategory/:categoryName')
+    .post(adminPageController.updateCategory);
+
+router.route('/updateProduct/:categoryName/:id')
+    .post(adminPageController.updateProduct);
+
+router.route('/addProductAmount/:productName')
+    .post(adminPageController.addProductAmount);
+
 router.route('/:categoryName')
     .delete(adminPageController.deleteCategory)
     .get(adminPageController.getCategoryByName);

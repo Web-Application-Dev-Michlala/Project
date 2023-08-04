@@ -51,10 +51,30 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+const updateCategory = async (req,res) =>{
+    const {newName,newImage} = await req.body;
+    const category = await categoryService.updateCategory(req.params.categoryName,newName,newImage);
+    if (!category){
+        return res.status(404).json({errors:['An error occurred while trying to update the category']});
+    } else {
+        res.json(category);
+    }
+}
+
+const updateProduct = async (req,res) => {
+    const {newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot} = await req.body;
+    const product = await productService.updateProduct(req.params.categoryName,req.params.id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot);
+    if(!product){
+        return res.status(404).json({errors:['An error occurred while trying to update the product']});
+    } else {
+        res.json(product);
+    }
+}
+
 const getCategoryByName = async (req,res) => {
     const category = await categoryService.getCategoryByName(req.params.categoryName);
     if (!category){
-      return res.status(404).json({errors:['Category not found']});
+        return res.status(404).json({errors:['Category not found']});
     }
     res.json(category);
 }
@@ -93,6 +113,15 @@ const createProduct = async(req,res) => {
         return res.status(404).json({errors:["Product wasn't created"]});
     }
     res.json(product);
+}
+
+const addProductAmount = async(req,res) => {
+    var is_added = true;
+    const product = await productService.addProductAmount(req.body.categoryName,req.params.productName,req.body.amount);
+    if(!product){
+        is_added = false;
+    }
+    res.json({is_added});
 }
 //----------------------------------------------------->
 
@@ -172,6 +201,8 @@ module.exports =
 {
     getAllCategorys,
     deleteCategory,
+    updateCategory,
+    updateProduct,
     getAdminPage,
     getCategoryDetails,
     deleteProduct,
@@ -185,5 +216,6 @@ module.exports =
     getAllOrders,
     isCategoryExist,
     getPassword,
-    changePassword
+    changePassword,
+    addProductAmount
 }

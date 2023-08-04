@@ -1,6 +1,7 @@
 
 $(document).ready(function(){
-
+var imgpath=null
+var decimalprice=null
     $.ajax
     ({
         url:'/isLoggedIn',
@@ -29,6 +30,8 @@ $(document).ready(function(){
           
         }).done(function(data)
         {
+            imgpath=data[0].image
+            decimalprice=data[0].price.$numberDecimal;
             $('#productName').text(data[0].name);
             $('#productSize').text(data[0].size.$numberDecimal);
             $('#productCategory').text(data[0].category);
@@ -56,6 +59,7 @@ $(document).ready(function(){
                 carouselInner.append(carouselItem);
                 carouselIndicators.append(carouselInd);
             });
+            
         })
     
         $('#button-increase').click(function(){
@@ -73,7 +77,110 @@ $(document).ready(function(){
             }
             $('#productQuantity').val(value);
         });
+        
+      
+          
+        $('#addToCart').click(function() 
+        {   
+            
+            if(data.isConnected!=false)
+            {
+            var cart=null;
+            
+            const prodname=$('#productName').text();
+            var prodamount=parseInt($('#productQuantity').val());
+            const categoryName= $('#productCategory').text();
+            const price= decimalprice
+            const imageSrc=imgpath;
+            const JSONedcart=sessionStorage.getItem('categories');
+            if(JSONedcart===null)
+            {
+             const categoriesArray=[ {
+                    category:categoryName,
+                    items:
+                    [
+                        {name:prodname,amount:prodamount,price:price,imageSrc:imageSrc}
+                    ]
+                }
+                ]
+                
+                const categoriesJsonString=JSON.stringify(categoriesArray);
+                cart=categoriesArray;
+                sessionStorage.setItem('categories',categoriesJsonString);
+                
+            }
+            else
+           {
+            cart=JSON.parse(JSONedcart);
+            const existingCategoryIndex = cart.findIndex((item) => item.category === categoryName);
+            if (existingCategoryIndex === -1) {
+                // Category doesn't exist, so create a new category with the name-amount pair
+                const newCategory = {
+                  category:categoryName,
+                  items: [{ name:prodname,amount:prodamount,price:price,imageSrc:imageSrc }],
+                };
+                
+                cart.push(newCategory);
+            }
+                else{
+            const existingCategory = cart[existingCategoryIndex];
+            const existingKeyIndex = existingCategory.items.findIndex((item) => item.name === prodname);
+            if (existingKeyIndex === -1) 
+            {
+                existingCategory.items.push({ name:prodname,amount:prodamount,price:price,imageSrc:imageSrc });
+                
+            }
+            else
+            {
+                existingCategory.items[existingKeyIndex].amount += prodamount;
+                prodamount=existingCategory.items[existingKeyIndex].amount;
+            
+            }
+        }
+        };
+       var dataToSend={
+        categoryName:categoryName,
+        name:prodname,
+        amount:prodamount,
+        price:price,
+        imageSrc:imageSrc,
+       };
+       
+        $.ajax({
+            url: '/cart/validate',
+            type: 'POST',
+            data: JSON.stringify(dataToSend), 
+            contentType: 'application/json', // Set the content type header to JSON
+            success: function (flag) 
+            {
+              if(flag===0)
+              {
+                alert('error coudlnt find this item')
+                window.location.href ='/category?name='+categoryName;
+               
+              }
+             else if(flag===1)
+             {
+                alert('sorry, amount surpasses our stock')
+             }
+             else if(flag===2)
+             {
+                alert('item added successfully')
+                const updatedCategoriesJsonString = JSON.stringify(cart);
+                sessionStorage.setItem('categories', updatedCategoriesJsonString);
+                
+                 window.location.href ='/category?name='+categoryName;
+             }
+            },
+           
+          });
+      
     
+        
+        
+    }
+    else
+    window.location.href ='/login'
     });
     
     
@@ -81,4 +188,4 @@ $(document).ready(function(){
     });
     
 
-   
+})

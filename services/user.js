@@ -1,5 +1,5 @@
 const usersModel = require('../models/users.js');
-
+const orderModel = require('../models/order.js');
 
 const createUser = async( userName,password,birthdate,email,isAdmin=false,purchaseHistory = []) => {
     try {
@@ -147,6 +147,8 @@ const getAllorders = async(userName)=>{
     }
 
 }
+
+
 module.exports = { 
     createUser,
     getUserById,

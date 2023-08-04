@@ -26,6 +26,25 @@ const deleteCategory = async (categoryName) => {
     }
 };
 
+const updateCategory = async(categoryName,newName,newImage) => {
+    try{
+        const category = await categoryModel.findOne({ categoryName });
+        if (!category) {
+            console.error(`Category ${categoryName} not found`);
+            return null;
+        }
+        category.categoryName = newName;
+        category.products.forEach((product) => {
+            product.category = newName;
+        });
+        category.image = newImage;
+        category.save();
+        return category;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
 
 const getAllCategorys = async () => {
     try {
@@ -54,7 +73,8 @@ const getCategoryByName = async (categoryName) => {
 
 module.exports = { 
     createCategory, 
-    deleteCategory, 
+    deleteCategory,
+    updateCategory, 
     getAllCategorys, 
     getCategoryByName
 };
