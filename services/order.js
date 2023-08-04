@@ -1,7 +1,7 @@
 const orderModel = require('../models/order.js');
 const userModel = require('../models/users.js');
 
-const createOrder = async (date, price, userName,...products) => {
+const createOrder = async (date, price, userName,products) => {
     try {
         const order = new orderModel({
             date,
