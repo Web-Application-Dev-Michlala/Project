@@ -50,11 +50,9 @@ const removeItems=async(req,res)=>
     }
 }
 
-    console.log("order Array in controller "+orderArray)
+   
     const order=await orderService.createOrder(new Date,totalPrice,username,orderArray)
-    console.log("check in Controller "+check)
-
-    //orderArray.forEach(product => {orderService.addProductToOrder(order._id,product)})
+   // orderArray.forEach(product => {orderService.addProductToOrder(order._id,product)})
     if(check===1)
     res.status(200).json(check)
 

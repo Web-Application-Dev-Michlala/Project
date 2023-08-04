@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const productSchema = require('./product.js');  //SubDocument schema
 
 const orderSchema = new mongoose.Schema({
+    
     date: {
         type: Date,
         required: true
@@ -17,8 +18,6 @@ const orderSchema = new mongoose.Schema({
     userName: {
         type: String,
         required: true,
-        unique: true,
-        maxlength: 24
     },
 });
 
