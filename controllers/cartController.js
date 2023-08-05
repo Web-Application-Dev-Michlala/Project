@@ -52,7 +52,7 @@ const removeItems=async(req,res)=>
     const order=await orderService.createOrder(new Date,totalPrice,username,orderArray)
    // orderArray.forEach(product => {orderService.addProductToOrder(order._id,product)})
     if(check===1)
-    res.status(200).json(check)
+    res.status(200).json(order)
 
 }
 module.exports=

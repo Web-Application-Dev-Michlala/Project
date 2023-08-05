@@ -27,9 +27,21 @@ $(document).ready(function()
             navbar.load('/public/Navbar/navBarLoggedOut.html')
         }
     });
-    
-  })
+  
+    $('#myModal').modal({ backdrop: 'static' }); // Set backdrop option to 'static'
 
+    // Event handler for close buttons and backdrop click
+    $('.modal-footer .btn-secondary, #myModal').on('click', function(event) {
+      if ($(event.target).is('.close, .btn-secondary') || $(event.target).closest('#myModal').length === 0) {
+        $('#myModal').modal('hide');
+        window.location.href = '/';
+      }
+    });
+
+    
+   
+   
+})
 
 var cart=null
 
@@ -86,7 +98,9 @@ removeButtons.forEach(function(button) {
   });
 });
 
-
+var myModal=document.getElementById('myModal')
+var modalTitle = myModal.querySelector('.modal-title')
+var modalBodyInput = myModal.querySelector('.modal-body')
 var purchaseButton = document.querySelector('.purchase-button');
 var backButton = document.querySelector('.back-button');
 
@@ -114,6 +128,39 @@ purchaseButton.addEventListener('click', function()
          
           if(toRemove.length===0)//all items exist and have sufficient amount
           {
+            modalBodyInput.innerHTML= '<table class="table">'+
+           '<thead>'+
+              '<tr>'+
+                '<th scope="col">Product</th>'+
+                '<th scope="col">Amount</th>'+
+                '<th scope="col">Price</th>'+
+              '</tr>'+
+            '</thead>'+
+            '<tbody id="tableBody">'+
+            '</tbody>'+
+          '</table>';
+
+          tableBody=document.getElementById('tableBody')
+          
+           $('.conti').each(function() {
+              
+              const name = $(this).find('.product-name').text();
+              const quantity = $(this).find('.quantity-value').text();
+              const price = $(this).find('.product-price').text();
+              var row=
+              '<tr>'+
+              '<td>'+name+'</td>'+
+              '<td>'+quantity+'</td>'+
+              '<td>'+price+'</td>'+
+            '</tr>';
+            tableBody.innerHTML+=row
+          });
+          tableBody.innerHTML+=
+          '<tr>'+
+          '<td></td>'+
+          '<thead><td>TOTAL:</td></thead>'+
+          '<td>'+totalPriceElement.textContent+'</td>'
+          '</tr>';
             sessionStorage.removeItem('categories')//clean storage
            
             $.ajax({
@@ -122,11 +169,13 @@ purchaseButton.addEventListener('click', function()
               url:'/cart/removeItems',
               type: 'POST',
 
-              success: function () //items removed successfully and order created
+              success: function (order) //items removed successfully and order created
               {
-                
-                alert('Purchase successful!');
-                window.location.href ='/'
+               
+               
+                modalTitle.textContent="order ID: "+order._id
+               
+                $(".modal").modal('show')
               }
           })
         }
@@ -196,7 +245,7 @@ function addItemToCart(name, price, quantity, imageSrc,categoryName)//create HTM
   noSpacesName = name.replace(/ /g, '');
 
   newItem.innerHTML = `
-    <div class="container">
+    <div class="container conti">
       <div class="row">
         <div class="col-2">
           <img class="product-image" src="${imageSrc}">
