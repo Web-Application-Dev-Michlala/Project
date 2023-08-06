@@ -18,3 +18,7 @@ h1{
     max-width: 50px;
     height: auto;
 }
+#pie-chart-container {
+    width: 100px;
+    height: 100px;
+}

@@ -20,6 +20,8 @@ router.route('/getCategorys')
 router.route('/profile')
 .get( adminPageController.getUserProfile);
 router.route('/orders')
+.get( adminPageController.getAllOrdersByUserName);
+router.route('/allOrders')
 .get( adminPageController.getAllOrders);
 router.route('/users')
 .get( adminPageController.getAllUsernames);

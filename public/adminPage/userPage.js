@@ -11,19 +11,100 @@ const session = require('express-session')
 //const session = require('express-session');
 //const userService=require('../services/user')
 
+$(document).ready(function () {
+  let categories;
+  let orders;
 
 
-
-function toggleGraphsTab() {
-    var graphsTab = document.getElementById('tab5');
-    var graphsLink = document.querySelector('.tab-content .nav-link[data-bs-toggle="tab"][href="#tab5"]');
-    if (graphsTab.classList.contains('show')) {
-        graphsTab.classList.remove('show');
-        graphsLink.classList.remove('active');
-    } else {
-        graphsTab.classList.add('show');
-        graphsLink.classList.add('active');
+  const fetchCategories = $.ajax({
+    url: "/adminPage/getCategorys",
+    type: "GET",
+    success: function (response) {
+      categories = response;
+    },
+    error: function () {
+      console.error("An error occurred while trying to fetch categories");
     }
+  });
+
+
+  const fetchOrders = $.ajax({
+    url: "/adminPage/allOrders",
+    type: "GET",
+    success: function (response) {
+      orders = response.orders;
+    },
+    error: function () {
+      console.error("An error occurred while trying to fetch orders");
+    }
+  })
+
+  $.when(fetchCategories, fetchOrders).done( () => {
+    const categoryProfits = {};
+
+    // Calculate total profits for each category
+    orders.forEach(order => {
+      order.products.forEach(product => {
+        const category = categories.find(cat => cat.categoryName === product.category);
+        if (category) {
+          if (!categoryProfits[category.categoryName]) {
+            categoryProfits[category.categoryName] = 0;
+          }
+          categoryProfits[category.categoryName] += parseFloat(product.price.$numberDecimal);
+        }
+      });
+    });
+
+    const categoryData = Object.keys(categoryProfits).map(categoryName => ({
+    category: categoryName,
+    totalProfit: categoryProfits[categoryName]
+    }));
+
+    generathGraph(categoryData);
+  });
+});
+
+
+function generathGraph(categoryData) {
+  const width = 400;
+  const height = 400;
+  const radius = Math.min(width, height) / 2;
+
+  try {
+    const svg = d3.select('#pie-chart-container')
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', `translate(${width / 2},${height / 2})`);
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const pie = d3.pie()
+      .value(d => d.totalProfit);
+
+    const arc = d3.arc()
+      .innerRadius(0)
+      .outerRadius(radius);
+
+    const arcs = svg.selectAll('arc')
+      .data(pie(categoryData))
+      .enter()
+      .append('g')
+      .attr('class', 'arc');
+
+    arcs.append('path')
+      .attr('d', arc)
+      .attr('fill', (d, i) => color(i));
+
+    arcs.append('text')
+      .attr('transform', d => `translate(${arc.centroid(d)})`)
+      .attr('dy', '0.35em')
+      .text(d => d.data.category)
+      .style('text-anchor', 'middle');
+  } catch (error) {
+    console.error('An error occurred while generating the graph:', error);
+  }
 }
 
 $(document).ready(function () {
@@ -108,7 +189,6 @@ $(document).ready(function () {
           const tableBody = modalBody.find('tbody');
           tableBody.empty();
           order.products.forEach((product,i) => {
-            console.log(product)
             const newRow = $('<tr>');
             newRow.html(`
               <td>${product.id}</td>

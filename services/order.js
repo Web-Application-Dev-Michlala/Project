@@ -90,10 +90,25 @@ const getAllOrdersByUserName = async (userName) => {
     }
 };
 
+const getAllOrders = async () => {
+    try {
+        const orders = await orderModel.find();
+        if (!orders || orders.length === 0) {
+            console.error(`There is no orders`);
+            return null;
+        }
+        return orders;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+
 module.exports = {
     createOrder,
     getOrderById,
     addProductToOrder,
     removeProductFromOrder,
     getAllOrdersByUserName,
+    getAllOrders,
 }
