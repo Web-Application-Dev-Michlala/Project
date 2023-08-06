@@ -1,16 +1,4 @@
-/*const express = require('express');
-const mongoose = require('mongoose');
-const session = require('express-session')
-
-
-*/
-
-
-//const adminPageController = require('../controllers/adminPageController.js')
-
-//const session = require('express-session');
-//const userService=require('../services/user')
-
+//---------------------- Graph handler --------------------
 $(document).ready(function () {
   let categories;
   let orders;
@@ -106,6 +94,8 @@ function generathGraph(categoryData) {
     console.error('An error occurred while generating the graph:', error);
   }
 }
+
+//----------------------------------------------------------------
 
 $(document).ready(function () {
   $.ajax
