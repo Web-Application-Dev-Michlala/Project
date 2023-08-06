@@ -130,7 +130,7 @@ function loadCategories(categoryArray) //load categories into cards
     { 
     cardRow=document.createElement('div');
     cardRow.classList.add('row');
-    cardRow.classList.add('justify-content-md-center');
+    cardRow.classList.add('justify-content-md-end');
     cardRow.classList.add('cards-row');
     container=document.getElementById('categories');
     container.appendChild(cardRow);
