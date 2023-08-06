@@ -106,7 +106,7 @@ $(document).ready(function () {
           const modalBody = $('#orderDetailsContent');
         
           const tableBody = modalBody.find('tbody');
-          tableBody.empty
+          tableBody.empty();
           order.products.forEach((product,i) => {
             console.log(product)
             const newRow = $('<tr>');
