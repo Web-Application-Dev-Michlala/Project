@@ -19,10 +19,10 @@ router.route('/getCategorys')
 //---------------------------------------------------------->
 router.route('/profile')
 .get( adminPageController.getUserProfile);
-router.route('/users')
-.get( adminPageController.getAllUsernames);
 router.route('/orders')
 .get( adminPageController.getAllOrders);
+router.route('/users')
+.get( adminPageController.getAllUsernames);
 //router.route('/changePassword')
 //.post( adminPageController.changePassword);
 router.route('/changePassword').post(adminPageController.changePassword);

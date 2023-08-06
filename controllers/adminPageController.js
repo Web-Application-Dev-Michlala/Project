@@ -1,7 +1,9 @@
 const categoryService = require("../services/category");
 const productService = require("../services/product");
 const userService=require('../services/user')
-const path = require('path')
+const orderService = require('../services/order.js');
+const path = require('path');
+const order = require("../models/order");
 
 const getAllCategorys = async (req,res) => {
     const categories = await categoryService.getAllCategorys();
@@ -137,8 +139,8 @@ const getUserProfile = async(req, res) => {
 const getAllOrders = async(req, res) => {
     try {
         const username = req.session.username; 
-       const orders= await userService.getAllorders(username);
-       res.json({orders});
+        const orders= await orderService.getAllOrdersByUserName(username);
+        res.json({orders});
     } catch (error) {
       console.error('Error fetching orders:', error);
       throw error;

@@ -14,3 +14,7 @@ h1{
 .form-control {
     max-width: 450px; 
 }
+.product-image {
+    max-width: 50px;
+    height: auto;
+}

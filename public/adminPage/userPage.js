@@ -69,7 +69,63 @@ $(document).ready(function () {
 });
 
 
-  $(document).ready(function () {
+$(document).ready(function () {
+  $.ajax({
+    url: "/adminPage/orders",
+    type: "GET",
+    success: function (response) {
+      const orders = response.orders;
+      const orderTableBody = $('#orderTableBody');
+      orderTableBody.empty();
+      for (let i = 0; i < orders.length; i++) {
+        const order = orders[i];
+        const formattedDate = new Date(order.date).toLocaleString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+        const date = formattedDate;
+        const price = order.price;
+        const amount = order.products.length;
+        const detailsButtonId = `detailsButton_${i}`; 
+        const newRow = $('<tr>');
+        newRow.html(`
+          <th scope="row">${i + 1}</th>
+          <td>${date}</td>
+          <td>${price+'$'}</td>
+          <td>${amount}</td>
+          <td><button id="${detailsButtonId}" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#orderDetailsModal">Details</button></td>
+        `);
+
+        orderTableBody.append(newRow);
+
+        $(`#${detailsButtonId}`).click(function() {
+          const modalBody = $('#orderDetailsContent');
+        
+          const tableBody = modalBody.find('tbody');
+          tableBody.empty
+          order.products.forEach((product,i) => {
+            console.log(product)
+            const newRow = $('<tr>');
+            newRow.html(`
+              <td>${product.id}</td>
+              <td>${product.brand}</td>
+              <td>${product.name}</td>
+              <td>$${product.price.$numberDecimal}</td>
+              <td><img src="${product.image}" alt="${product.name}" class="product-image"></td>
+            `);
+            tableBody.append(newRow);
+          });
+        });
+      }
+    },
+    error: function () {
+      console.error("order not loaded");
+    }
+});
     $.ajax({
       url: "/adminPage/users",
       type: "GET",
@@ -90,33 +146,10 @@ $(document).ready(function () {
       }
     });
   });
-/*
-  $(document).ready(function () {
-    $.ajax({
-      url: "/adminPage/orders",
-      type: "GET",
-      success: function (fullUserProfiles) {
-        const ordersListElement = $('#ordersList');
-        ordersListElement.empty(); 
-    
-        fullUserProfiles.users.forEach(( user)=>{
-          user.purchaseHistory.forEach(( order)=>{
 
-            
-           
-          const listItem = $('<li>').text(order);
-          ordersListElement.append(listItem);
-          }); }
-        
-        
-    );
-      },
-      error: function () {
-        alert("An error occurred while trying to fetch user information");
-      }
-    });
+$(document).ready(function () {
   });
-*/
+
   //-------------------------------------------------------------------------->***************************************************************************************************************
   $(document).ready(function() {
      $("#submit").click(function(event) {
