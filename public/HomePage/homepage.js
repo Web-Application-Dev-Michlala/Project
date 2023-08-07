@@ -120,54 +120,38 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
 }
 function loadCategories(categoryArray) //load categories into cards
 {
-    var cardRow
-    
-    var card1;
-    var card2;
-    var card3;
-   
-    for(let i=0;i<categoryArray.length;i+=3)
-    { 
-    cardRow=document.createElement('div');
+    var cardRow=document.createElement('div');
     cardRow.classList.add('row');
-    cardRow.classList.add('justify-content-md-end');
+    cardRow.classList.add('row-cols-1');
+    cardRow.classList.add('row-cols-md-3');
+    cardRow.classList.add('g-4');
     cardRow.classList.add('cards-row');
+    cardRow.classList.add('flex');
+    cardRow.classList.add('justify-content-center');
+    var card1;
+   
+   
+    for(let i=0;i<categoryArray.length;i++)
+    {   
+    
+  
+   
     container=document.getElementById('categories');
     container.appendChild(cardRow);
-        card1=
+        card1= 
+        '<div class="col">'+
         "<div onclick=\"window.location.href='/category?name="+categoryArray[i].categoryName+"'\" class=\"card text-center flex-fill\" style=\"width: 18rem;\">"+
 
         '<img class="card-img-top" src="./'+categoryArray[i].image+'" alt="Card image cap">'+
         '<div class="card-body">'+
         '<h5 class="card-titletext-md h1">'+categoryArray[i].categoryName+'</h5>'+//<!--pull text from category-->
         '</div>'+
+        '</div>'
         '</div>';
         cardRow.innerHTML+=card1;
-        if(i+1<categoryArray.length)
-        {
-        card2=
-        "<div onclick=\"window.location.href='/category?name="+categoryArray[i+1].categoryName+"'\" class=\"card text-center flex-fill\" style=\"width: 18rem;\">"+
-        '<img class="card-img-top" src="./'+categoryArray[i+1].image+'" alt="Card image cap">'+
-        '<div class="card-body">'+
-        '<h5 class="card-titletext-md h1">'+categoryArray[i+1].categoryName+'</h5>'+//<!--pull text from category-->
-        '</div>'+
-        '</div>';
-        cardRow.innerHTML+=card2;
-        }
-        if(i+2<categoryArray.length)
-        {
-        card3=
-        "<div onclick=\"window.location.href='/category?name="+categoryArray[i+2].categoryName+"'\" class=\"card text-center flex-fill\" style=\"width: 18rem;\">"+
-        '<img class="card-img-top" src="/'+categoryArray[i+2].image+'" alt="Card image cap">'+
-        '<div class="card-body">'+
-        '<h5 class="card-titletext-md h1">'+categoryArray[i+2].categoryName+'</h5>'+//<!--pull text from category-->
-        '</div>'+
-        '</div>';
-        cardRow.innerHTML+=card3;
         }
       
     }
-}
 
 });
    

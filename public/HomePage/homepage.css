@@ -54,27 +54,15 @@ h5
     {
         max-width: 99.39%;
     }
-    .card
-    {
-        margin-right: 7px;
-        margin-left: 7px;
-       
-            height: 750px; /* Set the desired height for the card */
-            width: 750px; /* Let the card scale within its container */
-            object-fit: cover; /* Maintain the card's aspect ratio and cover its container */
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-          
-    }
+   .col
+   {
+    justify-content: start;    
+    display: flex;
+    justify-content: space-between;
+   }
+   .justify-content-center{
+    justify-content: start!important;
+   }
       
-    .c
-    {
-        margin-left:15px;
-        margin-right:15px;
-    }
-    .card-img-top{
-        height: 600px; /* Set the desired height for the image container */
-        width: 600px;
-        object-fit: cover; /* This will maintain the image aspect ratio and fill the container */
-      }
+   
+    
