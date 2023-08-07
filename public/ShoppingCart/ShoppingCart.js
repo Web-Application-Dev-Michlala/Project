@@ -44,7 +44,42 @@ $(document).ready(function()
 })
 
 var cart=null
-
+var cvs = document.getElementById("canvas");
+    ctx = cvs.getContext("2d");
+    sA = (Math.PI / 180) * 45;
+    sE = (Math.PI / 180) * 90;
+    ca = canvas.width;
+    ch = canvas.height;
+    var loadAnimation
+function init(){     
+    
+  loadAnimation= setInterval(function(){
+      
+     ctx.clearRect(0, 0, ca, ch);
+     ctx.lineWidth = 15;
+    
+     ctx.beginPath();
+     ctx.strokeStyle = "#ffffff";     
+     ctx.shadowColor = "#eeeeee";
+     ctx.shadowOffsetX = 2;
+     ctx.shadowOffsetY = 2;
+     ctx.shadowBlur = 5;
+     ctx.arc(50, 50, 25, 0, 360, false);
+     ctx.stroke();
+     ctx.closePath();
+      
+     sE += 0.05; 
+     sA += 0.05;
+              
+     ctx.beginPath();
+     ctx.strokeStyle = "#aaaaaa";
+     ctx.arc(50, 50, 25, sA, sE, false);
+     ctx.stroke();
+     ctx.closePath();   
+      
+  }, 6);
+  
+}
 function updateTotalPrice() //goes over all items and sums total price
 {
   var totalPriceElement = document.getElementById('total-price');
@@ -116,7 +151,7 @@ purchaseButton.addEventListener('click', function()
   const totalPrice = parseFloat(totalPriceElement.innerText.replace('$', '')); 
   
   
- 
+  init();
     $.ajax({
         contentType: 'application/json',
         data: JSON.stringify({arrayToSend:dataToSend}), 
@@ -172,7 +207,8 @@ purchaseButton.addEventListener('click', function()
               success: function (order) //items removed successfully and order created
               {
                
-               
+                clearInterval(loadAnimation);
+                ctx.clearRect(0, 0, ca, ch);
                 modalTitle.textContent="order ID: "+order._id
                
                 $(".modal").modal('show')
@@ -181,6 +217,8 @@ purchaseButton.addEventListener('click', function()
         }
          else
          {
+          clearInterval(loadAnimation);
+          ctx.clearRect(0, 0, ca, ch);
           var itemsString=""
            toRemove.forEach((item)=>
           {
@@ -319,3 +357,9 @@ quantityPlusButtons.forEach(function (button) {
 }
 
 attachQuantityButtonListeners();
+
+
+
+
+
+

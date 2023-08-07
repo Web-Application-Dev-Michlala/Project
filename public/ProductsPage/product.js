@@ -104,9 +104,8 @@ var decimalprice=null
                 }
                 ]
                 
-                const categoriesJsonString=JSON.stringify(categoriesArray);
                 cart=categoriesArray;
-                sessionStorage.setItem('categories',categoriesJsonString);
+                
                 
             }
             else
