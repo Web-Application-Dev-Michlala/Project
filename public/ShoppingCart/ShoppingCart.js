@@ -244,10 +244,17 @@ purchaseButton.addEventListener('click', function()
                   type: 'GET',
                   success: function (response) 
                   {
-                    response=JSON.parse(response)
-                    console.log(response)
-                    BaseUSD= 1/response.rates.USD;
-                    ILSrate=BaseUSD*response.rates.ILS;
+                    if(response!="Error")
+                    {
+                      response=JSON.parse(response)
+                      BaseUSD= 1/response.rates.USD;
+                      ILSrate=BaseUSD*response.rates.ILS;
+                    }
+                    
+                   else
+                   {
+                    $('#ILS, #USD').prop('disabled', true);
+                   }
                     clearInterval(loadAnimation);
                     ctx.clearRect(0, 0, ca, ch);
                     modalTitle.textContent="order ID: "+order._id

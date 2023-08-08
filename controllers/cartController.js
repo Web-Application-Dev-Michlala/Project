@@ -56,7 +56,7 @@ const removeItems=async(req,res)=>
 }
 const getRates =async(req,res)=>
 {
-    const apiUrl = 'http://api.exchangeratesapi.io/v1/latest?access_key=c093d2883542b4f930fd77303c502c42&symbols=USD,ILS'; 
+   /* const apiUrl = 'http://api.exchangeratesapi.io/v1/latest?access_key=c093d2883542b4f930fd77303c502c42&symbols=USD,ILS'; 
     const apiRequest = http.get(apiUrl, apiResponse => {
         let data = '';
 
@@ -72,7 +72,8 @@ const getRates =async(req,res)=>
 
     apiRequest.on('error', error => {
         res.send('Error');
-    });
+    });*/
+    res.send("Error")
 
 }
 module.exports=
