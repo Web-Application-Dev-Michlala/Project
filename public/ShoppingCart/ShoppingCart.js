@@ -41,8 +41,10 @@ $(document).ready(function()
     
    
    
-})
 
+})
+var BaseUSD
+var ILSrate
 var cart=null
 var cvs = document.getElementById("canvas");
     ctx = cvs.getContext("2d");
@@ -95,7 +97,38 @@ function updateTotalPrice() //goes over all items and sums total price
   totalPriceElement.innerText = '$' + totalPrice.toFixed(2);
   
 }
+$("input[name='flexRadioDefault']").change(function () {
+  const selectedCurrency = $(this).attr("id");
+  
+ 
+  if (selectedCurrency === "USD") 
+  {
+    var totalPrice=0;
+    $('.modalPrice').each(function() {
+      const $priceElement = $(this);
+      const priceText = $priceElement.text();
+      const price = parseFloat(priceText.replace('₪', ''));
+      const USDprice = price/ILSrate;
+      totalPrice+=USDprice
+      $priceElement.text('$' + USDprice.toFixed(2));
 
+  });
+  $('.modalTotalPrice').text('$' +totalPrice.toFixed(2));
+  } else if (selectedCurrency === "ILS") 
+  {
+      var totalPrice=0;
+    $('.modalPrice').each(function() {
+      const $priceElement = $(this);
+      const priceText = $priceElement.text();
+      const price = parseFloat(priceText.replace('$', ''));
+      const ILSprice = price * ILSrate;
+      totalPrice+=ILSprice
+      $priceElement.text('₪' + ILSprice.toFixed(2));
+
+  });
+  $('.modalTotalPrice').text('₪' +totalPrice.toFixed(2));
+}
+});
 const JSONedcart=sessionStorage.getItem('categories');//loads items from sessionStorage into page
     if(JSONedcart!=null)
     {
@@ -186,7 +219,7 @@ purchaseButton.addEventListener('click', function()
               '<tr>'+
               '<td>'+name+'</td>'+
               '<td>'+quantity+'</td>'+
-              '<td>'+price+'</td>'+
+              '<td class="modalPrice">'+price+'</td>'+
             '</tr>';
             tableBody.innerHTML+=row
           });
@@ -194,7 +227,7 @@ purchaseButton.addEventListener('click', function()
           '<tr>'+
           '<td></td>'+
           '<thead><td>TOTAL:</td></thead>'+
-          '<td>'+totalPriceElement.textContent+'</td>'
+          '<td class="modalTotalPrice">'+totalPriceElement.textContent+'</td>'
           '</tr>';
             sessionStorage.removeItem('categories')//clean storage
            
@@ -206,12 +239,21 @@ purchaseButton.addEventListener('click', function()
 
               success: function (order) //items removed successfully and order created
               {
-               
-                clearInterval(loadAnimation);
-                ctx.clearRect(0, 0, ca, ch);
-                modalTitle.textContent="order ID: "+order._id
-               
-                $(".modal").modal('show')
+                $.ajax({
+                  url:'/cart/getRates',
+                  type: 'GET',
+                  success: function (response) 
+                  {
+                    response=JSON.parse(response)
+                    console.log(response)
+                    BaseUSD= 1/response.rates.USD;
+                    ILSrate=BaseUSD*response.rates.ILS;
+                    clearInterval(loadAnimation);
+                    ctx.clearRect(0, 0, ca, ch);
+                    modalTitle.textContent="order ID: "+order._id
+                    $(".modal").modal('show')
+                  }
+                })
               }
           })
         }

@@ -1,6 +1,6 @@
 const productService=require('../services/product')
 const orderService=require('../services/order')
-
+const http=require('http')
 
 const getCartPage = async (req,res) => 
 {
@@ -50,9 +50,29 @@ const removeItems=async(req,res)=>
 
    
     const order=await orderService.createOrder(new Date,totalPrice,username,orderArray)
-   // orderArray.forEach(product => {orderService.addProductToOrder(order._id,product)})
     if(check===1)
     res.status(200).json(order)
+
+}
+const getRates =async(req,res)=>
+{
+    const apiUrl = 'http://api.exchangeratesapi.io/v1/latest?access_key=c093d2883542b4f930fd77303c502c42&symbols=USD,ILS'; 
+    const apiRequest = http.get(apiUrl, apiResponse => {
+        let data = '';
+
+        apiResponse.on('data', chunk => {
+            data += chunk;
+        });
+
+        apiResponse.on('end', () => {
+            console.log(data)
+            res.send(data);
+        });
+    });
+
+    apiRequest.on('error', error => {
+        res.send('Error');
+    });
 
 }
 module.exports=
@@ -60,5 +80,6 @@ module.exports=
     getCartPage,
     validateItem,
     validateAll,
-    removeItems
+    removeItems,
+    getRates
 }
