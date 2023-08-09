@@ -1,6 +1,7 @@
 const productService=require('../services/product')
 const orderService=require('../services/order')
-const http=require('http')
+const exchangeRatesApi=require('../services/exchangeRateApi')
+
 
 const getCartPage = async (req,res) => 
 {
@@ -56,25 +57,9 @@ const removeItems=async(req,res)=>
 }
 const getRates =async(req,res)=>
 {
-   /* const apiUrl = 'http://api.exchangeratesapi.io/v1/latest?access_key=c093d2883542b4f930fd77303c502c42&symbols=USD,ILS'; 
-    const apiRequest = http.get(apiUrl, apiResponse => {
-        let data = '';
-
-        apiResponse.on('data', chunk => {
-            data += chunk;
-        });
-
-        apiResponse.on('end', () => {
-            console.log(data)
-            res.send(data);
-        });
-    });
-
-    apiRequest.on('error', error => {
-        res.send('Error');
-    });*/
-    res.send("Error")
-
+    const data = await exchangeRatesApi.getRates();
+    console.log("controller data "+data)
+    res.send(data);
 }
 module.exports=
 {

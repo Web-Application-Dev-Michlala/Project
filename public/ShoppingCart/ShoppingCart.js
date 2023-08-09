@@ -244,8 +244,9 @@ purchaseButton.addEventListener('click', function()
                   type: 'GET',
                   success: function (response) 
                   {
-                    if(response!="Error")
+                    if(!response.includes("error"))
                     {
+                      console.log('response in userSide '+response)
                       response=JSON.parse(response)
                       BaseUSD= 1/response.rates.USD;
                       ILSrate=BaseUSD*response.rates.ILS;
@@ -253,10 +254,10 @@ purchaseButton.addEventListener('click', function()
                     
                    else
                    {
-                    $('#ILS, #USD').prop('disabled', true);
+                    $('#ILS, #USD').prop('disabled', true);//if api runs into error disable exchange rate buttons
                    }
-                    clearInterval(loadAnimation);
-                    ctx.clearRect(0, 0, ca, ch);
+                    clearInterval(loadAnimation);//clear animation interval
+                    ctx.clearRect(0, 0, ca, ch);//clear animation
                     modalTitle.textContent="order ID: "+order._id
                     $(".modal").modal('show')
                   }
