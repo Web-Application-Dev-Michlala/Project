@@ -63,7 +63,7 @@ $(document).ready(function()
         event.preventDefault(); // Prevent the default form submission
         var inputValue = document.getElementById("search-bar").value;
         if(prods[prodname.indexOf(inputValue)]==null)
-        window.location.href="/public/LoginError/loginError.html"
+        window.location.href="/public/LoginError/pageNotFound.html"
         else
         // Redirect to the desired page with the search value as a query parameter
         window.location.href = "/public/ProductsPage/index.html?id=" +prods[prodname.indexOf(inputValue)]+'&name='+cats[prodname.indexOf(inputValue)];
