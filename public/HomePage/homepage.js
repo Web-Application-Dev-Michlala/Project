@@ -1,8 +1,7 @@
 
 
 $(document).ready(function() 
-{
-    
+{ 
     $.ajax
     ({
         url:'/isLoggedIn',
@@ -24,11 +23,10 @@ $(document).ready(function()
             navbar.load('/public/Navbar/navBarLoggedOut.html')
         }
     });
-   
 carouselnum=1;
 var arr=[];
 categoryArray=[];
-$.ajax({
+$.ajax({//get items+categories and call functions to load them on page
     url:'/getCategorys'
 }).done(function(cateogries)
 {
@@ -56,7 +54,8 @@ $.ajax({
 })
 
 
-   
+
+//=============================================================>Functions<=============================================================
 function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the carousels with items 
 {
 
@@ -152,6 +151,5 @@ function loadCategories(categoryArray) //load categories into cards
         }
       
     }
-
 });
    
