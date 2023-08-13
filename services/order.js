@@ -103,7 +103,21 @@ const getAllOrders = async () => {
         return null;
     }
 };
-
+const groupOrders = async()=> {
+    try {
+      const ordersByUser = await orderModel.aggregate([
+        {
+          $group: {
+            _id: '$userName',
+            orders: { $push: '$$ROOT' },
+          },
+        },
+      ]);
+      return ordersByUser;
+    } catch (error) {
+      return error.message;
+    }
+  };
 module.exports = {
     createOrder,
     getOrderById,
@@ -111,4 +125,5 @@ module.exports = {
     removeProductFromOrder,
     getAllOrdersByUserName,
     getAllOrders,
+    groupOrders
 }

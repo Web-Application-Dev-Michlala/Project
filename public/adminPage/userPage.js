@@ -94,6 +94,85 @@ function generathGraph(categoryData) {
     console.error('An error occurred while generating the graph:', error);
   }
 }
+$(document).ready(function() {
+  $.ajax({
+    url: '/adminPage/topUsers',
+    method: 'GET',
+    dataType: 'json',
+    success: function(data) {
+      const pieData = data.map(([username, orderCount]) => ({
+        username: username,
+        totalPurchases: orderCount
+      }));
+      
+      generateGraph3(pieData);
+    },
+    error: function(xhr, status, error) {
+      console.error('An error occurred:', error);
+    }
+  });
+})
+
+function generateGraph3(userData) {
+  const width = 1000; // Increase width to accommodate the legend
+  const height = 400;
+  const radius = Math.min(width, height) / 2;
+
+  try {
+    const svg = d3.select('#user-pie')
+      .append('svg')
+      .attr('width', width)
+      .attr('height', height)
+      .append('g')
+      .attr('transform', `translate(${width / 2},${height / 2})`);
+
+    const color = d3.scaleOrdinal(d3.schemeCategory10);
+
+    const pie = d3.pie()
+      .value(d => d.totalPurchases);
+
+    const arc = d3.arc()
+      .innerRadius(0)
+      .outerRadius(radius);
+
+    const arcs = svg.selectAll('arc')
+      .data(pie(userData))
+      .enter()
+      .append('g')
+      .attr('class', 'arc');
+
+    arcs.append('path')
+      .attr('d', arc)
+      .attr('fill', (d, i) => color(i));
+
+    // Create a legend beside the pie chart
+    const legend = svg.selectAll('.legend')
+      .data(userData)
+      .enter()
+      .append('g')
+      .attr('class', 'legend')
+      .attr('transform', (d, i) => `translate(${radius + 10},${(i - userData.length / 2) * 20})`); // Adjust spacing
+
+    legend.append('rect')
+      .attr('width', 15)
+      .attr('height', 15)
+      .attr('fill', (d, i) => color(i));
+
+    legend.append('text')
+      .attr('x', 20)
+      .attr('y', 9)
+      .attr('dy', '.35em')
+      .style('text-anchor', 'start')
+      .text(d => `${d.username} (Orders: ${d.totalPurchases})`); // Include the order number
+
+  } catch (error) {
+    console.error('An error occurred while generating the graph:', error);
+  }
+}
+
+
+
+
 
 //----------------------------------------------------------------
 
