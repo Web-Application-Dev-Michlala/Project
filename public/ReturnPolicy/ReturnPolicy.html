@@ -45,6 +45,16 @@
     .contact-info p:last-child {
       margin-bottom: 0;
     }
+    @font-face {
+    font-family: 'CustomFont';
+    src: url('public/fonts/OOswald-ExtraLight.ttf') format('truetype');
+    /* Add more formats for better browser compatibility */
+  }
+
+  .custom-font {
+    font-family: 'CustomFont', sans-serif;
+  }
+
   </style>
   
 </head>
@@ -52,8 +62,8 @@
   <nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top w-100 custom-navbar" id="navbar">
    
   </nav>
-  <div class="cont">
-  <h1>Product Return Policy</h1>
+  <div class="cont custom-font">
+  <h1 >Product Return Policy</h1>
   <p>
     At our online store, we want to ensure your satisfaction with every purchase. If you are not completely satisfied with your order, we offer a hassle-free return policy to make things right.
   </p>
