@@ -38,5 +38,26 @@ app.use('/adminPage',adminPageRoute);
 app.use('/ProductsPage',productRouter);
 app.use('/', homepageRouter);
 
-app.listen(3000);
+const server = app.listen(3000);
 console.log('listening to 3000');
+
+const io = require('socket.io')(server);
+
+io.on('connection', (socket) => {
+ 
+    socket.on('add product',(product) => {
+        io.emit('add product',product);
+    });
+    
+    socket.on('product restock',(product) => {
+        io.emit('product restock',product);
+    })
+    
+    socket.on('limited product',(product) => {
+        socket.broadcast.emit('limited product',product);
+    })
+    
+    socket.on('out of stock',(product) => {
+        socket.broadcast.emit('out of stock',product);
+    })
+});
