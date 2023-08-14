@@ -1,7 +1,4 @@
-
-
-
-
+var socket = io();
 
 $(document).ready(function() 
 {
@@ -260,6 +257,14 @@ purchaseButton.addEventListener('click', function()
                     ctx.clearRect(0, 0, ca, ch);//clear animation
                     modalTitle.textContent="order ID: "+order._id
                     $(".modal").modal('show')
+                  }
+                })
+                order.products.forEach((product) => {
+                  if(product.amount === 0){
+                    socket.emit('out of stock',product);
+                  }
+                  else if(product.amount <= 2){
+                    socket.emit('limited product',product)
                   }
                 })
               }
