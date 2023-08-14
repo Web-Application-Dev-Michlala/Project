@@ -122,7 +122,7 @@ const getProductById = async (categoryName,id) => {
             console.error(`Product with ${id} not found`);
             return null;
         }
-        return product;
+        return product[0];
     } catch (err) {
         console.error(err);
     }
@@ -410,7 +410,7 @@ const addProductAmount = async(categoryName,productName,amount)=>{
         }
         product[0].amount += parseInt(amount);
        await category.save();
-        return product;
+        return product[0];
     } catch (err) {
         console.error(err);
         return null;

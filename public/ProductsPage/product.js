@@ -30,20 +30,20 @@ var decimalprice=null
           
         }).done(function(data)
         {
-            imgpath=data[0].image
-            decimalprice=data[0].price.$numberDecimal;
-            $('#productName').text(data[0].name);
-            $('#productSize').text(data[0].size.$numberDecimal);
-            $('#productCategory').text(data[0].category);
-            $('#productColor').text(data[0].color);
-            $('#productDescription').html("<strong>Description:</strong><br>"+data[0].description);
-            $('#productPrice').text(data[0].price.$numberDecimal+'$');
+            imgpath=data.image
+            decimalprice=data.price.$numberDecimal;
+            $('#productName').text(data.name);
+            $('#productSize').text(data.size.$numberDecimal);
+            $('#productCategory').text(data.category);
+            $('#productColor').text(data.color);
+            $('#productDescription').html("<strong>Description:</strong><br>"+data.description);
+            $('#productPrice').text(data.price.$numberDecimal+'$');
             
             const carouselInner = $('.carousel-inner');
             carouselInner.empty(); 
             const carouselIndicators = $('.carousel-indicators');
             // Loop through the image paths and add them to the carousel
-            data[0].image.forEach((picturePath, index) => {
+            data.image.forEach((picturePath, index) => {
                 const carouselItemClass = index === 0 ? 'carousel-item active' : 'carousel-item';
                 const carouselItem = `
                     <div class="${carouselItemClass}" data-bs-interval="10000">
