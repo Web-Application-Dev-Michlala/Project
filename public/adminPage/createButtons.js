@@ -1,5 +1,6 @@
 var categories;
 var currCategoryName;
+var socket = io();
 
 $(document).ready(function(){
     $.ajax({
@@ -214,7 +215,7 @@ $(document).ready(function(){
             $.ajax({
                 url:"/adminPage/" + $("#createProductCategoryField").val() + "/" + $("#productSelectName").val().split("Id:")[1],
                 type: "GET",
-            }).done((product) => {fillProductFields(product[0]);})
+            }).done((product) => {fillProductFields(product);})
         }
     });
 
@@ -253,13 +254,15 @@ $(document).ready(function(){
                     brand: $("#productBrandField").val(),
                     hot: productHot
                 },
-                success: () =>{
+                success: (product) =>{
                     $("#createProductSuccess strong").text("product created succesfuly!")
                     $("#createProductSuccess").prop("hidden",false);
                     setTimeout(() => {
                         $("#createProductSuccess").prop("hidden",true);
                     },3000);
                     resetCreateProductFields();
+                    socket.emit('add product',product);
+
                 },
                 error: () =>{
                     $("#createProductError").text("An error occurred while trying to create the product");
@@ -369,22 +372,24 @@ $(document).ready(function(){
         }
         else{
             $.ajax({
-                url: "/adminPage/addProductAmount/" + $("#addAmountProductField").val(),
+                url: "/adminPage/addProductAmount/" + $("#addAmountProductField").val().split(',')[0],
                 type: "POST",
                 data: {
                     categoryName: $("#addAmountCategoryField").val(),
                     amount: $("#addAmountField").val()
-                }
-            }).done((is_success)=>{
-                if(is_success){
+                },
+                success: (product) => {
                     $("#addAmountSuccess").prop("hidden",false);
                     setTimeout(() => {
                         $("#addAmountSuccess").prop("hidden",true);
                     },3000);
+                    if(product.amount === parseInt($("#addAmountField").val())){
+                        socket.emit('product restock',product);
+                    }
                     $("#addAmountCategoryField").val("0");
                     $("#addAmountCategoryField").change();
-                }
-                else{
+                },
+                error: () => {
                     $("#addAmountError").text("An error occurred while trying to create the product");
                     $("#addAmountAlert").prop("hidden", false);
                     setTimeout(() => {
@@ -467,7 +472,7 @@ $(document).ready(function(){
                 async: false,
                 type: "GET",
                 success: (data) => {
-                    if(data[0].id !== parseInt($("#productSelectName").val().split("Id:")[1])){
+                    if(data.id !== parseInt($("#productSelectName").val().split("Id:")[1])){
                         $("#createProductError").text("Product with the same id already exists");
                         boolean = false;
                     }
@@ -644,7 +649,7 @@ $(document).ready(function(){
                 field.append(new Option("Product", "0"));
                 
                 categoryDetails.products.forEach(product => {
-                    field.append(new Option(product.name + " , Id:" +product.id,product.name + " , Id:" +product.id));
+                    field.append(new Option(product.name + ",Id:" +product.id,product.name + ",Id:" +product.id));
                 });
             },
             error: function() {

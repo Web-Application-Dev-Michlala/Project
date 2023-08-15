@@ -108,21 +108,21 @@ const createCategory = async(req,res) => {
 }
 
 const createProduct = async(req,res) => {
-    const product = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
+    const category = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
         req.body.size,req.body.image,req.body.description,req.body.price,req.body.amount,req.body.brand,req.body.hot);
-    if(!product){
+    if(!category){
         return res.status(404).json({errors:["Product wasn't created"]});
     }
+    const product = await productService.getProductById(category.categoryName,req.body.Id);
     res.json(product);
 }
 
 const addProductAmount = async(req,res) => {
-    var is_added = true;
     const product = await productService.addProductAmount(req.body.categoryName,req.params.productName,req.body.amount);
     if(!product){
-        is_added = false;
+        return res.status(404).json({errors:["Amount wasn't added"]});;
     }
-    res.json({is_added});
+    res.json(product);
 }
 //----------------------------------------------------->
 
