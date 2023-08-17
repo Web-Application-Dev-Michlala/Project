@@ -1,14 +1,12 @@
-var categories;
 var currCategoryName;
 var socket = io();
 
 $(document).ready(function(){
-    $.ajax({
+    $.ajax({//setting category names in offcanvases
         url: "/adminPage/getCategorys",
         type: "GET",
         success: function(data) {
-            categories = data;
-            categories.forEach((category) =>{
+            data.forEach((category) =>{
                 $(".categoriesList").each(function(){
                     $(this).append(new Option(category.categoryName,category.categoryName));
                 });
@@ -20,52 +18,58 @@ $(document).ready(function(){
     });
 
 
-    $("#createUpdateCategoryButton").click(function(){
+    $("#createUpdateCategoryButton").click(function(){//reset create update category offcanvas
         $("#createUpdateCategoryActionType").val("0");
         $("#createUpdateCategoryActionType").change();
     })
 
-    $("#createUpdateCategoryActionType").change(function(){
+    $("#createUpdateCategoryActionType").change(function(){//changes action from no action,create and update
         var action = $(this).val();
         resetCategoryFields();
-        if (action === "0") {
-            $("#createUpdateCategoryInfo").prop("hidden", true);
+        if (action === "0") {//no action
+            $("#createUpdateCategoryInfo").prop("hidden", true);//hides the fields of category
+            //resets the select field of categoryname
             $("#createUpdateCategorySelectName").val("0");
             $("#createUpdateCategorySelectName").change();
-        } else if (action === "Create") {
-            $("#createUpdateCategoryInfo").prop("hidden",false);
-            $("#createUpdateCategorySelectName").prop("hidden",true);
+        } else if (action === "Create") {//create
+            $("#createUpdateCategoryInfo").prop("hidden",false);//shows the fields of category
+            $("#createUpdateCategorySelectName").prop("hidden",true);//select field needed only on update
             $("#createCategorySubmit").prop("hidden",false);
             $("#updateCategorySubmit").prop("hidden",true);
-            $("#createUpdateCategorySelectName").val("0");
-            $("#createUpdateCategorySelectName").change();
+            //enables all fields to use for create
             $("#createUpdateCategoryForm .form-control").each(function(){
                 $(this).prop("disabled",false);
             });
-        } else {
-            $("#createUpdateCategoryInfo").prop("hidden",false);
-            $("#createUpdateCategorySelectName").prop("hidden",false);
+        } else {//update
+            $("#createUpdateCategoryInfo").prop("hidden",false);//shows the fields of category
+            $("#createUpdateCategorySelectName").prop("hidden",false);//select field needed for update
+            //reset select name field
+            $("#createUpdateCategorySelectName").val("0");
+            $("#createUpdateCategorySelectName").change();
             $("#createCategorySubmit").prop("hidden",true);
             $("#updateCategorySubmit").prop("hidden",false);
+            //disables all fields,need to change select name to use
             $("#createUpdateCategoryForm .form-control").each(function(){
                 $(this).prop("disabled",true);
             });
         }
     })
 
-    $("#createUpdateCategorySelectName").change(function(){
+    $("#createUpdateCategorySelectName").change(function(){//change select name field
         var name = $(this).val();
 
-        if(name === "0"){
+        if(name === "0"){//no category chosen
+            //resets and disables category fields
             $("#createUpdateCategoryForm .form-control").each(function(){
                 $(this).prop("disabled",true);
             });
             resetCategoryFields();
-        } else {
+        } else {//category chosen
+            //enables category fields
             $("#createUpdateCategoryForm .form-control").each(function(){
                 $(this).prop("disabled",false);
             });
-            $.ajax({
+            $.ajax({//getting category information and filling the category fields with it
                 url: "/adminPage/getCategoryDetails/" + $("#createUpdateCategorySelectName").val(),
                 type: "GET",
                 success: function(categoryDetails) {
@@ -79,16 +83,16 @@ $(document).ready(function(){
         }
     })
 
-    $("#createCategorySubmit").click(function(){
+    $("#createCategorySubmit").click(function(){//creating category
        
-        if(!categoryNameValidate() || !categoryImageValidate()){
+        if(!categoryNameValidate() || !categoryImageValidate()){//checks validation
             $("#createUpdateCategoryAlert").prop("hidden",false);;
             setTimeout(() => {
                 $("#createUpdateCategoryAlert").prop("hidden",true);;
             },3000);
         }
-        else{
-            $.ajax({
+        else{//is valid
+            $.ajax({//creates category
                 url: "/adminPage/createCategory",
                 type: "POST",
                 data: {
@@ -96,8 +100,9 @@ $(document).ready(function(){
                     image : $("#createUpdateCategoryImageField").val()
                 },
                 success: (category) =>{
-                    $(".categoriesList").append(new Option(category.categoryName,category.categoryName));
+                    $(".categoriesList").append(new Option(category.categoryName,category.categoryName));//add category to categories selects on html
                     $("#createUpdateCategorySuccess strong").text("Category created succesfuly!");
+                    //reset category fields
                     $("#createUpdateCategorySuccess").prop("hidden",false);
                     setTimeout(() => {
                         $("#createUpdateCategorySuccess").prop("hidden",true);
@@ -117,23 +122,24 @@ $(document).ready(function(){
         }
     })
 
-    $("#updateCategorySubmit").click(function(){
-        if(!categoryNameValidate() || !categoryImageValidate()){
+    $("#updateCategorySubmit").click(function(){//update category
+        if(!categoryNameValidate() || !categoryImageValidate()){//check validation
             $("#createUpdateCategoryAlert").prop("hidden",false);
             setTimeout(() => {
                 $("#createUpdateCategoryAlert").prop("hidden",true);
             },4000);
         }
-        else{
-            $.ajax({
-                url: "/adminPage/updateCategory/" + currCategoryName,
+        else{//is valid
+            $.ajax({//updating category
+                url: "/adminPage/updateCategory/" + $("#createUpdateCategorySelectName").val(),
                 type: "POST",
                 data: {
                     newName: $("#createUpdateCategoryNameField").val(),
                     newImage: $("#createUpdateCategoryImageField").val()
                 },
                 success: (category) => {
-                    $(".categoriesList option[value='" + currCategoryName + "']").each(function(){
+                    //removes previous name from category selects on html an add new name
+                    $(".categoriesList option[value='" + $("#createUpdateCategorySelectName").val() + "']").each(function(){
                         $(this).remove();
                     });
                     $(".categoriesList").append(new Option(category.categoryName,category.categoryName));
@@ -142,6 +148,7 @@ $(document).ready(function(){
                     setTimeout(() => {
                         $("#createUpdateCategorySuccess").prop("hidden",true);
                     },3000);
+                    //reset category fields
                     $("#createUpdateCategoryForm .form-control").each(function(){
                         $(this).prop("disabled",true);
                     });
@@ -159,32 +166,38 @@ $(document).ready(function(){
         }
     })
 
-    $("#createUpdateProductButton").click(function(){
+    $("#createUpdateProductButton").click(function(){//reset create update product offcanvas
         $("#createUpdateProductActionType").val("0");
         $("#createUpdateProductActionType").change()
     })
 
-    $("#createUpdateProductActionType").change(function(){
+    $("#createUpdateProductActionType").change(function(){//changes product action from no action,create,update
         var action = $(this).val();
-        $("#createUpdateProductCategoryField").val("0");
-        $("#createUpdateProductCategoryField").change();
         resetCreateProductFields();
-        if (action === "0") {
-            $("#createUpdateProductInfo").prop("hidden", true);
-        } else if (action === "Create") {
-            $("#createUpdateProductInfo").prop("hidden",false);
-            $("#createUpdateProductSelectName").prop("hidden",true);
+        if (action === "0") {//no action
+            $("#createUpdateProductInfo").prop("hidden", true);//hiding product fields
+        } else if (action === "Create") {//create
+            //reset category select field
+            $("#createUpdateProductCategoryField").val("0");
+            $("#createUpdateProductCategoryField").change();
+            $("#createUpdateProductInfo").prop("hidden",false);//show product fields
+            $("#createUpdateProductSelectName").prop("hidden",true);//dont need product name select for create
             $("#createProductSubmit").prop("hidden",false);
             $("#updateProductSubmit").prop("hidden",true);
-            $("#createUpdateProductForm .form-control").each(function(){
+            //enabling product fields
+            $("#createUpdateProductForm .form-control").each(function(){ 
                 $(this).prop("disabled",false);
             });
             $("#createUpdateProductHotField").prop("disabled",false);
-        } else {
-            $("#createUpdateProductInfo").prop("hidden",false);
-            $("#createUpdateProductSelectName").prop("hidden",false);
+        } else {//update
+            //reset category select field
+            $("#createUpdateProductCategoryField").val("0");
+            $("#createUpdateProductCategoryField").change();
+            $("#createUpdateProductInfo").prop("hidden",false);//show product fields
+            $("#createUpdateProductSelectName").prop("hidden",false);//need product name select for update
             $("#createProductSubmit").prop("hidden",true);
             $("#updateProductSubmit").prop("hidden",false);
+            //disable product fields
             $("#createUpdateProductForm .form-control").each(function(){
                 $(this).prop("disabled",true);
             });
@@ -192,15 +205,17 @@ $(document).ready(function(){
         }
     })
 
-    $("#createUpdateProductCategoryField").change(function() {
+    $("#createUpdateProductCategoryField").change(function() {//change category name select
         category = $(this).val();
-        if($("#createUpdateProductActionType").val() !== "Create"){
-            if (category === "0") {
+        if($("#createUpdateProductActionType").val() !== "Create"){//change from category to default option does not affect create
+            if (category === "0") {//picked default option
+                //reset product name select
                 $("#createUpdateProductSelectName").prop("disabled", true);
                 $("#createUpdateProductSelectName").empty();
                 $("#createUpdateProductSelectName").append(new Option("Product", "0"));
                 $("#createUpdateProductSelectName").change();
-            } else {
+            } else {//picked a category
+                //reset product name select and fills the select with products of the category
                 $("#createUpdateProductSelectName").val("0");
                 $("#createUpdateProductSelectName").change();
                 getProducts(category,$("#createUpdateProductSelectName"));
@@ -208,22 +223,24 @@ $(document).ready(function(){
         }
     });
 
-    $("#createUpdateProductSelectName").change(function() {
+    $("#createUpdateProductSelectName").change(function() {//changes product name select
         product = $(this).val();
         category = $("#createUpdateProductCategoryField").val();
-        if (product === "0") {
+        if (product === "0") {//picked default product name
+            //disable and reset product fields
             $("#createUpdateProductForm .form-control").each(function(){
                 $(this).prop("disabled",true);
             });
             $("#createUpdateProductHotField").prop("disabled",true);
             resetCreateProductFields();
             $("#createUpdateProductCategoryField").val(category);
-        } else {
+        } else {//picked product
+            //enable product fields
             $("#createUpdateProductForm .form-control").each(function(){
                 $(this).prop("disabled",false);
             });
             $("#createUpdateProductHotField").prop("disabled",false);
-            $.ajax({
+            $.ajax({//get product information and fill the product fields with the information
                 url:"/adminPage/" + $("#createUpdateProductCategoryField").val() + "/" + $("#createUpdateProductSelectName").val().split("Id:")[1],
                 type: "GET",
             }).done((product) => {fillProductFields(product);})
@@ -231,8 +248,9 @@ $(document).ready(function(){
     });
 
 
-    $("#createProductSubmit").click(function(){
-        if(!productCategoryValidate() || !productNameValidate() || !productIdValidate() || !productColorValidate()
+    $("#createProductSubmit").click(function(){//create product
+        //validate fields
+        if(!productCategoryValidate() || !productNameValidate() || !productIdValidate() || !productColorValidate() 
         || !productImageValidate() || !productSizeValidate() || !productDescValidate() || !productPriceValidate()
         || !productAmountValidate() || !productBrandValidate()){
             $("#createUpdateProductAlert").prop("hidden",false);
@@ -240,7 +258,7 @@ $(document).ready(function(){
                     $("#createUpdateProductAlert").prop("hidden",true);
                 },3000);
         }
-        else{
+        else{//is valid 
             var productHot = $("#createUpdateProductHotField").val();
             if(productHot === "0" || productHot === "No"){
                 productHot = false;
@@ -249,7 +267,7 @@ $(document).ready(function(){
                 productHot = true;
             }
             
-            $.ajax({
+            $.ajax({//create product
                 url: "/adminPage/createProduct",
                 type: "POST",
                 data: { 
@@ -272,7 +290,7 @@ $(document).ready(function(){
                         $("#createUpdateProductSuccess").prop("hidden",true);
                     },3000);
                     resetCreateProductFields();
-                    socket.emit('add product',product);
+                    socket.emit('add product',product);//sends message so the server will send everyone about the product
 
                 },
                 error: () =>{
@@ -284,10 +302,12 @@ $(document).ready(function(){
                 }
             })
             
+            
         }
     })
 
-    $("#updateProductSubmit").click(function(){
+    $("#updateProductSubmit").click(function(){//update product
+        //validate product fields
         if(!productCategoryValidate() || !productNameValidate() || !productIdValidate() || !productColorValidate()
         || !productImageValidate() || !productSizeValidate() || !productDescValidate() || !productPriceValidate()
         || !productAmountValidate() || !productBrandValidate()){
@@ -296,7 +316,7 @@ $(document).ready(function(){
                     $("#createUpdateProductAlert").prop("hidden",true);
                 },3000);
         }
-        else{
+        else{//is valid
             var productHot = $("#createUpdateProductHotField").val();
             if(productHot === "0" || productHot === "No"){
                 productHot = false;
@@ -305,7 +325,7 @@ $(document).ready(function(){
                 productHot = true;
             }
             
-            $.ajax({
+            $.ajax({//update product
                 url: "/adminPage/updateProduct/" + $("#createUpdateProductCategoryField").val() + "/" + $("#createUpdateProductSelectName").val().split("Id:")[1],
                 type: "POST",
                 data: { 
@@ -326,9 +346,11 @@ $(document).ready(function(){
                     setTimeout(() => {
                         $("#createUpdateProductSuccess").prop("hidden",true);
                     },3000);
+                    //disable product fields
                     $("#createUpdateProductForm .form-control").each(function(){
                         $(this).prop("disabled",true);
                     });
+                    //resets product fields including name select
                     $("#createUpdateProductHotField").prop("disabled",true);
                     $("#createUpdateProductSelectName").val("0");
                     $("#createUpdateProductSelectName").prop("disabled",true);
@@ -347,47 +369,51 @@ $(document).ready(function(){
         }
     })
 
-    $("#addProductAmountButton").click(function(){
+    $("#addProductAmountButton").click(function(){//reset add product amount offcanvas
         $("#addAmountCategoryField").val("0");
         $("#addAmountCategoryField").change()
     })
 
-    $("#addAmountCategoryField").change(function() {
+    $("#addAmountCategoryField").change(function() {//change category name select of addAmount
         category = $(this).val();
         
-        if (category === "0") {
+        if (category === "0") {//if default category
+            //disable and reset product select
             $("#addAmountProductField").prop("disabled", true);
             $("#addAmountProductField").empty();
             $("#addAmountProductField").append(new Option("Product", "0"));
             $("#addAmountProductField").change();
         } else {
+            //fill products from the category in product select
             getProducts(category,$("#addAmountProductField"));
         }
     });
 
-    $("#addAmountProductField").change(function() {
+    $("#addAmountProductField").change(function() {//products name select of addAmount
         product = $(this).val();
         
-        if (product === "0") {
+        if (product === "0") {//if default product
+            //disable and reset amount field, hide submit button
             $("#addAmountField").prop("disabled", true);
             $("#addAmountSubmit").prop("hidden", true);
             $("#addAmountField").val("");
-        } else {
+        } else {//product selected
+            //enable amount field and show submit button
             $("#addAmountField").prop("disabled", false);
             $("#addAmountSubmit").prop("hidden", false);
 
         }
     });
 
-    $("#addAmountSubmit").click(function(){
-        if(!addAmountValidate()){
+    $("#addAmountSubmit").click(function(){//add amount to product
+        if(!addAmountValidate()){//validate amount field
             $("#addAmountAlert").prop("hidden", false);
             setTimeout(() => {
                 $("#addAmountAlert").prop("hidden", true);
             },3000);
         }
-        else{
-            $.ajax({
+        else{//is valid
+            $.ajax({//add amount
                 url: "/adminPage/addProductAmount/" + $("#addAmountProductField").val().split('Id:')[1],
                 type: "POST",
                 data: {
@@ -399,9 +425,11 @@ $(document).ready(function(){
                     setTimeout(() => {
                         $("#addAmountSuccess").prop("hidden",true);
                     },3000);
+                    //if amount of product was 0 send message to server of restock
                     if(product.amount === parseInt($("#addAmountField").val())){
                         socket.emit('product restock',product);
                     }
+                    //reset amount field
                     $("#addAmountCategoryField").val("0");
                     $("#addAmountCategoryField").change();
                 },
@@ -421,17 +449,20 @@ $(document).ready(function(){
 
     //================== Functions =============================
 
+    //checking if name is valid
     function categoryNameValidate(){
         if($("#createUpdateCategoryNameField").val().length === 0){
             $("#createUpdateCategoryError").text("Name field is empty");
             return false;
         }
         var boolean = true;
+        //cheking if category name exist
         $.ajax({
             url: "/adminPage/" + $("#createUpdateCategoryNameField").val(),
-            async:false,
+            async:false,//async false because cant continue creating/updating before checking this
             type: "GET",
             success: (data) => {
+                //if we are in update mode than need to check if found a name different than the previous name of the category
                 if(data.categoryName !== $("#createUpdateCategorySelectName").val()){
                     $("#createUpdateCategoryError").text("Category with this name already exists");
                     boolean =  false;
@@ -441,8 +472,10 @@ $(document).ready(function(){
         return boolean;
     }
 
-    function categoryImageValidate(){ //check if image is in path instead
-        if($("#createUpdateCategoryImageField").val().length != 0){
+    //checking if image is valid
+    function categoryImageValidate(){
+        if($("#createUpdateCategoryImageField").val().length != 0){//if image is empty return true because it is not required
+            //check the path is good
             var linkParts = $("#createUpdateCategoryImageField").val().split('/');
             if(linkParts.length != 3 || linkParts[0] != "public" || linkParts[1] != "images"){
                 $("#createUpdateCategoryError").text("Image field is invalid");
@@ -453,51 +486,83 @@ $(document).ready(function(){
                 $("#createUpdateCategoryError").text("Image field is invalid");
                 return false;
             }
+            //check this is a real image    
+            const image = new Image();
+            image.src ="/" + $("#createUpdateProductImageField").val();
+            if(image.complete){//if is real image
+                return true;
+            }
+            image.onload = () => {//if image took time to load
+                return true;
+            }
+            image.onerror = () => {//if not real image
+                return false;
+            }
         }
         return true;
     }
 
+    //filling the category fields according to the category details given
     function fillCategoryFields(categoryDetails){
         $("#createUpdateCategoryNameField").val(categoryDetails.categoryName);
         $("#createUpdateCategoryImageField").val(categoryDetails.image);
     }
 
+    //reseting the category fields
     function resetCategoryFields(){
         $("#createUpdateCategoryNameField").val("");
         $("#createUpdateCategoryImageField").val("");
     }
 
+    //checking if product id is valid
     function productIdValidate(){
         if($("#createUpdateProductIdField").val().length == 0){
             $("#createUpdateProductError").text("Id field is empty");
             return false;
         }
-        var number = +($("#createUpdateProductIdField").val());
-        if(!number){
-            $("#createUpdateProductError").text("Id is not a number");
-            return false;
-        }
+        var number = +($("#createUpdateProductIdField").val());//trying to convert to a number
         if(number <= 0){
             $("#createUpdateProductError").text("Id is not a positive number");
             return false;
         }
+        if(!number){//failed to convert
+            $("#createUpdateProductError").text("Id is not a number");
+            return false;
+        }
+        else if(number % 1 != 0){//checking if it is a whole number
+            $("#createUpdateProductError").text("Number is not a whole number");
+            return false;
+        }
         var boolean = true;
-        categories.forEach((category)=>{
-            $.ajax({
-                url:"/adminPage/" + category.categoryName + "/" + $("#createUpdateProductIdField").val(),
-                async: false,
-                type: "GET",
-                success: (data) => {
-                    if(data.id !== parseInt($("#createUpdateProductSelectName").val().split("Id:")[1])){
-                        $("#createUpdateProductError").text("Product with the same id already exists");
-                        boolean = false;
-                    }
-                }
-            });
-        })
+        //checking if a product with the same id exists
+        $.ajax({//getting all categorys
+            url: "/adminPage/getCategorys",
+            async: false,//async false because cant continue creating/updating before checking this
+            type: "GET",
+            success: function(data) {
+                data.forEach((category)=>{
+                    $.ajax({//checking for each product of the category
+                        url:"/adminPage/" + category.categoryName + "/" + $("#createUpdateProductIdField").val(),
+                        async: false,//async false because cant continue creating/updating before checking this
+                        type: "GET",
+                        success: (data) => {
+                            //if we are in update mode than need to check if found an id different than the previous id of the product
+                            if(data.id !== parseInt($("#createUpdateProductSelectName").val().split("Id:")[1])){
+                                $("#createUpdateProductError").text("Product with the same id already exists");
+                                boolean = false;//found a product with the same id
+                            }
+                        }
+                    });
+                })
+            },
+            error: function() {
+                alert("An error occurred while trying to fetch categories");
+            }
+        });
         return boolean;
     }
 
+    //checking if product name is valid
     function productNameValidate(){
         if($("#createUpdateProductNameField").val().length === 0){
             $("#createUpdateProductError").text("Name field is empty");
@@ -506,6 +571,7 @@ $(document).ready(function(){
         return true;
     }
 
+    //checking if product category name is valid
     function productCategoryValidate(){
         if($("#createUpdateProductCategoryField").val() === "0"){
             $("#createUpdateProductError").text("Category hasn't been chosen");
@@ -514,6 +580,7 @@ $(document).ready(function(){
         return true;
     }
 
+    //checking if product color is valid
     function productColorValidate(){
         if($("#createUpdateProductColorField").val().length === 0){
             $("#createUpdateProductError").text("Color field is empty");
@@ -522,8 +589,10 @@ $(document).ready(function(){
         return true;
     }
 
+    //checking if product image is valid
     function productImageValidate(){
-        if($("#createUpdateProductImageField").val().length != 0){
+        if($("#createUpdateProductImageField").val().length != 0){//if image is empty return true because it is not required
+            //check the path is good
             var linkParts = $("#createUpdateProductImageField").val().split('/');
             if(linkParts.length != 3 || linkParts[0] != "public" || linkParts[1] != "images"){
                 $("#createUpdateProductError").text("Image field is invalid");
@@ -534,33 +603,36 @@ $(document).ready(function(){
                 $("#createUpdateProductError").text("Image field is invalid");
                 return false;
             }
+            //check this is a real image
             const image = new Image();
             image.src ="/" + $("#createUpdateProductImageField").val();
-            if(image.complete){
+            if(image.complete){//it is a real image
                 return true;
             }
-            image.onload = () => {
+            image.onload = () => {//image took time to load
                 return true;
             }
-            image.onerror = () => {
+            image.onerror = () => {//not a real image
                 return false;
             }
         }
         return true;
     }
 
+    //checking if product size is valid
     function productSizeValidate(){
         if($("#createUpdateProductSizeField").val().length === 0){
             $("#createUpdateProductError").text("Size field is empty");
             return false;
         }
-        if(!isNumeric($("#createUpdateProductSizeField").val())){
+        if(!isNumeric($("#createUpdateProductSizeField").val())){//checking if size is a number
             $("#createUpdateProductError").text("Size field is invalid");
             return false;
         }
         return true;
     }
 
+    //checking if product description is valid
     function productDescValidate(){
         if($("#createUpdateProductDescField").val().length === 0){
             $("#createUpdateProductError").text("Description field is empty");
@@ -569,24 +641,26 @@ $(document).ready(function(){
         return true;
     }
 
+    //checking if product price is valid
     function productPriceValidate(){
         if($("#createUpdateProductPriceField").val().length === 0){
             $("#createUpdateProductError").text("Price field is empty");
             return false;
         }
-        if(!isNumeric($("#createUpdateProductPriceField").val())){
+        if(!isNumeric($("#createUpdateProductPriceField").val())){//cheking if price is a number
             $("#createUpdateProductError").text("Price field is invalid");
             return false;
         }
         return true;
     }
 
+    //checking if product amount is valid
     function productAmountValidate(){
         if($("#createUpdateProductAmountField").val().length === 0){
             $("#createUpdateProductError").text("Amount field is empty");
             return false;
         }
-        var number = +($("#createUpdateProductAmountField").val());
+        var number = +($("#createUpdateProductAmountField").val());//trying to convert to a number
         if(number <= 0){
             $("#createUpdateProductError").text("Amount is not a positive number");
             return false;
@@ -595,13 +669,14 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Amount is not a number");
             return false;
         }
-        else if(number % 1 != 0){
+        else if(number % 1 != 0){//checking if it is a whole number
             $("#createUpdateProductError").text("Number is not a whole number");
             return false;
         }
         return true;
     }
 
+    //checking if product brand is valid
     function productBrandValidate(){
         if($("#createUpdateProductBrandField").val().length === 0){
             $("#createUpdateProductError").text("Brand field is empty");
@@ -610,6 +685,7 @@ $(document).ready(function(){
         return true;
     }
 
+    //filling the product fields according to the product given
     function fillProductFields(product){
         $("#createUpdateProductIdField").val(product.id);
         $("#createUpdateProductNameField").val(product.name);
@@ -626,6 +702,7 @@ $(document).ready(function(){
         $("#createUpdateProductBrandField").val(product.brand);
     }
 
+    //reseting the product fields
     function resetCreateProductFields(){
         $("#createUpdateProductIdField").val("");
         $("#createUpdateProductNameField").val("");
@@ -640,41 +717,46 @@ $(document).ready(function(){
         $("#createUpdateProductBrandField").val("");
     }
 
+    //check the amount is valid
     function addAmountValidate(){
         var amount = $("#addAmountField").val();
         if(amount.length === 0){
             $("#addAmountError").text("Amount field is empty");
             return false;
         }
-        var number = +(amount);
+        var number = +(amount);//trying to convert to a number
         if(number <= 0){
             $("#addAmountError").text("Amount is not a positive number");
             return false;
         }
-        else if(!number){
+        else if(!number){//failed to convert
             $("#addAmountError").text("Amount is not a number");
             return false;
         }
-        else if(number % 1 != 0){
+        else if(number % 1 != 0){//if not a whole number
             $("#addAmountError").text("Amount is not a whole number");
             return false;
         }
         return true;
     }
 
+    //cheking if a value is a number,
+    //check if it starts with a one or more digits '\d+' ,and optional '()' for having a dot '\.' and after one or more digits '\d+'
     function isNumeric(value){
         return /^\d+(\.\d+)?$/.test(value);
     }
 
+    //gets category and product name field
+    //it empties the field, gets all products in the category and fills the field with the products
     function getProducts(category,field){
         $.ajax({
             url: "/adminPage/getCategoryDetails/" + category,
             type: "GET",
             success: function(categoryDetails) {
-                field.prop("disabled", false);
-                field.empty();
-                field.append(new Option("Product", "0"));
-                
+                field.prop("disabled", false);//enables the option to choose product from field
+                field.empty();//empty field
+                field.append(new Option("Product", "0"));//add default option
+                //adds products
                 categoryDetails.products.forEach(product => {
                     field.append(new Option(product.name + ",Id:" +product.id,product.name + ",Id:" +product.id));
                 });

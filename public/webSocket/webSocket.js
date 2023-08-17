@@ -1,56 +1,54 @@
 var socket = io();
 
 $(document).ready(function(){
-    if(window.location === window.parent.location){//window with an iframe has a problem with toast
-        socket.on('add product',function(product){
-            console.log(product);
-            if(!$(".toast-container").length){
-                $("body").append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
-            }
-            var toast = createToast(product);
-            $(toast).addClass("text-bg-light");
-            $(toast).find(".me-auto").text("New product added");
-            $(".toast-container").append(toast);
-            $(toast).toast('show');
-        })
+    socket.on('add product',function(product){//when the client gets message about an added product
+        if(!$(".toast-container").length){
+            $("body").append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
+        }
+        //creating and adding a toast
+        var toast = createToast(product);
+        $(toast).addClass("text-bg-light");
+        $(toast).find(".me-auto").text("New product added");
+        $(".toast-container").append(toast);
+        $(toast).toast('show');
+    })
 
-        socket.on('product restock',function(product){
-            if(!$(".toast-container").length){
-                $("body").append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
-            }
-            var toast = createToast(product);
-            $(toast).addClass("text-bg-success");
-            $(toast).find(".me-auto").text("Product restocked");
-            $(".toast-container").append(toast);
-            $(toast).toast('show');
-            console.log(product);
-        })
+    socket.on('product restock',function(product){//when the client gets message about a restocked product
+        if(!$(".toast-container").length){
+            $("body").append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
+        }
+        //creating and adding a toast
+        var toast = createToast(product);
+        $(toast).addClass("text-bg-success");
+        $(toast).find(".me-auto").text("Product restocked");
+        $(".toast-container").append(toast);
+        $(toast).toast('show');
+    })
 
-        socket.on('limited product',function(product){
-            if(!$(".toast-container").length){
-                $("body").append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
-            }
-            var toast = createToast(product);
-            $(toast).addClass("text-bg-warning");
-            $(toast).find(".me-auto").text("Product has limited amount");
-            $(".toast-container").append(toast);
-            $(toast).toast('show');
-            console.log(product);
-        })
+    socket.on('limited product',function(product){//when the client gets message about a limited product
+        if(!$(".toast-container").length){
+            $("body").append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
+        }
+        //creating and adding a toast
+        var toast = createToast(product);
+        $(toast).addClass("text-bg-warning");
+        $(toast).find(".me-auto").text("Product has limited amount");
+        $(".toast-container").append(toast);
+        $(toast).toast('show');
+    })
 
-        socket.on('out of stock',function(product){
-            if(!$(".toast-container").length){
-                $("body").append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
-            }
-            var toast = createOutToast(product);
-            $(".toast-container").append(toast);
-            $(toast).toast('show');
-            console.log(product);
-        })
-    }
+    socket.on('out of stock',function(product){//when the client gets message about an out of stock product
+        if(!$(".toast-container").length){
+            $("body").append('<div class="toast-container position-fixed bottom-0 end-0 p-3"></div>');
+        }
+        //creating and adding a toast
+        var toast = createOutToast(product);
+        $(".toast-container").append(toast);
+        $(toast).toast('show');
+    })
 });
 
-function createToast(product){
+function createToast(product){//creates toast for general query
     var toast = document.createElement('div');
     $(toast).addClass('toast');
     $(toast).attr('role','alert');
@@ -72,7 +70,7 @@ function createToast(product){
     return toast;
 }
 
-function createOutToast(product){
+function createOutToast(product){//creates toast for out of stock product
     var toast = document.createElement('div');
     $(toast).addClass('toast text-bg-danger');
     $(toast).attr('role','alert');
