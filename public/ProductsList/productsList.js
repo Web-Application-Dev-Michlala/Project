@@ -1,6 +1,6 @@
 var curr_page_num = 1;
 var current_accord = null;
-var curr_sorter = document.getElementById("oldestSorter");
+var curr_sorter = $("#oldestSorter");
 var products;
 var colors;
 var sizes;
@@ -22,7 +22,7 @@ $(document).ready(function()
     }).done(function(data)
     {
         const navbar=$('#navbar');
-        if(data.isConnected!=false)
+        if(data.isConnected!==false)
         { 
            navbar.load('public/Navbar/navBar.html',function()
            { $('#userGreet').text('Hello '+data.isConnected);
@@ -43,18 +43,7 @@ $(document).ready(function()
             url:"/category/getAllProductsByCategory/" + categoryName,
             type: "Get",
         }).done(function(data){
-            products = data;
-            curr_products = products;
-            colors = getAllColors(products).sort();
-            sizes = getAllSizes(products);
-            sizes.sort((size1,size2) => size1 - size2);
-            brands = getAllBrands(products).sort();
-            price_range = [getMinPrice(products),getMaxPrice(products)];
-            $( "#price" ).text( "$" + price_range[0] + " - $" + price_range[1] );
-            $( "#advanced2_price" ).text( "$" + price_range[0] + " - $" + price_range[1] );
-            curr_price_range = price_range;
-            advanced_curr_price_range = price_range;
-            names = getAllNames(products).sort();
+            setData(data);
             createPages(products);
             createFilters();
 
@@ -64,14 +53,31 @@ $(document).ready(function()
             });
 
 
-            //searchinh colors
+            $("#refreshProducts").click(function(){
+                $.ajax({
+                    url:"/category/getAllProductsByCategory/" + categoryName,
+                    type: "Get",
+                }).done(function(data){
+                    setData(data);
+                    $("#oldestSorter").click();
+                    $("#color_search").html("");
+                    $("#size_search").html("");
+                    $("#brand_search").html("");
+                    $("#advanced1_color_search").html("");
+                    $("#advanced1_size_search").html("");
+                    $("#advanced1_brand_search").html("");
+                    $("#advanced2_color_search").html("");
+                    $("#advanced2_brand_search").html("");
+                    createFilters();    
+                })
+            });
+
+            //searching colors
             $("#color_submit").click(function(){
                 var colorPicks = [];
-                var color_search = document.querySelector("#color_search");
-                var checkBoxes = color_search.querySelectorAll("input");
-                checkBoxes.forEach((checkBox) => {
-                    if($(checkBox).is(':checked')){
-                        colorPicks.push(checkBox.id);
+                $("#color_search input").each(function(){
+                    if($(this).is(':checked')){
+                        colorPicks.push($(this).attr('id'));
                     }
                 })
                 if(colorPicks.length === 0){
@@ -91,11 +97,9 @@ $(document).ready(function()
             //searching sizes
             $("#size_submit").click(function(){
                 var sizePicks = [];
-                var size_search = document.querySelector("#size_search");
-                var checkBoxes = size_search.querySelectorAll("input");
-                checkBoxes.forEach((checkBox) => {
-                    if($(checkBox).is(':checked')){
-                        sizePicks.push(parseFloat(checkBox.id.split(' ')[0]));
+                $("#size_search input").each(function(){
+                    if($(this).is(':checked')){
+                        sizePicks.push(parseFloat($(this).attr('id').split(' ')[0]));
                     }
                 })
                 if(sizePicks.length === 0){
@@ -115,11 +119,9 @@ $(document).ready(function()
             //searching brands
             $("#brand_submit").click(function(){
                 var brandPicks = [];
-                var brand_search = document.querySelector("#brand_search");
-                var checkBoxes = brand_search.querySelectorAll("input");
-                checkBoxes.forEach((checkBox) => {
-                    if($(checkBox).is(':checked')){
-                        brandPicks.push(checkBox.id);
+                $("#brand_search input").each(function(){
+                    if($(this).is(':checked')){
+                        brandPicks.push($(this).attr('id'));
                     }
                 })
                 if(brandPicks.length === 0){
@@ -253,23 +255,33 @@ $(document).ready(function()
 
         //searching id
         $("#id_submit").click(function(){
-            if(this.value.length === 0){
-                //check validation
+            if($("#id").val().length === 0){
+                alert("no ids were written");
+                return;
             }
             $.ajax({
                 url:"/category/getProductById/" + categoryName + "/" + $("#id").val(),
                 success: function(data){
-                    curr_products = data;
+                    curr_products = [];
+                    curr_products.push(data);
                     $("#oldestSorter").click();
                 },
                 error: () => {alert("No products were found");}
             })
         })
 
+        $("#id").keydown(function(event) {            
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                $("#id_submit").click();
+            }
+        });
+
         //searchin names
         $("#name_submit").click(function(){
-            if(this.value.length === 0){
-                //check validation
+            if($("#name").val().length === 0){
+                alert("no names were written");
+                return;
             }
             $.ajax({
                 url:"/category/getProductsByName/" + categoryName + "/" + $("#name").val(),
@@ -281,36 +293,43 @@ $(document).ready(function()
             })
         })
 
+        $("#name").keydown(function(event) {            
+            if (event.keyCode === 13) {
+                event.preventDefault();
+                $("#name_submit").click();
+            }
+        });
+
         //sorting by newest
         $("#newestSorter").click(function(){
-            curr_sorter.disabled = false;
-            this.disabled = true;
-            curr_sorter = this;
+            $(curr_sorter).prop('disabled',false);
+            $(this).prop('disabled',true);
+            curr_sorter = $(this);
             sortByNewest();
         })
 
 
         //searching by oldest
         $("#oldestSorter").click(function(){
-            curr_sorter.disabled = false;
-            this.disabled = true;
-            curr_sorter = this;
+            $(curr_sorter).prop('disabled',false);
+            $(this).prop('disabled',true);
+            curr_sorter = $(this);
             sortByOldest();
         })
 
         //searching by cheapest
         $("#cheapestSorter").click(function(){
-            curr_sorter.disabled = false;
-            this.disabled = true;
-            curr_sorter = this;
+            $(curr_sorter).prop('disabled',false);
+            $(this).prop('disabled',true);
+            curr_sorter = $(this);
             sortByCheapest();
         })
 
         //searching by most expensive
         $("#expensiveSorter").click(function(){
-            curr_sorter.disabled = false;
-            this.disabled = true;
-            curr_sorter = this;
+            $(curr_sorter).prop('disabled',false);
+            $(this).prop('disabled',true);
+            curr_sorter = $(this);
             sortByMostExpensive();
         })
         
@@ -325,8 +344,32 @@ $(document).ready(function()
         })
 })
 
+function setData(data){
+    products = data;
+    curr_products = products;
+    colors = getAllColors(data).sort();
+    sizes = getAllSizes(data);
+    sizes.sort((size1,size2) => size1 - size2);
+    brands = getAllBrands(data).sort();
+    price_range = [getMinPrice(data),getMaxPrice(data)];
+    $( "#price" ).text( "$" + price_range[0] + " - $" + price_range[1] );
+    $( "#advanced2_price" ).text( "$" + price_range[0] + " - $" + price_range[1] );
+    curr_price_range = price_range;
+    advanced_curr_price_range = price_range;
+    names = getAllNames(data).sort();    
+}
+
+
+function compareProductArrays(products1,products2){
+    if(products1.length !== products2.length)
+        return false;
+    
+    return true;
+}
+
 //create page numbers and products
 function createPages(products){
+
     let length = products.length;
     let num_pages;
     let last_page_num_products;
@@ -341,7 +384,7 @@ function createPages(products){
     addPageNumbers(num_pages);
     for(let i = 1 ; i<=num_pages ; i++){
         addPage(i);
-        if(i != num_pages){
+        if(i !== num_pages){
             for(let j = 0 ; j<9 ; j++){
                 addProduct(products,i,(i-1)*9 +j);
             }
@@ -355,13 +398,10 @@ function createPages(products){
     if(num_pages > 1){
         for(let i = 1; i<= num_pages ; i++){
             $("#page-"+i).click(function(){
-                let Page = document.querySelector("#content-box-"+i);
-                Page.hidden = false;
-                let curr_page = document.querySelector("#content-box-" + curr_page_num);
-                curr_page.hidden = true;
-                let curr_page_button = document.querySelector("#page-" + curr_page_num);
-                this.className = "page-link disabled";
-                curr_page_button.className = "page-link";
+                $("#content-box-" + i).prop('hidden',false);
+                $("#content-box-" + curr_page_num).prop('hidden',true);
+                $(this).addClass('disabled');
+                $("#page-" + curr_page_num).removeClass('disabled');
                 curr_page_num = i;
             });
         }
@@ -375,125 +415,57 @@ function addPageNumbers(i){
     if(i === 1){
         return;
     } 
+    var disabled = "disabled";
     for(let j = 1 ; j<=i ; j++){
-        const pages = document.querySelector(".pagination");
-        const newPage = document.createElement("li");
-        newPage.className = "page-item";
-        const pageNum = document.createElement("a");
-        pageNum.className = "page-link";
-        pageNum.id = "page-" +  j;
-        if(j===1){
-            pageNum.className = "page-link disabled";
-        }
-        pageNum.type = "button";
-        pageNum.innerText = ""+j;
-        newPage.appendChild(pageNum);
-        pages.appendChild(newPage);
+        if(j>1){
+            disabled = "";
+        }    
+        $(".pagination").append('<li class="page-item">' +
+        '<a class="page-link ' + disabled + '" id="page-' + j + '" type="button">' + j + '</a>' +
+        '</li>');
     }
 }
 
 
 //create page
 function addPage(i){
-    const content = document.querySelector(".content");
-    const newPage = document.createElement("div")
-    newPage.className ="row row-cols-auto row-cols-md-3 g-5";
-    newPage.id = "content-box-" + i;
-    if(i>1){
-        newPage.hidden = true;
+    var hidden
+    if(i===1){
+        hidden = "";
     }
-    content.appendChild(newPage);
+    else{
+        hidden = "hidden";
+    } 
+    $(".content").append('<div class="row row-cols-auto row-cols-md-3 g-5" id="content-box-' + i + '" ' + hidden + '>');
 }
 
 
 //create product
 function addProduct(products,i,j){
-    const page = document.querySelector("#content-box-" + i);
-    const productCol = document.createElement("div")
-    productCol.className = "col"
-
-    const link = document.createElement("a");
-
-    const newProduct = document.createElement("div");
-    newProduct.className = "card"
-        
-    const productImage = document.createElement("img");
-    if(products[j].amount == 0)
-        productImage.src = "public/images/soldout.png";
+    var image;
+    if(products[j].amount > 0){
+        image = '<a href="/public/ProductsPage/index.html?id=' + products[j].id + '&name=' + categoryName + '">' +
+        '<img src="/' + products[j].image + '" class="card-img-top" alt="...">' +
+        '</a>'; 
+    }
     else{
-        productImage.src = products[j].image;
-        link.href = "/public/ProductsPage/index.html?id=" + products[j].id + "&name=" + categoryName;
+        image = '<img src="public/images/soldout.png" class="card-img-top" alt="...">';
     }
-    productImage.className = "card-img-top";
-    productImage.alt = "...";
-    
-    const productBody = document.createElement("div");
-    productBody.className = "card-body";
-    
-    const productTitle = document.createElement("h5");
-    productTitle.className = "card-title";
-    productTitle.innerText = products[j].name;
-
-    
-    const productId = document.createElement("p");
-    productId.className = "card-text"
-    productId.innerText = "Id: " + products[j].id;
-
-    const productColor = document.createElement("p");
-    productColor.className = "card-text"
-    productColor.innerText = "Color: " + products[j].color;
-
-    const productSize = document.createElement("p");
-    productSize.className = "card-text"
-    productSize.innerText ="Size: " + products[j].size.$numberDecimal + " Inch";
-
-    const productBrand = document.createElement("p");
-    productBrand.className = "card-text"
-    productBrand.innerText = "Brand: " + products[j].brand;
-    
-
-    const productDesc = document.createElement("p");
-    productDesc.className = "card-text"
-    productDesc.innerText = products[j].description;
-    
-    const productPrice = document.createElement("p");
-    productPrice.className = "card-text";
-    productPrice.id = "product-price";
-    productPrice.innerText = "Price: "+ products[j].price.$numberDecimal;
-
-    
-    
-    productBody.appendChild(productTitle);
-    productBody.appendChild(productId);
-    productBody.appendChild(productDesc);
-    productBody.appendChild(productBrand);
-    productBody.appendChild(productColor);
-    productBody.appendChild(productSize);
-    productBody.appendChild(productPrice);
-    if(products[j].amount != 0){
-        link.appendChild(productImage);
-        newProduct.appendChild(link);
-    }
-    else
-        newProduct.appendChild(productImage);
-    newProduct.appendChild(productBody);
-    productCol.appendChild(newProduct);
-    page.appendChild(productCol);
-
-
+    $("#content-box-" + i).append('<div class="col">' +
+    '<div class="card">' + image +
+    '<div class="card-body">' +
+    '<h5 class="card-title">' + products[j].name + '</h5>' +
+    '<p class="card-text">Id: ' + products[j].id + '</p>' +
+    '<p class="card-text">' + products[j].description + '</p>' +
+    '<p class="card-text">Price: ' + products[j].price.$numberDecimal + '</p>' +
+    '</div></div></div>')
 }
 
 
 //removes all pages
 function removePages(){
-    const pages = document.querySelector(".pagination");
-    while(pages.firstChild){
-        pages.removeChild(pages.lastChild);
-    }
-    const content = document.querySelector(".content");
-    while(content.firstChild){
-        content.removeChild(content.lastChild);
-    }
+    $(".pagination").empty();
+    $(".content").empty();
 }
 
 //creates filters
@@ -502,92 +474,46 @@ function createFilters(){
     createSizes();
     createBrands();
     createPriceRange();
-    //createAdvanced();
 }
 
 //creates color filters
 function createColors(){
-    var colorList = document.querySelector("#color_search");
     colors.forEach(color => {
-        const colorCheck = document.createElement("div");
-        colorCheck.className = "form-check";
-        const checkBox = document.createElement("input");
-        checkBox.type = "checkbox";
-        checkBox.className = "form-check-input";
-        checkBox.id = "" + color;
-        const colorLabel = document.createElement("label");
-        colorLabel.for = "" + color;
-        colorLabel.className = "form-label";
-        colorLabel.innerText = "" + color;
-        colorCheck.appendChild(colorLabel);
-        colorCheck.appendChild(checkBox);
-        colorList.appendChild(colorCheck);
+        $("#color_search").append('<div class="form-check">' +
+        '<label for="' + color + '" class="form-label">'+ color + '</label>' +
+        '<input type="checkbox" class="form-check-input" id="'+color + '">' +
+        '</div>');
     })
     $("#color_search").clone().appendTo("#advanced1_color_search");
     $("#color_search").clone().appendTo("#advanced2_color_search");
-    const colorButton = document.createElement("button");
-    colorButton.type = "button";
-    colorButton.className = "btn btn-primary btn-sm";
-    colorButton.id = "color_submit";
-    colorButton.innerText = "Search";
-    colorList.appendChild(colorButton);
+    $("#color_search").append('<button type="button" class="btn btn-primary btn-sm" id="color_submit">Search</button>')
 }
 
 //creates size filters
 
 function createSizes(){
-    var sizeList = document.querySelector("#size_search");
     sizes.forEach(size => {
-        const sizeCheck = document.createElement("div");
-        sizeCheck.className = "form-check";
-        const checkBox = document.createElement("input");
-        checkBox.type = "checkbox";
-        checkBox.className = "form-check-input";
-        checkBox.id = "" + size + " Inch";
-        const sizeLabel = document.createElement("label");
-        sizeLabel.for = "" + size + " Inch" ;
-        sizeLabel.className = "form-label";
-        sizeLabel.innerText = "" + size + " Inch";
-        sizeCheck.appendChild(sizeLabel);
-        sizeCheck.appendChild(checkBox);
-        sizeList.appendChild(sizeCheck);
+        $("#size_search").append('<div class="form-check">' +
+        '<label for="' + size + '" class="form-label">'+ size + ' Inch</label>' +
+        '<input type="checkbox" class="form-check-input" id="' + size + ' Inch">' +
+        '</div>');
     })
     $("#size_search").clone().appendTo("#advanced1_size_search");
-    const sizeButton = document.createElement("button");
-    sizeButton.type = "button";
-    sizeButton.className = "btn btn-primary btn-sm";
-    sizeButton.id = "size_submit";
-    sizeButton.innerText = "Search";
-    sizeList.appendChild(sizeButton);
+    $("#size_search").append('<button type="button" class="btn btn-primary btn-sm" id="size_submit">Search</button>')
 }
 
 //creates brand filters
 
 function createBrands(){
-    var brandList = document.querySelector("#brand_search");
     brands.forEach(brand => {
-        const brandCheck = document.createElement("div");
-        brandCheck.className = "form-check";
-        const checkBox = document.createElement("input");
-        checkBox.type = "checkbox";
-        checkBox.className = "form-check-input";
-        checkBox.id = "" + brand;
-        const brandLabel = document.createElement("label");
-        brandLabel.for = "" + brand;
-        brandLabel.className = "form-label";
-        brandLabel.innerText = "" + brand;
-        brandCheck.appendChild(brandLabel);
-        brandCheck.appendChild(checkBox);
-        brandList.appendChild(brandCheck);
+        $("#brand_search").append('<div class="form-check">' +
+        '<label for="' + brand + '" class="form-label">'+ brand + '</label>' +
+        '<input type="checkbox" class="form-check-input" id="'+brand + '">' +
+        '</div>');
     })
     $("#brand_search").clone().appendTo("#advanced1_brand_search");
     $("#brand_search").clone().appendTo("#advanced2_brand_search");
-    const brandButton = document.createElement("button");
-    brandButton.type = "button";
-    brandButton.className = "btn btn-primary btn-sm";
-    brandButton.id = "brand_submit";
-    brandButton.innerText = "Search";
-    brandList.appendChild(brandButton);
+    $("#brand_search").append('<button type="button" class="btn btn-primary btn-sm" id="brand_submit">Search</button>')
 }
 
 //creates price range
@@ -671,7 +597,7 @@ function getAllNames(products){
 function getMinPrice(products){
 var min = -1;
 products.forEach( product => {
-    if(min == -1 || parseFloat(product.price.$numberDecimal) < parseFloat(min.$numberDecimal))
+    if(min === -1 || parseFloat(product.price.$numberDecimal) < parseFloat(min.$numberDecimal))
     {
         min = product.price;
     }
