@@ -63,7 +63,7 @@ function createToast(product){
     '<button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>'+
     '</div>'+
     '<div class="toast-body">'+
-    '<img src="' + product.image + '" alt="...">'+
+    '<img src="/' + product.image + '" alt="...">'+
     '<p><strong>Name: ' + product.name + '</strong></p><p>color: ' + product.color + ', size: ' + product.size.$numberDecimal + ' Inch, brand: ' +
     product.brand + ', price: ' + product.price.$numberDecimal + '$</p>' +
     '<p>To get to the product page click <a href="/public/ProductsPage/index.html?id=' + product.id + '&name=' + product.category + '">here</a></p>'+
