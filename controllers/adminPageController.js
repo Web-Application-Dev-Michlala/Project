@@ -118,7 +118,7 @@ const createProduct = async(req,res) => {
 }
 
 const addProductAmount = async(req,res) => {
-    const product = await productService.addProductAmount(req.body.categoryName,req.params.productName,req.body.amount);
+    const product = await productService.addProductAmount(req.body.categoryName,req.params.id,req.body.amount);
     if(!product){
         return res.status(404).json({errors:["Amount wasn't added"]});;
     }

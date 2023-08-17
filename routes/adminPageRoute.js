@@ -52,7 +52,7 @@ router.route('/updateCategory/:categoryName')
 router.route('/updateProduct/:categoryName/:id')
     .post(adminPageController.updateProduct);
 
-router.route('/addProductAmount/:productName')
+router.route('/addProductAmount/:id')
     .post(adminPageController.addProductAmount);
 
 router.route('/:categoryName')
