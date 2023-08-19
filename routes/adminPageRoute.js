@@ -17,6 +17,8 @@ router.route('/getCategorys')
     
 
 //---------------------------------------------------------->
+router.route('/topUsers')
+.get(adminPageController.getTopUsersWithOrderCounts)
 router.route('/profile')
 .get( adminPageController.getUserProfile);
 router.route('/orders')
@@ -27,7 +29,8 @@ router.route('/users')
 .get( adminPageController.getAllUsernames);
 //router.route('/changePassword')
 //.post( adminPageController.changePassword);
-router.route('/changePassword').post(adminPageController.changePassword);
+router.route('/changePassword')
+.post(adminPageController.changePassword);
 
 //--------------------------------------------------------->
 
@@ -49,7 +52,7 @@ router.route('/updateCategory/:categoryName')
 router.route('/updateProduct/:categoryName/:id')
     .post(adminPageController.updateProduct);
 
-router.route('/addProductAmount/:productName')
+router.route('/addProductAmount/:id')
     .post(adminPageController.addProductAmount);
 
 router.route('/:categoryName')

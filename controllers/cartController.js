@@ -58,7 +58,6 @@ const removeItems=async(req,res)=>
 const getRates =async(req,res)=>
 {
     const data = await exchangeRatesApi.getRates();
-    console.log("controller data "+data)
     res.send(data);
 }
 module.exports=

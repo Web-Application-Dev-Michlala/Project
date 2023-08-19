@@ -108,21 +108,21 @@ const createCategory = async(req,res) => {
 }
 
 const createProduct = async(req,res) => {
-    const product = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
+    const category = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
         req.body.size,req.body.image,req.body.description,req.body.price,req.body.amount,req.body.brand,req.body.hot);
-    if(!product){
+    if(!category){
         return res.status(404).json({errors:["Product wasn't created"]});
     }
+    const product = await productService.getProductById(category.categoryName,req.body.Id);
     res.json(product);
 }
 
 const addProductAmount = async(req,res) => {
-    var is_added = true;
-    const product = await productService.addProductAmount(req.body.categoryName,req.params.productName,req.body.amount);
+    const product = await productService.addProductAmount(req.body.categoryName,req.params.id,req.body.amount);
     if(!product){
-        is_added = false;
+        return res.status(404).json({errors:["Amount wasn't added"]});;
     }
-    res.json({is_added});
+    res.json(product);
 }
 //----------------------------------------------------->
 
@@ -207,6 +207,41 @@ const getAllOrdersByUserName = async(req, res) => {
     }
     }
 
+    
+
+
+const getTopUsersWithOrderCounts = async (req, res) => {
+  try {
+    const ordersByUser = await orderService.groupOrders();
+
+    const userOrderCountMap = new Map();
+
+    ordersByUser.forEach((userGroup) => {
+      const userName = userGroup._id;
+      const orderCount = userGroup.orders.length;
+
+      userOrderCountMap.set(userName, orderCount);
+    });
+
+    const userOrderCountArray = Array.from(userOrderCountMap.entries());
+    userOrderCountArray.sort((a, b) => a[1] - b[1]);
+
+    const topUsers = userOrderCountArray.slice(-4); // Get only the top 4 users
+    const totalOrders = userOrderCountArray.reduce((sum, [, orderCount]) => sum + orderCount, 0);
+    const ordersInTopUsers = topUsers.reduce((sum, [, orderCount]) => sum + orderCount, 0);
+    const ordersInOthers = totalOrders - ordersInTopUsers;
+
+    const userOrderCountMapWithOthers = new Map(topUsers);
+    userOrderCountMapWithOthers.set('others', ordersInOthers);
+
+    res.json([...userOrderCountMapWithOthers.entries()]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while processing data' });
+  }
+};
+
+
 module.exports = 
 {
     getAllCategorys,
@@ -228,5 +263,6 @@ module.exports =
     getPassword,
     changePassword,
     getAllOrdersByUserName,
-    addProductAmount
+    addProductAmount,
+    getTopUsersWithOrderCounts
 }

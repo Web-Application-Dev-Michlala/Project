@@ -1,7 +1,4 @@
-
-
-
-
+var socket = io();
 
 $(document).ready(function() 
 {
@@ -37,100 +34,24 @@ $(document).ready(function()
         window.location.href = '/';
       }
     });
-
-    
-   
-   
-
 })
+var myModal=document.getElementById('myModal')
+var modalTitle = myModal.querySelector('.modal-title')
+var modalBodyInput = myModal.querySelector('.modal-body')
+var purchaseButton = document.querySelector('.purchase-button');
+var backButton = document.querySelector('.back-button');
 var BaseUSD
 var ILSrate
 var cart=null
 var cvs = document.getElementById("canvas");
-    ctx = cvs.getContext("2d");
-    sA = (Math.PI / 180) * 45;
-    sE = (Math.PI / 180) * 90;
-    ca = canvas.width;
-    ch = canvas.height;
-    var loadAnimation
-function init(){     
-    
-  loadAnimation= setInterval(function(){
-      
-     ctx.clearRect(0, 0, ca, ch);
-     ctx.lineWidth = 15;
-    
-     ctx.beginPath();
-     ctx.strokeStyle = "#ffffff";     
-     ctx.shadowColor = "#eeeeee";
-     ctx.shadowOffsetX = 2;
-     ctx.shadowOffsetY = 2;
-     ctx.shadowBlur = 5;
-     ctx.arc(50, 50, 25, 0, 360, false);
-     ctx.stroke();
-     ctx.closePath();
-      
-     sE += 0.05; 
-     sA += 0.05;
-              
-     ctx.beginPath();
-     ctx.strokeStyle = "#aaaaaa";
-     ctx.arc(50, 50, 25, sA, sE, false);
-     ctx.stroke();
-     ctx.closePath();   
-      
-  }, 6);
-  
-}
-function updateTotalPrice() //goes over all items and sums total price
-{
-  var totalPriceElement = document.getElementById('total-price');
-  var cartItems = document.querySelectorAll('.cart-item');
-  var totalPrice = 0;
-
-  cartItems.forEach(function(item) {
-    var priceString = item.querySelector('.product-price').innerText;
-    var price = parseFloat(priceString.replace('$', ''));
-    totalPrice += price;
-  });
-
-  totalPriceElement.innerText = '$' + totalPrice.toFixed(2);
-  
-}
-$("input[name='flexRadioDefault']").change(function () {
-  const selectedCurrency = $(this).attr("id");
-  
- 
-  if (selectedCurrency === "USD") 
-  {
-    var totalPrice=0;
-    $('.modalPrice').each(function() {
-      const $priceElement = $(this);
-      const priceText = $priceElement.text();
-      const price = parseFloat(priceText.replace('₪', ''));
-      const USDprice = price/ILSrate;
-      totalPrice+=USDprice
-      $priceElement.text('$' + USDprice.toFixed(2));
-
-  });
-  $('.modalTotalPrice').text('$' +totalPrice.toFixed(2));
-  } else if (selectedCurrency === "ILS") 
-  {
-      var totalPrice=0;
-    $('.modalPrice').each(function() {
-      const $priceElement = $(this);
-      const priceText = $priceElement.text();
-      const price = parseFloat(priceText.replace('$', ''));
-      const ILSprice = price * ILSrate;
-      totalPrice+=ILSprice
-      $priceElement.text('₪' + ILSprice.toFixed(2));
-
-  });
-  $('.modalTotalPrice').text('₪' +totalPrice.toFixed(2));
-}
-});
-const JSONedcart=sessionStorage.getItem('categories');//loads items from sessionStorage into page
-    if(JSONedcart!=null)
+ctx = cvs.getContext("2d");
+sA = (Math.PI / 180) * 45;
+sE = (Math.PI / 180) * 90;
+ca = canvas.width;
+ch = canvas.height;
+var loadAnimation
+const JSONedcart=sessionStorage.getItem('categories');
+if(JSONedcart!=null)//load items from sessionStorage into page
     {
       cart=JSON.parse(JSONedcart);
       cart.forEach((category)=>
@@ -139,16 +60,14 @@ const JSONedcart=sessionStorage.getItem('categories');//loads items from session
         {
           addItemToCart(item.name,item.price,item.amount,item.imageSrc,category.category);
         })
-       
       });
-    }
-
-
-
-
-// Add event listener to dynamically remove items from the cart
+}
 var removeButtons = document.querySelectorAll('.remove-button');
-removeButtons.forEach(function(button) {
+
+
+//=============================================================>Button Listeners<=============================================================
+
+removeButtons.forEach(function(button) {//add functionality to remove buttons
   button.addEventListener('click', function() {
     const categoryName=button.parentNode.parentNode.parentNode.parentNode.querySelector('.product-category').innerText;
     const prodname=button.parentNode.parentNode.parentNode.parentNode.querySelector('.product-name').innerText;
@@ -165,27 +84,17 @@ removeButtons.forEach(function(button) {
     updateTotalPrice();
   });
 });
-
-var myModal=document.getElementById('myModal')
-var modalTitle = myModal.querySelector('.modal-title')
-var modalBodyInput = myModal.querySelector('.modal-body')
-var purchaseButton = document.querySelector('.purchase-button');
-var backButton = document.querySelector('.back-button');
-
-purchaseButton.addEventListener('click', function()
- {
-  if(cart===undefined||cart===null||cart.length===0)
+purchaseButton.addEventListener('click', function() {//add logic to purchase button
+  if(cart===undefined||cart===null||cart.length===0)//empty cart
   {
     alert('Cart is empty')
     return;
   }
   var dataToSend=cart
- const totalPriceElement = document.getElementById('total-price');
+  const totalPriceElement = document.getElementById('total-price');
   const totalPrice = parseFloat(totalPriceElement.innerText.replace('$', '')); 
-  
-  
-  init();
-    $.ajax({
+  init();//start loading animation
+  $.ajax({//check for items validity
         contentType: 'application/json',
         data: JSON.stringify({arrayToSend:dataToSend}), 
         url:'/cart/purchaseValidate',//validates items in purchase
@@ -246,7 +155,7 @@ purchaseButton.addEventListener('click', function()
                   {
                     if(!response.includes("error"))
                     {
-                      console.log('response in userSide '+response)
+                      
                       response=JSON.parse(response)
                       BaseUSD= 1/response.rates.USD;
                       ILSrate=BaseUSD*response.rates.ILS;
@@ -260,6 +169,14 @@ purchaseButton.addEventListener('click', function()
                     ctx.clearRect(0, 0, ca, ch);//clear animation
                     modalTitle.textContent="order ID: "+order._id
                     $(".modal").modal('show')
+                  }
+                })
+                order.products.forEach((product) => {
+                  if(product.amount === 0){//if product is soldout than send message to server that product is soldout
+                    socket.emit('out of stock',product);
+                  }
+                  else if(product.amount <= 2){//if product has limited amount send message to server that product has limited amount
+                    socket.emit('limited product',product)
                   }
                 })
               }
@@ -315,15 +232,48 @@ purchaseButton.addEventListener('click', function()
          }
         
         },
-      });
+  });
   
 });
-
-backButton.addEventListener('click', function() {
+backButton.addEventListener('click', function() {//return to homepage
  
   // Redirect to homepage
   window.location.href ='/';
 });
+$("input[name='flexRadioDefault']").change(function () {//switch in reciept modal from USD to ILS
+  const selectedCurrency = $(this).attr("id");
+  
+ 
+  if (selectedCurrency === "USD") 
+  {
+    var totalPrice=0;
+    $('.modalPrice').each(function() {
+      const $priceElement = $(this);
+      const priceText = $priceElement.text();
+      const price = parseFloat(priceText.replace('₪', ''));
+      const USDprice = price/ILSrate;
+      totalPrice+=USDprice
+      $priceElement.text('$' + USDprice.toFixed(2));
+
+  });
+  $('.modalTotalPrice').text('$' +totalPrice.toFixed(2));
+  } else if (selectedCurrency === "ILS") 
+  {
+      var totalPrice=0;
+    $('.modalPrice').each(function() {
+      const $priceElement = $(this);
+      const priceText = $priceElement.text();
+      const price = parseFloat(priceText.replace('$', ''));
+      const ILSprice = price * ILSrate;
+      totalPrice+=ILSprice
+      $priceElement.text('₪' + ILSprice.toFixed(2));
+
+  });
+  $('.modalTotalPrice').text('₪' +totalPrice.toFixed(2));
+}
+});
+
+//=============================================================>Functions<=============================================================
 function addItemToCart(name, price, quantity, imageSrc,categoryName)//create HTML item in page
  {
   var cartItems = document.querySelector('.cart-items');
@@ -358,10 +308,7 @@ function addItemToCart(name, price, quantity, imageSrc,categoryName)//create HTM
 
   updateTotalPrice();
 }
-
-
-
-function attachQuantityButtonListeners() {
+function attachQuantityButtonListeners() {//add functionality to inc and dec buttons
 var quantityMinusButtons = document.querySelectorAll('.quantity-minus');
 var quantityPlusButtons = document.querySelectorAll('.quantity-plus');
 //increament decreament buttons and their logic
@@ -405,7 +352,50 @@ quantityPlusButtons.forEach(function (button) {
   });
 });
 }
+function init(){//creates loading animation     
+    
+  loadAnimation= setInterval(function(){
+      
+     ctx.clearRect(0, 0, ca, ch);
+     ctx.lineWidth = 15;
+    
+     ctx.beginPath();
+     ctx.strokeStyle = "#ffffff";     
+     ctx.shadowColor = "#eeeeee";
+     ctx.shadowOffsetX = 2;
+     ctx.shadowOffsetY = 2;
+     ctx.shadowBlur = 5;
+     ctx.arc(50, 50, 25, 0, 360, false);
+     ctx.stroke();
+     ctx.closePath();
+      
+     sE += 0.05; 
+     sA += 0.05;
+              
+     ctx.beginPath();
+     ctx.strokeStyle = "#aaaaaa";
+     ctx.arc(50, 50, 25, sA, sE, false);
+     ctx.stroke();
+     ctx.closePath();   
+      
+  }, 6);
+  
+}
+function updateTotalPrice() //goes over all items and sums total price
+{
+  var totalPriceElement = document.getElementById('total-price');
+  var cartItems = document.querySelectorAll('.cart-item');
+  var totalPrice = 0;
 
+  cartItems.forEach(function(item) {
+    var priceString = item.querySelector('.product-price').innerText;
+    var price = parseFloat(priceString.replace('$', ''));
+    totalPrice += price;
+  });
+
+  totalPriceElement.innerText = '$' + totalPrice.toFixed(2);
+  
+}
 attachQuantityButtonListeners();
 
 
