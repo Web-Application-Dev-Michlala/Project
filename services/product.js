@@ -396,14 +396,14 @@ catch (err) {
 }
 };
 
-const addProductAmount = async(categoryName,productName,amount)=>{
+const addProductAmount = async(categoryName,id,amount)=>{
     try {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
             return null;
         }
-        const product = category.products.filter(product=>product.name == productName);
+        const product = category.products.filter(product=>product.id == id);
         if(!product){
             console.error(`Product with name ${productName} not found`);
             return null;

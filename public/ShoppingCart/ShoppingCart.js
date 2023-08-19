@@ -172,10 +172,10 @@ purchaseButton.addEventListener('click', function() {//add logic to purchase but
                   }
                 })
                 order.products.forEach((product) => {
-                  if(product.amount === 0){
+                  if(product.amount === 0){//if product is soldout than send message to server that product is soldout
                     socket.emit('out of stock',product);
                   }
-                  else if(product.amount <= 2){
+                  else if(product.amount <= 2){//if product has limited amount send message to server that product has limited amount
                     socket.emit('limited product',product)
                   }
                 })

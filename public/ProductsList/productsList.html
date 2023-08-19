@@ -9,6 +9,8 @@
         <link rel="stylesheet" href="public/ProductsList/productsList.css" type="text/css" media="screen"/>
         <script src="/socket.io/socket.io.js"></script>
         <script src="/public/webSocket/webSocket.js"></script>
+        <link rel="stylesheet" href="/public/webSocket/webSocket.css">
+
     </head>
 
     <body>
@@ -20,12 +22,12 @@
                 <div class="col-lg-2 col-md-3 col-sm-5 col-6">
                     <aside>
                         <div class="accordion" id="product_search">
-                            
                             <br>
+                            <button type="button" class="btn btn-secondary btn-sm" id="refreshProducts">Refresh Products</button>
+                            <br><br>
                             <button type="button" class="btn btn-secondary btn-sm" id="resetFilters">Reset Filters</button>
-                            <br>
-                            <br>
-
+                            <br><br>
+                            
                             <!--id search-->
       
                             <div class="accordion-item">
