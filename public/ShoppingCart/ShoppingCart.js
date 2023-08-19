@@ -155,7 +155,7 @@ purchaseButton.addEventListener('click', function() {//add logic to purchase but
                   {
                     if(!response.includes("error"))
                     {
-                      console.log('response in userSide '+response)
+                      
                       response=JSON.parse(response)
                       BaseUSD= 1/response.rates.USD;
                       ILSrate=BaseUSD*response.rates.ILS;

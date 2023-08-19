@@ -241,16 +241,6 @@ const getTopUsersWithOrderCounts = async (req, res) => {
   }
 };
 
-module.exports = {
-  getTopUsersWithOrderCounts,
-};
-
-    
-    module.exports = {
-      getTopUsersWithOrderCounts,
-    };
-    
-    
 
 module.exports = 
 {
