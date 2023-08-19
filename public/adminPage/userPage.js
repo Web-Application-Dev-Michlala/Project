@@ -151,7 +151,7 @@ function generateGraph3(userData) {
       .enter()
       .append('g')
       .attr('class', 'legend')
-      .attr('transform', (d, i) => `translate(${radius + 10},${(i - userData.length / 2) * 20})`); // Adjust spacing
+      .attr('transform', (d, i) => `translate(${radius + 10},${(i - userData.length / 2) * 20})`); //Adjuts each legend entry to be horizontally on offset of +10 from center and vertically calculate it
 
     legend.append('rect')
       .attr('width', 15)

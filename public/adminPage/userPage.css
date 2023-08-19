@@ -11,7 +11,7 @@ h1{
     outline: none;
   }
  
-.form-control {
+.custom-control {
     max-width: 450px; 
 }
 .product-image {
