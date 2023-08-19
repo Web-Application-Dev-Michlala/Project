@@ -1,7 +1,8 @@
 const express = require('express');
 const mongoose = require('mongoose');
-
-//require('custom-env').env('local','./config')
+const keys=require('custom-env')
+keys.env(process.env.NODE_ENV,'./config')
+const mongokey=process.env.MONGO_KEY;
 
 const cartRouter=require('./routes/cartRoute')
 const homepageRouter=require('./routes/homepageRoute')
@@ -18,7 +19,7 @@ app.use("/public",express.static(__dirname + "/public"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 try{
-    mongoose.connect('mongodb+srv://shahargut2:u7Fsk8KLaJe4IzOi@cluster0.lctj22i.mongodb.net/');
+    mongoose.connect(mongokey);
     console.log('Connected to MongoDB');
 }catch(err){
     console.error('Error connecting to MongoDB', err);
