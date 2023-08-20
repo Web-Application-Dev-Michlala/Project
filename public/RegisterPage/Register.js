@@ -54,10 +54,10 @@ $( document ).ready(function()
             body: JSON.stringify(payload),
           });
       
-          if (response.ok) 
+          if (response.ok) //then login
           {
               window.location.href = '/login';
-          } else {
+          } else {//user taken
             const data = await response.json();
             alert("username is already taken");
           }
