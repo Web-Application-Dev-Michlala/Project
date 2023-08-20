@@ -312,7 +312,8 @@ function attachQuantityButtonListeners() {//add functionality to inc and dec but
 var quantityMinusButtons = document.querySelectorAll('.quantity-minus');
 var quantityPlusButtons = document.querySelectorAll('.quantity-plus');
 //increament decreament buttons and their logic
-quantityMinusButtons.forEach(function (button) {
+quantityMinusButtons.forEach(function (button)//add listener to the dec buttons 
+{
   button.addEventListener('click', function () {
 
     var quantityElement = button.nextElementSibling;
@@ -333,7 +334,8 @@ quantityMinusButtons.forEach(function (button) {
   });
 });
 
-quantityPlusButtons.forEach(function (button) {
+quantityPlusButtons.forEach(function (button) //add listener to the inc buttons
+{
   button.addEventListener('click', function () {
     const categoryName=button.parentNode.parentNode.parentNode.parentNode.querySelector('.product-category').innerText;
     const prodname=button.parentNode.parentNode.parentNode.parentNode.querySelector('.product-name').innerText;
