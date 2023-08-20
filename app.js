@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const keys=require('custom-env')
 keys.env(process.env.NODE_ENV,'./config')
 const mongokey=process.env.MONGO_KEY;
-
+const googleRouter=require('./routes/googleRoute')
 const cartRouter=require('./routes/cartRoute')
 const homepageRouter=require('./routes/homepageRoute')
 const adminPageRoute=require('./routes/adminPageRoute')
@@ -30,7 +30,9 @@ app.use(session({
     resave: false
 }))
 
+
 app.use('/cart',cartRouter);
+app.use('/googleKey',googleRouter);
 app.use('/category',categoryRouter);
 app.use('/login', loginRouter);
 app.use('/register',registerRouter);

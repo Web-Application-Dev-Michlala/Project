@@ -8,9 +8,17 @@
 */
 
 $(document).ready(function() {
-    initMap();
+  $.ajax
+  ({
+      url:'/googleKey',
+    
+  }).done(function(key)
+  {
+    $('.key').attr("src",key);
+    
+  })
 });
-
+initMap();
 function initMap() {
     var mapElement = $('#map')[0]; // Get the actual DOM element
     var map = new google.maps.Map(mapElement, {
