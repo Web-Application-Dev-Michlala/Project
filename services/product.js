@@ -45,7 +45,7 @@ const deleteProduct = async (categoryName,productName) => {
     }
 };
 
-const updateProduct = async (categoryName,id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot) => {
+const updateProduct = async (categoryName,id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand) => {
     try{
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
@@ -66,7 +66,6 @@ const updateProduct = async (categoryName,id,newName,newId,newColor,newSize,newI
         category.products[index].price = newPrice;
         category.products[index].amount = newAmount;
         category.products[index].brand = newBrand;
-        category.products[index].hot = newHot;
         category.save();
         return category.products[index];
    } catch(err){

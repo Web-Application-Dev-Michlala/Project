@@ -26,7 +26,7 @@
             <br>
             <div id="createUpdateCategoryInfo" hidden>
                 <p>Please enter category information:</p>
-                <select class="form-select categoriesList" id="createUpdateCategorySelectName">
+                <select class="form-select categoriesList" id="createUpdateCategorySelectName" disabled>
                     <option value="0">Category</option>
                 </select>
                 <br>
@@ -38,10 +38,9 @@
                     </div>
                     <br>
                     <!--Category image-->
-                    <div class="form-floating">
-                        <input id="createUpdateCategoryImageField" type="text" class="form-control" disabled>
-                        <label for="createUpdateCategoryImageField">Category image path</label>
-                    </div>
+                    <select class="form-select imagesList" id="createUpdateCategoryImageField">
+                        <option value="0">Image</option>
+                    </select>
                     <br>
                     <button type="button" class="btn btn-secondary btn-sm" id="createCategorySubmit">Create category</button>
                     <button type="button" class="btn btn-secondary btn-sm" id="updateCategorySubmit">Update category</button>
@@ -82,7 +81,7 @@
                 <form id="createUpdateProductForm">
                     <!--Product category-->
                     <select class="form-select categoriesList" id="createUpdateProductCategoryField">
-                        <option value="0">Product category</option>
+                        <option value="0">Category</option>
                     </select>
                     <br>
                     <!--Product name select-->
@@ -109,23 +108,15 @@
                     </div>
                     <br>
                     <!--Product image-->
-                    <div class="form-floating">
-                        <input id="createUpdateProductImageField" type="text" class="form-control" required disabled>
-                        <label for="createUpdateProductImageField">Product image path</label>
-                    </div>
+                    <select class="form-select imagesList" id="createUpdateProductImageField" disabled>
+                        <option value="0">Image</option>
+                    </select>
                     <br>
                     <!--Product size-->
                     <div class="form-floating">
                         <input id="createUpdateProductSizeField" type="text" class="form-control" required disabled>
                         <label for="createUpdateProductSizeField">Product size</label>
                     </div>
-                    <br>
-                    <!--Product hot-->
-                    <select class="form-select hotSelect" id="createUpdateProductHotField" disabled>
-                        <option value="0" >Is product hot</option>
-                        <option>Yes</option>
-                        <option>No</option>
-                    </select>
                     <br>
                     <!--Product description-->
                     <div class="form-floating">
