@@ -122,7 +122,7 @@ const getProductById = async (categoryName,id) => {
             console.error(`Product with ${id} not found`);
             return null;
         }
-        return product;
+        return product[0];
     } catch (err) {
         console.error(err);
     }
@@ -340,7 +340,7 @@ const validateAll = async (cart) => {
     for (const category of cart) {
       for (const item of category.items) {
         const flag = await validateAmount(category.category, item.name, item.amount);
-        console.log("this is flag" + flag);
+        
   
         if (flag === 0) {
           const newItem = {
@@ -352,7 +352,7 @@ const validateAll = async (cart) => {
         } else if (flag === 1) {
           const product = await getProductByName(category.category, item.name)
           const updatedAmount = product.amount
-            console.log("this is updated amount " + updatedAmount);
+            
           const newItem = {
             category:category.category,
             name:item.name,
@@ -396,21 +396,21 @@ catch (err) {
 }
 };
 
-const addProductAmount = async(categoryName,productName,amount)=>{
+const addProductAmount = async(categoryName,id,amount)=>{
     try {
         const category = await categoryModel.findOne({ categoryName });
         if (!category) {
             console.error(`Category ${categoryName} not found`);
             return null;
         }
-        const product = category.products.filter(product=>product.name == productName);
+        const product = category.products.filter(product=>product.id == id);
         if(!product){
             console.error(`Product with name ${productName} not found`);
             return null;
         }
         product[0].amount += parseInt(amount);
        await category.save();
-        return product;
+        return product[0];
     } catch (err) {
         console.error(err);
         return null;

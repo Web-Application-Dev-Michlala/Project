@@ -1,7 +1,9 @@
 const categoryService = require("../services/category");
 const productService = require("../services/product");
 const userService=require('../services/user')
-const path = require('path')
+const orderService = require('../services/order.js');
+const path = require('path');
+const fs = require('fs');
 
 const getAllCategorys = async (req,res) => {
     const categories = await categoryService.getAllCategorys();
@@ -21,6 +23,11 @@ const getAdminPage2 = async (req,res) => {
 const getAdminPage = async (req,res) => {
     res.sendFile(path.join(__dirname,"../public/deleteProduct/deleteProduct.html"))
 
+}
+
+const getAllImages = async(req,res) => {
+    const images = await fs.readdirSync('public/images');
+    res.json(images);
 }
 const getCategoryDetails = async (req,res) => {
     const category = await categoryService.getCategoryByName(req.params.categoryName);
@@ -97,7 +104,6 @@ const getProductById = async (req,res) => {
     res.json(product);
 }
 
-
 const createCategory = async(req,res) => {
     const category = await categoryService.createCategory(req.body.categoryName,req.body.image);
     if(!category){
@@ -107,21 +113,61 @@ const createCategory = async(req,res) => {
 }
 
 const createProduct = async(req,res) => {
-    const product = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
+    const category = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
         req.body.size,req.body.image,req.body.description,req.body.price,req.body.amount,req.body.brand,req.body.hot);
-    if(!product){
+    if(!category){
         return res.status(404).json({errors:["Product wasn't created"]});
     }
+    const product = await productService.getProductById(category.categoryName,req.body.Id);
     res.json(product);
 }
 
 const addProductAmount = async(req,res) => {
-    var is_added = true;
-    const product = await productService.addProductAmount(req.body.categoryName,req.params.productName,req.body.amount);
+    const product = await productService.addProductAmount(req.body.categoryName,req.params.id,req.body.amount);
     if(!product){
-        is_added = false;
+        return res.status(404).json({errors:["Amount wasn't added"]});;
     }
-    res.json({is_added});
+    res.json(product);
+}
+
+const isProductExistCreate = async(req,res) => {
+    var isDup = false;
+    const categories = await categoryService.getAllCategorys();
+    for(const category of categories){
+        const product1 = await productService.getProductById(category.categoryName,req.body.Id);
+        if(product1){
+            isDup = true;
+            break;
+        }
+        const product2 = await productService.getProductByName(category.categoryName,req.body.name);
+        if(product2){
+            isDup = true;
+            break;
+        }
+    }
+    return isDup;
+}
+
+const isProductExistUpdate = async(req,res) => {
+    var isDup = false;
+    const categories = await categoryService.getAllCategorys();
+    for(const category of categories){
+        if(req.body.oldId !== req.body.newId){
+            const product = await productService.getProductById(category.categoryName,req.body.newId);
+            if(product){
+                isDup = true;
+                break;
+            }
+        }
+        if(req.body.oldName !== req.body.newName){
+            const product = await productService.getProductByName(category.categoryName,req.body.newName);
+            if(product){
+                isDup = true;
+                break;
+            }
+        }
+    }
+    return isDup;
 }
 //----------------------------------------------------->
 
@@ -132,13 +178,22 @@ const getUserProfile = async(req, res) => {
     
   };
   
-
-
 const getAllOrders = async(req, res) => {
+try {
+    const username = req.session.username; 
+    const orders= await orderService.getAllOrdersByUserName(username);
+    res.json({orders});
+} catch (error) {
+    console.error('Error fetching orders:', error);
+    throw error;
+}
+}
+
+const getAllOrdersByUserName = async(req, res) => {
     try {
         const username = req.session.username; 
-       const orders= await userService.getAllorders(username);
-       res.json({orders});
+        const orders= await orderService.getAllOrdersByUserName(username);
+        res.json({orders});
     } catch (error) {
       console.error('Error fetching orders:', error);
       throw error;
@@ -209,6 +264,41 @@ const getAllOrders = async(req, res) => {
           throw error;
         }
         }
+    
+
+
+const getTopUsersWithOrderCounts = async (req, res) => {
+  try {
+    const ordersByUser = await orderService.groupOrders();
+
+    const userOrderCountMap = new Map();
+
+    ordersByUser.forEach((userGroup) => {
+      const userName = userGroup._id;
+      const orderCount = userGroup.orders.length;
+
+      userOrderCountMap.set(userName, orderCount);
+    });
+
+    const userOrderCountArray = Array.from(userOrderCountMap.entries());
+    userOrderCountArray.sort((a, b) => a[1] - b[1]);
+
+    const topUsers = userOrderCountArray.slice(-4); // Get only the top 4 users
+    const totalOrders = userOrderCountArray.reduce((sum, [, orderCount]) => sum + orderCount, 0);
+    const ordersInTopUsers = topUsers.reduce((sum, [, orderCount]) => sum + orderCount, 0);
+    const ordersInOthers = totalOrders - ordersInTopUsers;
+
+    const userOrderCountMapWithOthers = new Map(topUsers);
+    userOrderCountMapWithOthers.set('others', ordersInOthers);
+
+    res.json([...userOrderCountMapWithOthers.entries()]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'An error occurred while processing data' });
+  }
+};
+
+
 
 module.exports = 
 {
@@ -231,5 +321,11 @@ module.exports =
     getPassword,
     changePassword,
     addProductAmount,
-    ChangeProfile
+    ChangeProfile,
+    getAllOrdersByUserName,
+    addProductAmount,
+    getTopUsersWithOrderCounts,
+    getAllImages,
+    isProductExistCreate,
+    isProductExistUpdate
 }

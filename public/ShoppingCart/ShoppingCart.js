@@ -1,7 +1,4 @@
-
-
-
-
+var socket = io();
 
 $(document).ready(function() 
 {
@@ -27,30 +24,34 @@ $(document).ready(function()
             navbar.load('/public/Navbar/navBarLoggedOut.html')
         }
     });
-    
-  })
-
-
-var cart=null
-
-function updateTotalPrice() //goes over all items and sums total price
-{
-  var totalPriceElement = document.getElementById('total-price');
-  var cartItems = document.querySelectorAll('.cart-item');
-  var totalPrice = 0;
-
-  cartItems.forEach(function(item) {
-    var priceString = item.querySelector('.product-price').innerText;
-    var price = parseFloat(priceString.replace('$', ''));
-    totalPrice += price;
-  });
-
-  totalPriceElement.innerText = '$' + totalPrice.toFixed(2);
   
-}
+    $('#myModal').modal({ backdrop: 'static' }); // Set backdrop option to 'static'
 
-const JSONedcart=sessionStorage.getItem('categories');//loads items from sessionStorage into page
-    if(JSONedcart!=null)
+    // Event handler for close buttons and backdrop click
+    $('.modal-footer .btn-secondary, #myModal').on('click', function(event) {
+      if ($(event.target).is('.close, .btn-secondary') || $(event.target).closest('#myModal').length === 0) {
+        $('#myModal').modal('hide');
+        window.location.href = '/';
+      }
+    });
+})
+var myModal=document.getElementById('myModal')
+var modalTitle = myModal.querySelector('.modal-title')
+var modalBodyInput = myModal.querySelector('.modal-body')
+var purchaseButton = document.querySelector('.purchase-button');
+var backButton = document.querySelector('.back-button');
+var BaseUSD
+var ILSrate
+var cart=null
+var cvs = document.getElementById("canvas");
+ctx = cvs.getContext("2d");
+sA = (Math.PI / 180) * 45;
+sE = (Math.PI / 180) * 90;
+ca = canvas.width;
+ch = canvas.height;
+var loadAnimation
+const JSONedcart=sessionStorage.getItem('categories');
+if(JSONedcart!=null)//load items from sessionStorage into page
     {
       cart=JSON.parse(JSONedcart);
       cart.forEach((category)=>
@@ -59,16 +60,14 @@ const JSONedcart=sessionStorage.getItem('categories');//loads items from session
         {
           addItemToCart(item.name,item.price,item.amount,item.imageSrc,category.category);
         })
-       
       });
-    }
-
-
-
-
-// Add event listener to dynamically remove items from the cart
+}
 var removeButtons = document.querySelectorAll('.remove-button');
-removeButtons.forEach(function(button) {
+
+
+//=============================================================>Button Listeners<=============================================================
+
+removeButtons.forEach(function(button) {//add functionality to remove buttons
   button.addEventListener('click', function() {
     const categoryName=button.parentNode.parentNode.parentNode.parentNode.querySelector('.product-category').innerText;
     const prodname=button.parentNode.parentNode.parentNode.parentNode.querySelector('.product-name').innerText;
@@ -85,25 +84,17 @@ removeButtons.forEach(function(button) {
     updateTotalPrice();
   });
 });
-
-
-var purchaseButton = document.querySelector('.purchase-button');
-var backButton = document.querySelector('.back-button');
-
-purchaseButton.addEventListener('click', function()
- {
-  if(cart===undefined||cart===null||cart.length===0)
+purchaseButton.addEventListener('click', function() {//add logic to purchase button
+  if(cart===undefined||cart===null||cart.length===0)//empty cart
   {
     alert('Cart is empty')
     return;
   }
   var dataToSend=cart
- const totalPriceElement = document.getElementById('total-price');
+  const totalPriceElement = document.getElementById('total-price');
   const totalPrice = parseFloat(totalPriceElement.innerText.replace('$', '')); 
-  
-  
- 
-    $.ajax({
+  init();//start loading animation
+  $.ajax({//check for items validity
         contentType: 'application/json',
         data: JSON.stringify({arrayToSend:dataToSend}), 
         url:'/cart/purchaseValidate',//validates items in purchase
@@ -114,24 +105,87 @@ purchaseButton.addEventListener('click', function()
          
           if(toRemove.length===0)//all items exist and have sufficient amount
           {
+            modalBodyInput.innerHTML= '<table class="table">'+
+           '<thead>'+
+              '<tr>'+
+                '<th scope="col">Product</th>'+
+                '<th scope="col">Amount</th>'+
+                '<th scope="col">Price</th>'+
+              '</tr>'+
+            '</thead>'+
+            '<tbody id="tableBody">'+
+            '</tbody>'+
+          '</table>';
+
+          tableBody=document.getElementById('tableBody')
+          
+           $('.conti').each(function() {
+              
+              const name = $(this).find('.product-name').text();
+              const quantity = $(this).find('.quantity-value').text();
+              const price = $(this).find('.product-price').text();
+              var row=
+              '<tr>'+
+              '<td>'+name+'</td>'+
+              '<td>'+quantity+'</td>'+
+              '<td class="modalPrice">'+price+'</td>'+
+            '</tr>';
+            tableBody.innerHTML+=row
+          });
+          tableBody.innerHTML+=
+          '<tr>'+
+          '<td></td>'+
+          '<thead><td>TOTAL:</td></thead>'+
+          '<td class="modalTotalPrice">'+totalPriceElement.textContent+'</td>'
+          '</tr>';
             sessionStorage.removeItem('categories')//clean storage
-            console.log('entering successful buy start')
+           
             $.ajax({
               contentType: 'application/json',
               data: JSON.stringify({arrayToSend:dataToSend,totalPrice:totalPrice}), 
               url:'/cart/removeItems',
               type: 'POST',
 
-              success: function () //items removed successfully and order created
+              success: function (order) //items removed successfully and order created
               {
-                
-                alert('Purchase successful!');
-                window.location.href ='/'
+                $.ajax({
+                  url:'/cart/getRates',
+                  type: 'GET',
+                  success: function (response) 
+                  {
+                    if(!response.includes("error"))
+                    {
+                      
+                      response=JSON.parse(response)
+                      BaseUSD= 1/response.rates.USD;
+                      ILSrate=BaseUSD*response.rates.ILS;
+                    }
+                    
+                   else
+                   {
+                    $('#ILS, #USD').prop('disabled', true);//if api runs into error disable exchange rate buttons
+                   }
+                    clearInterval(loadAnimation);//clear animation interval
+                    ctx.clearRect(0, 0, ca, ch);//clear animation
+                    modalTitle.textContent="order ID: "+order._id
+                    $(".modal").modal('show')
+                  }
+                })
+                order.products.forEach((product) => {
+                  if(product.amount === 0){//if product is soldout than send message to server that product is soldout
+                    socket.emit('out of stock',product);
+                  }
+                  else if(product.amount <= 2){//if product has limited amount send message to server that product has limited amount
+                    socket.emit('limited product',product)
+                  }
+                })
               }
           })
         }
          else
          {
+          clearInterval(loadAnimation);
+          ctx.clearRect(0, 0, ca, ch);
           var itemsString=""
            toRemove.forEach((item)=>
           {
@@ -178,15 +232,48 @@ purchaseButton.addEventListener('click', function()
          }
         
         },
-      });
+  });
   
 });
-
-backButton.addEventListener('click', function() {
+backButton.addEventListener('click', function() {//return to homepage
  
   // Redirect to homepage
   window.location.href ='/';
 });
+$("input[name='flexRadioDefault']").change(function () {//switch in reciept modal from USD to ILS
+  const selectedCurrency = $(this).attr("id");
+  
+ 
+  if (selectedCurrency === "USD") 
+  {
+    var totalPrice=0;
+    $('.modalPrice').each(function() {
+      const $priceElement = $(this);
+      const priceText = $priceElement.text();
+      const price = parseFloat(priceText.replace('₪', ''));
+      const USDprice = price/ILSrate;
+      totalPrice+=USDprice
+      $priceElement.text('$' + USDprice.toFixed(2));
+
+  });
+  $('.modalTotalPrice').text('$' +totalPrice.toFixed(2));
+  } else if (selectedCurrency === "ILS") 
+  {
+      var totalPrice=0;
+    $('.modalPrice').each(function() {
+      const $priceElement = $(this);
+      const priceText = $priceElement.text();
+      const price = parseFloat(priceText.replace('$', ''));
+      const ILSprice = price * ILSrate;
+      totalPrice+=ILSprice
+      $priceElement.text('₪' + ILSprice.toFixed(2));
+
+  });
+  $('.modalTotalPrice').text('₪' +totalPrice.toFixed(2));
+}
+});
+
+//=============================================================>Functions<=============================================================
 function addItemToCart(name, price, quantity, imageSrc,categoryName)//create HTML item in page
  {
   var cartItems = document.querySelector('.cart-items');
@@ -196,7 +283,7 @@ function addItemToCart(name, price, quantity, imageSrc,categoryName)//create HTM
   noSpacesName = name.replace(/ /g, '');
 
   newItem.innerHTML = `
-    <div class="container">
+    <div class="container conti">
       <div class="row">
         <div class="col-2">
           <img class="product-image" src="${imageSrc}">
@@ -221,14 +308,12 @@ function addItemToCart(name, price, quantity, imageSrc,categoryName)//create HTM
 
   updateTotalPrice();
 }
-
-
-
-function attachQuantityButtonListeners() {
+function attachQuantityButtonListeners() {//add functionality to inc and dec buttons
 var quantityMinusButtons = document.querySelectorAll('.quantity-minus');
 var quantityPlusButtons = document.querySelectorAll('.quantity-plus');
 //increament decreament buttons and their logic
-quantityMinusButtons.forEach(function (button) {
+quantityMinusButtons.forEach(function (button)//add listener to the dec buttons 
+{
   button.addEventListener('click', function () {
 
     var quantityElement = button.nextElementSibling;
@@ -249,7 +334,8 @@ quantityMinusButtons.forEach(function (button) {
   });
 });
 
-quantityPlusButtons.forEach(function (button) {
+quantityPlusButtons.forEach(function (button) //add listener to the inc buttons
+{
   button.addEventListener('click', function () {
     const categoryName=button.parentNode.parentNode.parentNode.parentNode.querySelector('.product-category').innerText;
     const prodname=button.parentNode.parentNode.parentNode.parentNode.querySelector('.product-name').innerText;
@@ -268,5 +354,54 @@ quantityPlusButtons.forEach(function (button) {
   });
 });
 }
+function init(){//creates loading animation     
+    
+  loadAnimation= setInterval(function(){
+      
+     ctx.clearRect(0, 0, ca, ch);
+     ctx.lineWidth = 15;
+    
+     ctx.beginPath();
+     ctx.strokeStyle = "#ffffff";     
+     ctx.shadowColor = "#eeeeee";
+     ctx.shadowOffsetX = 2;
+     ctx.shadowOffsetY = 2;
+     ctx.shadowBlur = 5;
+     ctx.arc(50, 50, 25, 0, 360, false);
+     ctx.stroke();
+     ctx.closePath();
+      
+     sE += 0.05; 
+     sA += 0.05;
+              
+     ctx.beginPath();
+     ctx.strokeStyle = "#aaaaaa";
+     ctx.arc(50, 50, 25, sA, sE, false);
+     ctx.stroke();
+     ctx.closePath();   
+      
+  }, 6);
+  
+}
+function updateTotalPrice() //goes over all items and sums total price
+{
+  var totalPriceElement = document.getElementById('total-price');
+  var cartItems = document.querySelectorAll('.cart-item');
+  var totalPrice = 0;
 
+  cartItems.forEach(function(item) {
+    var priceString = item.querySelector('.product-price').innerText;
+    var price = parseFloat(priceString.replace('$', ''));
+    totalPrice += price;
+  });
+
+  totalPriceElement.innerText = '$' + totalPrice.toFixed(2);
+  
+}
 attachQuantityButtonListeners();
+
+
+
+
+
+

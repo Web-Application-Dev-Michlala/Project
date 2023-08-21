@@ -12,13 +12,22 @@ router.route('/')
 router.route('/getCategorys')
     .get(adminPageController.getAllCategorys);
 
+router.route('/getAllImages')
+    .get(adminPageController.getAllImages);
+
 
 
     
 
 //---------------------------------------------------------->
+router.route('/topUsers')
+.get(adminPageController.getTopUsersWithOrderCounts)
 router.route('/profile')
 .get( adminPageController.getUserProfile);
+router.route('/orders')
+.get( adminPageController.getAllOrdersByUserName);
+router.route('/allOrders')
+.get( adminPageController.getAllOrders);
 router.route('/users')
 .get( adminPageController.getAllUsernames);
 router.route('/orders')
@@ -29,7 +38,7 @@ router.route('/ChangeProfile').post(adminPageController.ChangeProfile,loginContr
 
 //--------------------------------------------------------->
 
-router.route('/checkCategory/:categoryName')
+router.route('/isCategoryExist/:categoryName')
     .get(adminPageController.isCategoryExist);
 
 router.route('/createCategory')
@@ -47,7 +56,7 @@ router.route('/updateCategory/:categoryName')
 router.route('/updateProduct/:categoryName/:id')
     .post(adminPageController.updateProduct);
 
-router.route('/addProductAmount/:productName')
+router.route('/addProductAmount/:id')
     .post(adminPageController.addProductAmount);
 
 router.route('/:categoryName')

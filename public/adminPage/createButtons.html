@@ -3,126 +3,122 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe" crossorigin="anonymous"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
  
     <!--Create/update category-->
 
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createCategory" aria-controls="createCategory">Create/Update category</button>
+    <button class="btn btn-primary" id="createUpdateCategoryButton" type="button" data-bs-toggle="offcanvas" data-bs-target="#createUpdateCategory" aria-controls="createUpdateCategory">Create/Update category</button>
 
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="createCategory" aria-labelledby="createCategoryLabel">
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="createUpdateCategory" aria-labelledby="createUpdateCategoryLabel">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="createCategoryLabel">Category creation and update</h5>
+          <h5 class="offcanvas-title" id="createUpdateCategoryLabel">Category creation and update</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <select class="form-select-lg" id="categoryActionType">
+            <select class="form-select-lg" id="createUpdateCategoryActionType">
                 <option value="0">Type of action</option>
                 <option value="Create">Create</option>
                 <option value="Update">Update</option>
             </select>
             <br>
             <br>
-            <div id="categoryInfo" hidden>
+            <div id="createUpdateCategoryInfo" hidden>
                 <p>Please enter category information:</p>
-                <select class="form-select categoriesList" id="categorySelectName">
+                <select class="form-select categoriesList" id="createUpdateCategorySelectName">
                     <option value="0">Category</option>
                 </select>
                 <br>
-                <form id="createCategoryForm">
+                <form id="createUpdateCategoryForm">
                     <!--Category name-->
                     <div class="form-floating">
-                        <input id="categoryNameField" type="text" class="form-control" required disabled>
-                        <label for="categoryNameField">Category name</label>
+                        <input id="createUpdateCategoryNameField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateCategoryNameField">Category name</label>
                     </div>
                     <br>
                     <!--Category image-->
-                    <div class="form-floating">
-                        <input id="categoryImageField" type="text" class="form-control" disabled>
-                        <label for="categoryImageField">Category image path</label>
-                    </div>
+                    <select class="form-select imagesList" id="createUpdateCategoryImageField">
+                    </select>
                     <br>
                     <button type="button" class="btn btn-secondary btn-sm" id="createCategorySubmit">Create category</button>
                     <button type="button" class="btn btn-secondary btn-sm" id="updateCategorySubmit">Update category</button>
-                    <div class="alert alert-danger mt-3 " id="createCategoryAlert" hidden>
+                    <div class="alert alert-danger mt-3 " id="createUpdateCategoryAlert" hidden>
                         <strong>
                             Error:
                         </strong>
-                        <p id="createCategoryError"></p>
+                        <p id="createUpdateCategoryError"></p>
                     </div>
-                    <div class="alert alert-success mt-3 " id="createCategorySuccess" hidden>
-                        <strong>
-                            Category created succesfuly!
-                        </strong>
+                    <div class="alert alert-success mt-3 " id="createUpdateCategorySuccess" hidden>
+                        <strong></strong>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!--Create product-->
+    <!--Create/Update product-->
 
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#createProduct" aria-controls="createProduct">Create/Update product</button>
+    <button class="btn btn-primary" id="createUpdateProductButton" type="button" data-bs-toggle="offcanvas" data-bs-target="#createUpdateProduct" aria-controls="createUpdateProduct">Create/Update product</button>
 
 
-    <div class="offcanvas offcanvas-start" tabindex="-1" id="createProduct" aria-labelledby="createProductLabel">
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="createUpdateProduct" aria-labelledby="createUpdateProductLabel">
         <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="createProductLabel">Product creation and update</h5>
+          <h5 class="offcanvas-title" id="createUpdateProductLabel">Product creation and update</h5>
           <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
         </div>
         <div class="offcanvas-body">
-            <select class="form-select-lg" id="productActionType">
+            <select class="form-select-lg" id="createUpdateProductActionType">
                 <option value="0">Type of action</option>
                 <option value="Create">Create</option>
                 <option value="Update">Update</option>
             </select>
             <br>
             <br>
-            <div id="productInfo" hidden>
+            <div id="createUpdateProductInfo" hidden>
                 <p>Please enter product information:</p>
-                <form id="createProductForm">
+                <form id="createUpdateProductForm">
                     <!--Product category-->
-                    <select class="form-select categoriesList" id="createProductCategoryField">
-                        <option value="0">Product category</option>
+                    <select class="form-select categoriesList" id="createUpdateProductCategoryField">
+                        <option value="0">Category</option>
                     </select>
                     <br>
                     <!--Product name select-->
-                    <select class="form-select" id="productSelectName" disabled>
+                    <select class="form-select" id="createUpdateProductSelectName" disabled>
                         <option value="0">Product</option>
                     </select>
                     <br>
                     <!--Product name-->
                     <div class="form-floating">
-                        <input id="productNameField" type="text" class="form-control" required disabled>
-                        <label for="productNameField">Product name</label>
+                        <input id="createUpdateProductNameField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateProductNameField">Product name</label>
                     </div>
                     <br>
                     <!--Product id-->
                     <div class="form-floating">
-                        <input id="productIdField" type="text" class="form-control" required disabled>
-                        <label for="productIdField">Product id</label>
+                        <input id="createUpdateProductIdField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateProductIdField">Product id</label>
                     </div>
                     <br>
                     <!--Product color-->
                     <div class="form-floating">
-                        <input id="productColorField" type="text" class="form-control" required disabled>
-                        <label for="productColorField">Product color</label>
+                        <input id="createUpdateProductColorField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateProductColorField">Product color</label>
                     </div>
                     <br>
                     <!--Product image-->
-                    <div class="form-floating">
-                        <input id="productImageField" type="text" class="form-control" required disabled>
-                        <label for="productImageField">Product image path</label>
-                    </div>
+                    <select class="form-select imagesList" id="createUpdateProductImageField" disabled>
+                        <option value="0">Image</option>
+                    </select>
                     <br>
                     <!--Product size-->
                     <div class="form-floating">
-                        <input id="productSizeField" type="text" class="form-control" required disabled>
-                        <label for="productSizeField">Product size</label>
+                        <input id="createUpdateProductSizeField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateProductSizeField">Product size</label>
                     </div>
                     <br>
                     <!--Product hot-->
-                    <select class="form-select hotSelect" id="productHotField" disabled>
+                    <select class="form-select hotSelect" id="createUpdateProductHotField" disabled>
                         <option value="0" >Is product hot</option>
                         <option>Yes</option>
                         <option>No</option>
@@ -130,37 +126,37 @@
                     <br>
                     <!--Product description-->
                     <div class="form-floating">
-                        <input id="productDescField" type="text" class="form-control" required disabled>
-                        <label for="productDescField">Product description</label>
+                        <input id="createUpdateProductDescField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateProductDescField">Product description</label>
                     </div>
                     <br>
                     <!--Product price-->
                     <div class="form-floating">
-                        <input id="productPriceField" type="text" class="form-control" required disabled>
-                        <label for="productPriceField">Product price</label>
+                        <input id="createUpdateProductPriceField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateProductPriceField">Product price</label>
                     </div>
                     <br>
                     <!--Product amount-->
                     <div class="form-floating">
-                        <input id="productAmountField" type="text" class="form-control" required disabled>
-                        <label for="productAmountField">Product amount</label>
+                        <input id="createUpdateProductAmountField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateProductAmountField">Product amount</label>
                     </div>
                     <br>
                     <!--Product brand-->
                     <div class="form-floating">
-                        <input id="productBrandField" type="text" class="form-control" required disabled>
-                        <label for="productBrandField">Product brand</label>
+                        <input id="createUpdateProductBrandField" type="text" class="form-control" required disabled>
+                        <label for="createUpdateProductBrandField">Product brand</label>
                     </div>
                     <br>
                     <button type="button" class="btn btn-secondary btn-sm" id="createProductSubmit">Create Product</button>
                     <button type="button" class="btn btn-secondary btn-sm" id="updateProductSubmit">Update Product</button>
-                    <div class="alert alert-danger mt-3 " id="createProductAlert" hidden>
+                    <div class="alert alert-danger mt-3 " id="createUpdateProductAlert" hidden>
                         <strong>
                             Error:
                         </strong>
-                        <p id="createProductError"></p>
+                        <p id="createUpdateProductError"></p>
                     </div>
-                    <div class="alert alert-success mt-3 " id="createProductSuccess" hidden>
+                    <div class="alert alert-success mt-3 " id="createUpdateProductSuccess" hidden>
                         <strong>
                             Product created succesfuly!
                         </strong>
@@ -172,7 +168,7 @@
 
     <!--Add Product Amount-->
 
-    <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#addProductAmount" aria-controls="addProductAmount">Add product amount</button>
+    <button class="btn btn-primary" id="addProductAmountButton" type="button" data-bs-toggle="offcanvas" data-bs-target="#addProductAmount" aria-controls="addProductAmount">Add product amount</button>
 
     <div class="offcanvas offcanvas-start" tabindex="-1" id="addProductAmount" aria-labelledby="addProductAmountLabel">
         <div class="offcanvas-header">

@@ -152,6 +152,9 @@ const getAllorders = async(userName)=>{
 }
 
 
+  
+
+
 module.exports = { 
     createUser,
     getUserById,
@@ -160,6 +163,7 @@ module.exports = {
     setAdmin,
     getAllUsernames,
     getAllorders,
-    ChangeProfile
+    ChangeProfile,
+    
 
 };

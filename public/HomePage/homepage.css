@@ -54,14 +54,15 @@ h5
     {
         max-width: 99.39%;
     }
-    .card
-    {
-        margin-right: 7px;
-        margin-left: 7px;
-    }
+   .col
+   {
+    justify-content: start;    
+    display: flex;
+    justify-content: space-between;
+   }
+   .justify-content-center{
+    justify-content: start!important;
+   }
       
-    .c
-    {
-        margin-left:15px;
-        margin-right:15px;
-    }
+   
+    

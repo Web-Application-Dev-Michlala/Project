@@ -90,10 +90,40 @@ const getAllOrdersByUserName = async (userName) => {
     }
 };
 
+const getAllOrders = async () => {
+    try {
+        const orders = await orderModel.find();
+        if (!orders || orders.length === 0) {
+            console.error(`There is no orders`);
+            return null;
+        }
+        return orders;
+    } catch (err) {
+        console.error(err);
+        return null;
+    }
+};
+const groupOrders = async()=> {
+    try {
+      const ordersByUser = await orderModel.aggregate([
+        {
+          $group: {
+            _id: '$userName',
+            orders: { $push: '$$ROOT' },
+          },
+        },
+      ]);
+      return ordersByUser;
+    } catch (error) {
+      return error.message;
+    }
+  };
 module.exports = {
     createOrder,
     getOrderById,
     addProductToOrder,
     removeProductFromOrder,
     getAllOrdersByUserName,
+    getAllOrders,
+    groupOrders
 }

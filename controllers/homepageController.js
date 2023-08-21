@@ -1,5 +1,6 @@
 const categoryService = require('../services/category')
 const productService=require('../services/product')
+const shopService = require('../services/shop.js')
 const path = require('path')
 
 
@@ -30,12 +31,21 @@ const getProductById = async (req,res) =>
   }
 }
 
-
+const getAllShops = async (req, res) => {
+  try {
+      const shops = await shopService.getAllShops();
+      res.json(shops);
+  } catch (error) {
+      console.error(error);
+      res.status(404).json({ error: ['An error occurred while trying to fetch shops locations.'] });
+  }
+}
 module.exports = 
 {
     getHomePage,
     getAllCategorys,
     getCategoryByName,
-    getProductById
+    getProductById,
+    getAllShops
     
 }

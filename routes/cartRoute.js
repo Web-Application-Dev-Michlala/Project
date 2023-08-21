@@ -13,6 +13,8 @@ router.route('/purchaseValidate')
     .post(loginController.isLoggedIn,cartController.validateAll)
 router.route('/removeItems')
     .post(loginController.isLoggedIn,cartController.removeItems)
+router.route('/getRates')
+    .get(loginController.isLoggedIn,cartController.getRates)
 
 
 

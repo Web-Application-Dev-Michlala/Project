@@ -9,8 +9,6 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         required: true
     },
-
-    products: [productSchema],
     price: {
         type: Number,
         required: true
@@ -18,7 +16,9 @@ const orderSchema = new mongoose.Schema({
     userName: {
         type: String,
         required: true,
+        maxlength: 24
     },
+    products: [productSchema],
 });
 
 module.exports = mongoose.model('Order', orderSchema);

@@ -1,5 +1,6 @@
 const productService=require('../services/product')
 const orderService=require('../services/order')
+const exchangeRatesApi=require('../services/exchangeRateApi')
 
 
 const getCartPage = async (req,res) => 
@@ -9,7 +10,6 @@ const getCartPage = async (req,res) =>
 const validateItem =async(req,res)=>
 {
     const {categoryName,name,amount}=req.body;
-    console.log(categoryName,name,amount)
     const flag= await productService.validateAmount(categoryName,name,amount)
     if(flag===0)
     res.status(200).json(flag);
@@ -40,7 +40,6 @@ const removeItems=async(req,res)=>
     var {arrayToSend,totalPrice}=req.body;
     const username=req.session.username
     const check= await productService.removeItems(arrayToSend)
-    console.log("total price in controller "+totalPrice)
     var orderArray=[]
     for (const category of arrayToSend) {
     for (const item of category.items)
@@ -52,15 +51,20 @@ const removeItems=async(req,res)=>
 
    
     const order=await orderService.createOrder(new Date,totalPrice,username,orderArray)
-   // orderArray.forEach(product => {orderService.addProductToOrder(order._id,product)})
     if(check===1)
-    res.status(200).json(check)
+    res.status(200).json(order)
 
+}
+const getRates =async(req,res)=>
+{
+    const data = await exchangeRatesApi.getRates();
+    res.send(data);
 }
 module.exports=
 {
     getCartPage,
     validateItem,
     validateAll,
-    removeItems
+    removeItems,
+    getRates
 }

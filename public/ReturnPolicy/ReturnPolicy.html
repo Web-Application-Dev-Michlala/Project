@@ -8,6 +8,9 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
   <script src="/public/ReturnPolicy/ReturnPolicy.js"></script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/public/webSocket/webSocket.js"></script>
+  <link rel="stylesheet" href="/public/webSocket/webSocket.css">
   <title>Product Return Policy</title>
   <style>
     .cont {
@@ -45,6 +48,15 @@
     .contact-info p:last-child {
       margin-bottom: 0;
     }
+    @font-face {
+    font-family: 'CustomFont';
+    src: url('public/fonts/OOswald-ExtraLight.ttf') format('truetype');
+  }
+
+  .custom-font {
+    font-family: 'CustomFont', sans-serif;
+  }
+
   </style>
   
 </head>
@@ -52,8 +64,8 @@
   <nav class="navbar navbar-expand-sm navbar-light bg-light sticky-top w-100 custom-navbar" id="navbar">
    
   </nav>
-  <div class="cont">
-  <h1>Product Return Policy</h1>
+  <div class="cont custom-font">
+  <h1 >Product Return Policy</h1>
   <p>
     At our online store, we want to ensure your satisfaction with every purchase. If you are not completely satisfied with your order, we offer a hassle-free return policy to make things right.
   </p>
