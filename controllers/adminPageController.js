@@ -29,6 +29,7 @@ const getAllImages = async(req,res) => {
     const images = await fs.readdirSync('public/images');
     res.json(images);
 }
+
 const getCategoryDetails = async (req,res) => {
     const category = await categoryService.getCategoryByName(req.params.categoryName);
     if(category) {
@@ -132,42 +133,49 @@ const addProductAmount = async(req,res) => {
 
 const isProductExistCreate = async(req,res) => {
     var isDup = false;
+    var error = "";
     const categories = await categoryService.getAllCategorys();
     for(const category of categories){
-        const product1 = await productService.getProductById(category.categoryName,req.body.Id);
+        const product1 = await productService.getProductById(category.categoryName,req.params.Id);
         if(product1){
             isDup = true;
+            error = "id";
             break;
         }
-        const product2 = await productService.getProductByName(category.categoryName,req.body.name);
+        const product2 = await productService.getProductByName(category.categoryName,req.params.name);
         if(product2){
             isDup = true;
+            error = "name";
             break;
         }
     }
-    return isDup;
+    res.json({isDup,error});
 }
 
 const isProductExistUpdate = async(req,res) => {
     var isDup = false;
+    var error = "";
+    const {newId,newName} = await req.body
     const categories = await categoryService.getAllCategorys();
     for(const category of categories){
-        if(req.body.oldId !== req.body.newId){
+        if(req.params.Id !== newId){
             const product = await productService.getProductById(category.categoryName,req.body.newId);
             if(product){
                 isDup = true;
+                error = "id";
                 break;
             }
         }
-        if(req.body.oldName !== req.body.newName){
+        if(req.params.name !== newName){
             const product = await productService.getProductByName(category.categoryName,req.body.newName);
             if(product){
                 isDup = true;
+                error = "name";
                 break;
             }
         }
     }
-    return isDup;
+    res.json({isDup,error});
 }
 //----------------------------------------------------->
 

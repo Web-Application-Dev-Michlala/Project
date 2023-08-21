@@ -41,6 +41,12 @@ router.route('/ChangeProfile').post(adminPageController.ChangeProfile,loginContr
 router.route('/isCategoryExist/:categoryName')
     .get(adminPageController.isCategoryExist);
 
+router.route('/isProductExistCreate/:Id/:name')
+    .get(adminPageController.isProductExistCreate);
+
+router.route('/isProductExistUpdate/:Id/:name')
+    .post(adminPageController.isProductExistUpdate);
+
 router.route('/createCategory')
     .post(adminPageController.createCategory);
 
