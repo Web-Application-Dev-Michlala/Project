@@ -3,6 +3,7 @@ const productService = require("../services/product");
 const userService=require('../services/user')
 const orderService = require('../services/order.js');
 const path = require('path');
+const fs = require('fs');
 
 const getAllCategorys = async (req,res) => {
     const categories = await categoryService.getAllCategorys();
@@ -22,6 +23,11 @@ const getAdminPage2 = async (req,res) => {
 const getAdminPage = async (req,res) => {
     res.sendFile(path.join(__dirname,"../public/deleteProduct/deleteProduct.html"))
 
+}
+
+const getAllImages = async(req,res) => {
+    const images = await fs.readdirSync('public/images');
+    res.json(images);
 }
 const getCategoryDetails = async (req,res) => {
     const category = await categoryService.getCategoryByName(req.params.categoryName);
@@ -63,8 +69,8 @@ const updateCategory = async (req,res) =>{
 }
 
 const updateProduct = async (req,res) => {
-    const {newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot} = await req.body;
-    const product = await productService.updateProduct(req.params.categoryName,req.params.id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot);
+    const {newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand} = await req.body;
+    const product = await productService.updateProduct(req.params.categoryName,req.params.id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand);
     if(!product){
         return res.status(404).json({errors:['An error occurred while trying to update the product']});
     } else {
@@ -98,7 +104,6 @@ const getProductById = async (req,res) => {
     res.json(product);
 }
 
-
 const createCategory = async(req,res) => {
     const category = await categoryService.createCategory(req.body.categoryName,req.body.image);
     if(!category){
@@ -109,7 +114,7 @@ const createCategory = async(req,res) => {
 
 const createProduct = async(req,res) => {
     const category = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
-        req.body.size,req.body.image,req.body.description,req.body.price,req.body.amount,req.body.brand,req.body.hot);
+        req.body.size,req.body.image,req.body.description,req.body.price,req.body.amount,req.body.brand);
     if(!category){
         return res.status(404).json({errors:["Product wasn't created"]});
     }
@@ -264,5 +269,6 @@ module.exports =
     changePassword,
     getAllOrdersByUserName,
     addProductAmount,
-    getTopUsersWithOrderCounts
+    getTopUsersWithOrderCounts,
+    getAllImages
 }

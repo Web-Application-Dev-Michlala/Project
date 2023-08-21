@@ -12,6 +12,9 @@ router.route('/')
 router.route('/getCategorys')
     .get(adminPageController.getAllCategorys);
 
+router.route('/getAllImages')
+    .get(adminPageController.getAllImages);
+
 
 
     
