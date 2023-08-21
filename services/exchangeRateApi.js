@@ -1,11 +1,11 @@
 const http = require('http');
 const keys=require('custom-env')
 keys.env(process.env.NODE_ENV,'./config')
-const weatherkey=process.env.WEATHER_KEY;
+const rateskey=process.env.RATES_KEY;
 //uses exchangeRateApi with http GET request to get data and send it back to controller
 const getRates = () => {
     return new Promise((resolve) => {
-        const apiUrl = weatherkey; 
+        const apiUrl = rateskey; 
         const apiRequest = http.get(apiUrl, apiResponse => {
             let data = '';
 
