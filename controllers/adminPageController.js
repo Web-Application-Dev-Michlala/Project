@@ -129,6 +129,46 @@ const addProductAmount = async(req,res) => {
     }
     res.json(product);
 }
+
+const isProductExistCreate = async(req,res) => {
+    var isDup = false;
+    const categories = await categoryService.getAllCategorys();
+    for(const category of categories){
+        const product1 = await productService.getProductById(category.categoryName,req.body.Id);
+        if(product1){
+            isDup = true;
+            break;
+        }
+        const product2 = await productService.getProductByName(category.categoryName,req.body.name);
+        if(product2){
+            isDup = true;
+            break;
+        }
+    }
+    return isDup;
+}
+
+const isProductExistUpdate = async(req,res) => {
+    var isDup = false;
+    const categories = await categoryService.getAllCategorys();
+    for(const category of categories){
+        if(req.body.oldId !== req.body.newId){
+            const product = await productService.getProductById(category.categoryName,req.body.newId);
+            if(product){
+                isDup = true;
+                break;
+            }
+        }
+        if(req.body.oldName !== req.body.newName){
+            const product = await productService.getProductByName(category.categoryName,req.body.newName);
+            if(product){
+                isDup = true;
+                break;
+            }
+        }
+    }
+    return isDup;
+}
 //----------------------------------------------------->
 
 const getUserProfile = async(req, res) => {
@@ -270,5 +310,7 @@ module.exports =
     getAllOrdersByUserName,
     addProductAmount,
     getTopUsersWithOrderCounts,
-    getAllImages
+    getAllImages,
+    isProductExistCreate,
+    isProductExistUpdate
 }

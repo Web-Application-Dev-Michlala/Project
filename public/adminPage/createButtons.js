@@ -17,14 +17,13 @@ $(document).ready(function(){
             $("#createUpdateCategorySelectName").val("0");
             $("#createUpdateCategorySelectName").change();
         } else{
-            getCategories();
-            getImages();
+            getCategories();//updating category name select with categories
+            getImages();//updating image select with images
             if (action === "Create") {//create
                 $("#createUpdateCategoryInfo").prop("hidden",false);//shows the fields of category
                 $("#createUpdateCategorySelectName").prop("hidden",true);//select field needed only on update
                 $("#createCategorySubmit").prop("hidden",false);
                 $("#updateCategorySubmit").prop("hidden",true);
-                $("#createUpdateCategoryImageField").prop("disabled",false);
                 //enables all fields to use for create
                 $("#createUpdateCategoryForm .form-control").each(function(){
                     $(this).prop("disabled",false);
@@ -74,43 +73,56 @@ $(document).ready(function(){
 
     $("#createCategorySubmit").click(function(){//creating category
         if(!categoryNameValidate()){//checks validation
-            $("#createUpdateCategoryAlert").prop("hidden",false);;
+            $("#createUpdateCategoryAlert").prop("hidden",false);
             setTimeout(() => {
-                $("#createUpdateCategoryAlert").prop("hidden",true);;
+                $("#createUpdateCategoryAlert").prop("hidden",true);
             },3000);
         }
         else{//is valid
-            var image;
-            if($("#createUpdateCategoryImageField").val() === "0"){
-                image = "";
-            }
-            else{
-                image ="public/images/" + $("#createUpdateCategoryImageField").val();
-            }
-            $.ajax({//creates category
-                url: "/adminPage/createCategory",
-                type: "POST",
-                data: {
-                    categoryName: $("#createUpdateCategoryNameField").val(),
-                    image : image
-                },
-                success: (category) =>{
-                    $(".categoriesList").append(new Option(category.categoryName,category.categoryName));//add category to categories selects on html
-                    $("#createUpdateCategorySuccess strong").text("Category created succesfuly!");
-                    //reset category fields
-                    $("#createUpdateCategorySuccess").prop("hidden",false);
-                    setTimeout(() => {
-                        $("#createUpdateCategorySuccess").prop("hidden",true);
-                    },3000);
-                    resetCategoryFields();
-                },
-                error: () =>{
-                    $("#createUpdateCategoryError").text("An error occurred while trying to create the category");
-                    $("#createUpdateCategoryAlert").prop("hidden",false);;
+            $.ajax({
+                url:"/adminPage/isCategoryExist/" + $("#createUpdateCategoryNameField").val(),
+                type:"GET",
+            }).done((boolean) => {
+                if(boolean === true){//category name already exist
+                    $("#createUpdateCategoryError").text("Category name is already taken");
+                    $("#createUpdateCategoryAlert").prop("hidden",false);
                     setTimeout(() => {
                         $("#createUpdateCategoryAlert").prop("hidden",true);;
                     },3000);
+                    return;
                 }
+                var image;
+                if($("#createUpdateCategoryImageField").val() === "0"){
+                    image = "";
+                }
+                else{
+                    image ="public/images/" + $("#createUpdateCategoryImageField").val();
+                }
+                $.ajax({//creates category
+                    url: "/adminPage/createCategory",
+                    type: "POST",
+                    data: {
+                        categoryName: $("#createUpdateCategoryNameField").val(),
+                        image : image
+                    },
+                    success: (category) =>{
+                        $(".categoriesList").append(new Option(category.categoryName,category.categoryName));//add category to categories selects on html
+                        $("#createUpdateCategorySuccess strong").text("Category created succesfuly!");
+                        //reset category fields
+                        $("#createUpdateCategorySuccess").prop("hidden",false);
+                        setTimeout(() => {
+                            $("#createUpdateCategorySuccess").prop("hidden",true);
+                        },3000);
+                        resetCategoryFields();
+                    },
+                    error: () =>{
+                        $("#createUpdateCategoryError").text("An error occurred while trying to create the category");
+                        $("#createUpdateCategoryAlert").prop("hidden",false);;
+                        setTimeout(() => {
+                            $("#createUpdateCategoryAlert").prop("hidden",true);;
+                        },3000);
+                    }
+                })
             })
             
             
@@ -457,21 +469,7 @@ $(document).ready(function(){
             $("#createUpdateCategoryError").text("Name field is empty");
             return false;
         }
-        var boolean = true;
-        //cheking if category name exist
-        $.ajax({
-            url: "/adminPage/" + $("#createUpdateCategoryNameField").val(),
-            async:false,//async false because cant continue creating/updating before checking this
-            type: "GET",
-            success: (data) => {
-                //if we are in update mode than need to check if found a name different than the previous name of the category
-                if(data.categoryName !== $("#createUpdateCategorySelectName").val()){
-                    $("#createUpdateCategoryError").text("Category with this name already exists");
-                    boolean =  false;
-                }
-            }
-        }); 
-        return boolean;
+        return true;
     }
 
     //filling the category fields according to the category details given
