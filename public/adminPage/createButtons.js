@@ -206,6 +206,7 @@ $(document).ready(function(){
                 $("#createUpdateProductForm .form-control").each(function(){ 
                     $(this).prop("disabled",false);
                 });
+                $("#createUpdateProductHotField").prop("disabled",false);
                 $("#createUpdateProductImageField").prop("disabled",false);
             } else {//update
                 //reset category select field
@@ -219,6 +220,7 @@ $(document).ready(function(){
                 $("#createUpdateProductForm .form-control").each(function(){
                     $(this).prop("disabled",true);
                 });
+                $("#createUpdateProductHotField").prop("disabled",true);
                 $("#createUpdateProductImageField").prop("disabled",true);
             }
         }
@@ -250,6 +252,7 @@ $(document).ready(function(){
             $("#createUpdateProductForm .form-control").each(function(){
                 $(this).prop("disabled",true);
             });
+            $("#createUpdateProductHotField").prop("disabled",true);
             $("#createUpdateProductImageField").prop("disabled",true);
             resetCreateProductFields();
             $("#createUpdateProductCategoryField").val(category);
@@ -258,6 +261,7 @@ $(document).ready(function(){
             $("#createUpdateProductForm .form-control").each(function(){
                 $(this).prop("disabled",false);
             });
+            $("#createUpdateProductHotField").prop("disabled",false);
             $("#createUpdateProductImageField").prop("disabled",false);
             $.ajax({//get product information and fill the product fields with the information
                 url:"/adminPage/" + $("#createUpdateProductCategoryField").val() + "/" + $("#createUpdateProductSelectName").val().split("Id:")[1],
@@ -278,6 +282,12 @@ $(document).ready(function(){
                 },3000);
         }
         else{//is valid 
+            var productHot = $("#createUpdateProductHotField").val();
+            if(productHot === "0" || productHot === "No"){
+                productHot = false;
+            }
+            else
+                productHot = true;
             var image;
             if($("#createUpdateProductImageField").val() === "0"){
                 image = "";
@@ -299,6 +309,7 @@ $(document).ready(function(){
                     price: $("#createUpdateProductPriceField").val(),
                     amount: $("#createUpdateProductAmountField").val(),
                     brand: $("#createUpdateProductBrandField").val(),
+                    hot: productHot
                 },
                 success: (product) =>{
                     $("#createUpdateProductSuccess strong").text("product created succesfuly!")
@@ -334,6 +345,12 @@ $(document).ready(function(){
                 },3000);
         }
         else{//is valid
+            var productHot = $("#createUpdateProductHotField").val();
+            if(productHot === "0" || productHot === "No"){
+                productHot = false;
+            }
+            else
+                productHot = true;
             var image;
             if($("#createUpdateProductImageField").val() === "0"){
                 image = "";
@@ -354,6 +371,7 @@ $(document).ready(function(){
                     newPrice: $("#createUpdateProductPriceField").val(),
                     newAmount: $("#createUpdateProductAmountField").val(),
                     newBrand: $("#createUpdateProductBrandField").val(),
+                    newHot: productHot
                 },
                 success: () =>{
                     $("#createUpdateProductSuccess strong").text("product updated succesfuly!")
@@ -365,6 +383,7 @@ $(document).ready(function(){
                     $("#createUpdateProductForm .form-control").each(function(){
                         $(this).prop("disabled",true);
                     });
+                    $("#createUpdateProductHotField").prop("disabled",true);
                     //resets product fields including name select
                     $("#createUpdateProductSelectName").val("0");
                     $("#createUpdateProductSelectName").prop("disabled",true);
@@ -639,6 +658,10 @@ $(document).ready(function(){
             $("#createUpdateProductImageField").val("0");
         else
             $("#createUpdateProductImageField").val(product.image[0].split('images/')[1]);
+        if(product.hot)
+            $("#createUpdateProductHotField").val("Yes");
+        else
+            $("#createUpdateProductHotField").val("No");
         $("#createUpdateProductSizeField").val(product.size.$numberDecimal);
         $("#createUpdateProductDescField").val(product.description);
         $("#createUpdateProductPriceField").val(product.price.$numberDecimal);
@@ -653,6 +676,7 @@ $(document).ready(function(){
         $("#createUpdateProductCategoryField").val("0");
         $("#createUpdateProductColorField").val("");
         $("#createUpdateProductImageField").val("0");
+        $("#createUpdateProductHotField").val("0");
         $("#createUpdateProductSizeField").val("");
         $("#createUpdateProductDescField").val("");
         $("#createUpdateProductPriceField").val("");

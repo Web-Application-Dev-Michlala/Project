@@ -69,8 +69,8 @@ const updateCategory = async (req,res) =>{
 }
 
 const updateProduct = async (req,res) => {
-    const {newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand} = await req.body;
-    const product = await productService.updateProduct(req.params.categoryName,req.params.id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand);
+    const {newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot} = await req.body;
+    const product = await productService.updateProduct(req.params.categoryName,req.params.id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot);
     if(!product){
         return res.status(404).json({errors:['An error occurred while trying to update the product']});
     } else {
@@ -114,7 +114,7 @@ const createCategory = async(req,res) => {
 
 const createProduct = async(req,res) => {
     const category = await productService.createProduct(req.body.categoryName,req.body.productName,req.body.Id,req.body.color,
-        req.body.size,req.body.image,req.body.description,req.body.price,req.body.amount,req.body.brand);
+        req.body.size,req.body.image,req.body.description,req.body.price,req.body.amount,req.body.brand,req.body.hot);
     if(!category){
         return res.status(404).json({errors:["Product wasn't created"]});
     }
