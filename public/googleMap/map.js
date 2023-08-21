@@ -1,9 +1,4 @@
-
-
-
-  
-
-$(document).ready(function() {
+$(document).ready(function() {//gets api key
   $.ajax
   ({
       url:'/googleKey',
@@ -14,13 +9,7 @@ $(document).ready(function() {
     
   })
 });
-
-
-
-
-
-
-function createMarkers() {
+function createMarkers() {//creates map and sets our shops markers
   const mapElement = $('#map')[0]; // Get the actual DOM element
   const map = new google.maps.Map(mapElement, {
     center: { lat: 32.0853, lng: 34.7818 }, // Coordinates of the center point (Tel Aviv)
