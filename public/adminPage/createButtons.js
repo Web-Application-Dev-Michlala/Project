@@ -596,35 +596,6 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Number is not a whole number");
             return false;
         }
-
-        
-        /*var boolean = true;
-        //checking if a product with the same id exists
-        $.ajax({//getting all categorys
-            url: "/adminPage/getCategorys",
-            async: false,//async false because cant continue creating/updating before checking this
-            type: "GET",
-            success: function(data) {
-                data.forEach((category)=>{
-                    $.ajax({//checking for each product of the category
-                        url:"/adminPage/" + category.categoryName + "/" + $("#createUpdateProductIdField").val(),
-                        async: false,//async false because cant continue creating/updating before checking this
-                        type: "GET",
-                        success: (data) => {
-                            //if we are in update mode than need to check if found an id different than the previous id of the product
-                            if(data.id !== parseInt($("#createUpdateProductSelectName").val().split("Id:")[1])){
-                                $("#createUpdateProductError").text("Product with the same id already exists");
-                                boolean = false;//found a product with the same id
-                            }
-                        }
-                    });
-                })
-            },
-            error: function() {
-                alert("An error occurred while trying to fetch categories");
-            }
-        });
-        */
         return true;
     }
 
