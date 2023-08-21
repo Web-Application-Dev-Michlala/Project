@@ -213,6 +213,12 @@ $(document).ready(function() {
        const oldPassword = $("#exampleInputPassword1").val();
        const newPassword = $("#exampleInputPassword2").val();
        changePassword(oldPassword,newPassword);
+       sessionStorage.removeItem('categories');
+       $.ajax({
+        url:'/login/logout',
+        type:'GET',
+        success: function(){window.location='/login'}
+       })
 })});
   
 function ChangeProfile(newName, newEmail, newBirthday) {
