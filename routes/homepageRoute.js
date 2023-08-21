@@ -29,6 +29,9 @@ router.route('/googleMaps').get((req, res) => {
     res.sendFile('map.html', { root: 'public/googleMap' });
 });
 
+router.route('/googleMaps/shops')
+    .get(homepageController.getAllShops);
+
 
 
   
