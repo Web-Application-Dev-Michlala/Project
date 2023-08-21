@@ -596,6 +596,8 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Number is not a whole number");
             return false;
         }
+
+        
         /*var boolean = true;
         //checking if a product with the same id exists
         $.ajax({//getting all categorys
