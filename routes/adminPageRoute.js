@@ -37,7 +37,7 @@ router.route('/changePassword')
 
 //--------------------------------------------------------->
 
-router.route('/checkCategory/:categoryName')
+router.route('/isCategoryExist/:categoryName')
     .get(adminPageController.isCategoryExist);
 
 router.route('/createCategory')
