@@ -52,19 +52,22 @@ const ChangePassword = async(userName,password)=>{
 
 }
 
-const ChangeProfile = async(userName,newUerName,email,birthday)=>{
+const ChangeProfile = async(userName,newUserName,email,birthday)=>{
     try {
         const user = await usersModel.findOne({ userName });
-
         if (!user) {
             console.error(`User with this username:${userName} not found`);
             return null;
         }
-        
-        user.userName=newUerName;
+        user.userName=newUserName;
         user.email=email;
-        user.birthday=birthday;
+        console.log("bd:"+user.email);
+
+
+        console.log("bd:"+user.birthdate);
+        user.birthdate=birthday;
         await user.save();
+        console.log("bd:"+user.birthdate);
         return user;
     } catch (err) {
         console.error(err);

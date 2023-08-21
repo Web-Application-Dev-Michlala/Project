@@ -4,13 +4,31 @@ h1{
     font-size: 24px; 
     font-family: Arial, sans-serif; 
 }
+.fade:not(.show) {
+  display: none;
+  opacity: 0;
+}
+
+
 .tab-button {
     background-color: transparent;
     border: none;
     cursor: pointer;
     outline: none;
   }
- 
 .form-control {
     max-width: 450px; 
 }
+ .short-input {
+    width: 50%; 
+  }
+  .short-btn {
+    width: 30%; 
+  }
+  #editForm {
+    display: none;
+  }
+.iframe-container {
+    display: none;
+  }
+  

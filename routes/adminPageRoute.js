@@ -23,9 +23,9 @@ router.route('/users')
 .get( adminPageController.getAllUsernames);
 router.route('/orders')
 .get( adminPageController.getAllOrders);
-//router.route('/changePassword')
-//.post( adminPageController.changePassword);
 router.route('/changePassword').post(adminPageController.changePassword);
+router.route('/ChangeProfile').post(adminPageController.ChangeProfile,loginController.logout);
+
 
 //--------------------------------------------------------->
 

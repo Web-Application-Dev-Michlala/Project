@@ -173,18 +173,13 @@ const getAllOrders = async(req, res) => {
 
   const changePassword = async(req,res) => {
     try {
-        console.log("hi there!");
+       
         const username = req.session.username; 
         const oldpassword=req.body.oldPassword;
         const newpassword=req.body.newPassword;
         const user= await userService.getUserById(username);
-        console.log(`oldpassword ${oldpassword}, newpassword ${newpassword}, user password ${await user.password}`);
-        console.log("its camming dont worry----->");
         if(oldpassword===(await user.password)){
              v=(oldpassword===(await user.password));
-            console.log(`the password comp are: ${v}`);
-
-            console.log("its camming dont worry2");
             await userService.ChangePassword(username,newpassword);
             res.json({ success: true });
         }else{
@@ -196,6 +191,24 @@ const getAllOrders = async(req, res) => {
       throw error;
     }
     }
+
+    const ChangeProfile = async(req,res) => {
+        try {
+           
+            const username = req.session.username;
+            const newUserName=req.body.newName;
+            console.log("adming page controoler username: "+req.body.username)
+            req.session.username=newUserName;
+            const email=req.body.newEmail;
+            const birthday=req.body.newBirthday;
+            await userService.ChangeProfile(username,newUserName,email,birthday);
+            res.json({ success: true });
+           
+        } catch (error) {
+          console.error('Error in changing the personal details:', error);
+          throw error;
+        }
+        }
 
 module.exports = 
 {
@@ -217,5 +230,6 @@ module.exports =
     isCategoryExist,
     getPassword,
     changePassword,
-    addProductAmount
+    addProductAmount,
+    ChangeProfile
 }

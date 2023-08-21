@@ -61,6 +61,7 @@ const login= async(req,res)=>
 
 const logout=async(req, res)=> {
     req.session.destroy(() => {
+      console.log("dw you almoat get it");
       res.redirect('/');
     });
   }
