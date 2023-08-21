@@ -91,38 +91,7 @@ $(document).ready(function(){
                     },3000);
                     return;
                 }
-                var image;
-                if($("#createUpdateCategoryImageField").val() === "0"){
-                    image = "";
-                }
-                else{
-                    image ="public/images/" + $("#createUpdateCategoryImageField").val();
-                }
-                $.ajax({//creates category
-                    url: "/adminPage/createCategory",
-                    type: "POST",
-                    data: {
-                        categoryName: $("#createUpdateCategoryNameField").val(),
-                        image : image
-                    },
-                    success: (category) =>{
-                        $(".categoriesList").append(new Option(category.categoryName,category.categoryName));//add category to categories selects on html
-                        $("#createUpdateCategorySuccess strong").text("Category created succesfuly!");
-                        //reset category fields
-                        $("#createUpdateCategorySuccess").prop("hidden",false);
-                        setTimeout(() => {
-                            $("#createUpdateCategorySuccess").prop("hidden",true);
-                        },3000);
-                        resetCategoryFields();
-                    },
-                    error: () =>{
-                        $("#createUpdateCategoryError").text("An error occurred while trying to create the category");
-                        $("#createUpdateCategoryAlert").prop("hidden",false);;
-                        setTimeout(() => {
-                            $("#createUpdateCategoryAlert").prop("hidden",true);;
-                        },3000);
-                    }
-                })
+                createCategory()//creates category
             })
             
             
@@ -137,46 +106,24 @@ $(document).ready(function(){
             },4000);
         }
         else{//is valid
-            var image;
-            if($("#createUpdateCategoryImageField").val() === "0"){
-                image = "";
+            if($("#createUpdateCategorySelectName").val() === $("#createUpdateCategoryNameField").val())
+                updateCategory();
+            else{ 
+                $.ajax({
+                    url:"/adminPage/isCategoryExist/" + $("#createUpdateCategoryNameField").val(),
+                    type:"GET",
+                }).done((boolean) => {
+                    if(boolean === true){//category name already exist
+                        $("#createUpdateCategoryError").text("Category name is already taken");
+                        $("#createUpdateCategoryAlert").prop("hidden",false);
+                        setTimeout(() => {
+                            $("#createUpdateCategoryAlert").prop("hidden",true);;
+                        },3000);
+                        return;
+                    }
+                    updateCategory()//updates category
+                })
             }
-            else{
-                image ="public/images/" + $("#createUpdateCategoryImageField").val();
-            }
-            $.ajax({//updating category
-                url: "/adminPage/updateCategory/" + $("#createUpdateCategorySelectName").val(),
-                type: "POST",
-                data: {
-                    newName: $("#createUpdateCategoryNameField").val(),
-                    newImage: image
-                },
-                success: (category) => {
-                    //removes previous name from category selects on html an add new name
-                    $(".categoriesList option[value='" + $("#createUpdateCategorySelectName").val() + "']").each(function(){
-                        $(this).remove();
-                    });
-                    $(".categoriesList").append(new Option(category.categoryName,category.categoryName));
-                    $("#createUpdateCategorySuccess strong").text("Category updated succesfuly!");
-                    $("#createUpdateCategorySuccess").prop("hidden",false);
-                    setTimeout(() => {
-                        $("#createUpdateCategorySuccess").prop("hidden",true);
-                    },3000);
-                    //reset category fields
-                    $("#createUpdateCategoryForm .form-control").each(function(){
-                        $(this).prop("disabled",true);
-                    });
-                    $("#createUpdateCategoryImageField").prop("disabled",true);
-                    resetCategoryFields();
-                },
-                error: () => {
-                    $("#createUpdateCategoryError").text("An error occurred while trying to update the category");
-                    $("#createUpdateCategoryAlert").prop("hidden",false);;
-                    setTimeout(() => {
-                        $("#createUpdateCategoryAlert").prop("hidden",true);;
-                    },3000);
-                }
-            })
             
         }
     })
@@ -282,51 +229,22 @@ $(document).ready(function(){
                 },3000);
         }
         else{//is valid 
-            var productHot = $("#createUpdateProductHotField").val();
-            if(productHot === "0" || productHot === "No"){
-                productHot = false;
-            }
-            else
-                productHot = true;
-            var image;
-            if($("#createUpdateProductImageField").val() === "0"){
-                image = "";
-            }
-            else{
-                image ="public/images/" + $("#createUpdateProductImageField").val();
-            }
-            $.ajax({//create product
-                url: "/adminPage/createProduct",
-                type: "POST",
-                data: { 
-                    Id: $("#createUpdateProductIdField").val(), 
-                    categoryName: $("#createUpdateProductCategoryField").val(),
-                    productName: $("#createUpdateProductNameField").val(),
-                    color: $("#createUpdateProductColorField").val(),
-                    size: $("#createUpdateProductSizeField").val(),
-                    image: image,
-                    description: $("#createUpdateProductDescField").val(),
-                    price: $("#createUpdateProductPriceField").val(),
-                    amount: $("#createUpdateProductAmountField").val(),
-                    brand: $("#createUpdateProductBrandField").val(),
-                    hot: productHot
-                },
-                success: (product) =>{
-                    $("#createUpdateProductSuccess strong").text("product created succesfuly!")
-                    $("#createUpdateProductSuccess").prop("hidden",false);
-                    setTimeout(() => {
-                        $("#createUpdateProductSuccess").prop("hidden",true);
-                    },3000);
-                    resetCreateProductFields();
-                    socket.emit('add product',product);//sends message so the server will send everyone about the product
-
-                },
-                error: () =>{
-                    $("#createUpdateProductError").text("An error occurred while trying to create the product");
+            $.ajax({
+                url: "/adminPage/isProductExistCreate/" + $("#createUpdateProductIdField").val() + "/" + $("#createUpdateProductNameField").val(),
+                type: "GET",
+            }).done((boolean) => {
+                if(boolean.isDup){
+                    if(boolean.error === "id")
+                        $("#createUpdateProductError").text("Product with the same id already exist");
+                    else
+                        $("#createUpdateProductError").text("Product with the same name already exist");
                     $("#createUpdateProductAlert").prop("hidden",false);
                     setTimeout(() => {
                         $("#createUpdateProductAlert").prop("hidden",true);
                     },3000);
+                }
+                else{
+                    createProduct();
                 }
             })
             
@@ -345,59 +263,28 @@ $(document).ready(function(){
                 },3000);
         }
         else{//is valid
-            var productHot = $("#createUpdateProductHotField").val();
-            if(productHot === "0" || productHot === "No"){
-                productHot = false;
-            }
-            else
-                productHot = true;
-            var image;
-            if($("#createUpdateProductImageField").val() === "0"){
-                image = "";
-            }
-            else{
-                image ="public/images/" + $("#createUpdateProductImageField").val();
-            }
-            $.ajax({//update product
-                url: "/adminPage/updateProduct/" + $("#createUpdateProductCategoryField").val() + "/" + $("#createUpdateProductSelectName").val().split("Id:")[1],
+            $.ajax({
+                url: "/adminPage/isProductExistUpdate/" + $("#createUpdateProductSelectName").val().split("Id:")[1] + "/" + $("#createUpdateProductSelectName").val().split(',')[0],
                 type: "POST",
-                data: { 
-                    newName: $("#createUpdateProductNameField").val(),
+                data: {
                     newId: $("#createUpdateProductIdField").val(),
-                    newColor: $("#createUpdateProductColorField").val(),
-                    newSize: $("#createUpdateProductSizeField").val(),
-                    newImage: image,
-                    newDescription: $("#createUpdateProductDescField").val(),
-                    newPrice: $("#createUpdateProductPriceField").val(),
-                    newAmount: $("#createUpdateProductAmountField").val(),
-                    newBrand: $("#createUpdateProductBrandField").val(),
-                    newHot: productHot
-                },
-                success: () =>{
-                    $("#createUpdateProductSuccess strong").text("product updated succesfuly!")
-                    $("#createUpdateProductSuccess").prop("hidden",false);
-                    setTimeout(() => {
-                        $("#createUpdateProductSuccess").prop("hidden",true);
-                    },3000);
-                    //disable product fields
-                    $("#createUpdateProductForm .form-control").each(function(){
-                        $(this).prop("disabled",true);
-                    });
-                    $("#createUpdateProductHotField").prop("disabled",true);
-                    //resets product fields including name select
-                    $("#createUpdateProductSelectName").val("0");
-                    $("#createUpdateProductSelectName").prop("disabled",true);
-                    resetCreateProductFields();
-                },
-                error: () =>{
-                    $("#createUpdateProductError").text("An error occurred while trying to update the product");
+                    newName: $("#createUpdateProductNameField").val()
+                }
+            }).done((boolean) => {
+                if(boolean.isDup){
+                    if(boolean.error === "id")
+                        $("#createUpdateProductError").text("Product with the same id already exist");
+                    else
+                        $("#createUpdateProductError").text("Product with the same name already exist");
                     $("#createUpdateProductAlert").prop("hidden",false);
                     setTimeout(() => {
                         $("#createUpdateProductAlert").prop("hidden",true);
                     },3000);
                 }
+                else{
+                    updateProduct();
+                }
             })
-            
             
         }
     })
@@ -482,6 +369,189 @@ $(document).ready(function(){
 
     //================== Functions =============================
 
+    function createCategory(){
+        var image;
+        if($("#createUpdateCategoryImageField").val() === "0"){
+            image = "";
+        }
+        else{
+            image ="public/images/" + $("#createUpdateCategoryImageField").val();
+        }
+        $.ajax({
+            url: "/adminPage/createCategory",
+            type: "POST",
+            data: {
+                categoryName: $("#createUpdateCategoryNameField").val(),
+                image : image
+            },
+            success: (category) =>{
+                $(".categoriesList").append(new Option(category.categoryName,category.categoryName));//add category to categories selects on html
+                $("#createUpdateCategorySuccess strong").text("Category created succesfuly!");
+                //reset category fields
+                $("#createUpdateCategorySuccess").prop("hidden",false);
+                setTimeout(() => {
+                    $("#createUpdateCategorySuccess").prop("hidden",true);
+                },3000);
+                resetCategoryFields();
+            },
+            error: () =>{
+                $("#createUpdateCategoryError").text("An error occurred while trying to create the category");
+                $("#createUpdateCategoryAlert").prop("hidden",false);;
+                setTimeout(() => {
+                    $("#createUpdateCategoryAlert").prop("hidden",true);;
+                },3000);
+            }
+        })
+    }
+
+    function updateCategory(){
+        var image;
+        if($("#createUpdateCategoryImageField").val() === "0"){
+            image = "";
+        }
+        else{
+            image ="public/images/" + $("#createUpdateCategoryImageField").val();
+        }
+        $.ajax({//updating category
+            url: "/adminPage/updateCategory/" + $("#createUpdateCategorySelectName").val(),
+            type: "POST",
+            data: {
+                newName: $("#createUpdateCategoryNameField").val(),
+                newImage: image
+            },
+            success: (category) => {
+                //removes previous name from category selects on html an add new name
+                $(".categoriesList option[value='" + $("#createUpdateCategorySelectName").val() + "']").each(function(){
+                    $(this).remove();
+                });
+                $(".categoriesList").append(new Option(category.categoryName,category.categoryName));
+                $("#createUpdateCategorySuccess strong").text("Category updated succesfuly!");
+                $("#createUpdateCategorySuccess").prop("hidden",false);
+                setTimeout(() => {
+                    $("#createUpdateCategorySuccess").prop("hidden",true);
+                },3000);
+                //reset category fields
+                $("#createUpdateCategoryForm .form-control").each(function(){
+                    $(this).prop("disabled",true);
+                });
+                $("#createUpdateCategoryImageField").prop("disabled",true);
+                resetCategoryFields();
+            },
+            error: () => {
+                $("#createUpdateCategoryError").text("An error occurred while trying to update the category");
+                $("#createUpdateCategoryAlert").prop("hidden",false);;
+                setTimeout(() => {
+                    $("#createUpdateCategoryAlert").prop("hidden",true);;
+                },3000);
+            }
+        })
+    }
+
+    function createProduct(){
+        var productHot = $("#createUpdateProductHotField").val();
+        if(productHot === "0" || productHot === "No"){
+            productHot = false;
+        }
+        else
+            productHot = true;
+        var image;
+        if($("#createUpdateProductImageField").val() === "0"){
+            image = "";
+        }
+        else{
+            image ="public/images/" + $("#createUpdateProductImageField").val();
+        }
+        $.ajax({//create product
+            url: "/adminPage/createProduct",
+            type: "POST",
+            data: { 
+                Id: $("#createUpdateProductIdField").val(), 
+                categoryName: $("#createUpdateProductCategoryField").val(),
+                productName: $("#createUpdateProductNameField").val(),
+                color: $("#createUpdateProductColorField").val(),
+                size: $("#createUpdateProductSizeField").val(),
+                image: image,
+                description: $("#createUpdateProductDescField").val(),
+                price: $("#createUpdateProductPriceField").val(),
+                amount: $("#createUpdateProductAmountField").val(),
+                brand: $("#createUpdateProductBrandField").val(),
+                hot: productHot
+            },
+            success: (product) =>{
+                $("#createUpdateProductSuccess strong").text("product created succesfuly!")
+                $("#createUpdateProductSuccess").prop("hidden",false);
+                setTimeout(() => {
+                    $("#createUpdateProductSuccess").prop("hidden",true);
+                },3000);
+                resetCreateProductFields();
+                socket.emit('add product',product);//sends message so the server will send everyone about the product
+
+            },
+            error: () =>{
+                $("#createUpdateProductError").text("An error occurred while trying to create the product");
+                $("#createUpdateProductAlert").prop("hidden",false);
+                setTimeout(() => {
+                    $("#createUpdateProductAlert").prop("hidden",true);
+                },3000);
+            }
+        })
+    }
+
+    function updateProduct(){
+        var productHot = $("#createUpdateProductHotField").val();
+        if(productHot === "0" || productHot === "No"){
+            productHot = false;
+        }
+        else
+            productHot = true;
+        var image;
+        if($("#createUpdateProductImageField").val() === "0"){
+            image = "";
+        }
+        else{
+            image ="public/images/" + $("#createUpdateProductImageField").val();
+        }
+        $.ajax({//update product
+            url: "/adminPage/updateProduct/" + $("#createUpdateProductCategoryField").val() + "/" + $("#createUpdateProductSelectName").val().split("Id:")[1],
+            type: "POST",
+            data: { 
+                newName: $("#createUpdateProductNameField").val(),
+                newId: $("#createUpdateProductIdField").val(),
+                newColor: $("#createUpdateProductColorField").val(),
+                newSize: $("#createUpdateProductSizeField").val(),
+                newImage: image,
+                newDescription: $("#createUpdateProductDescField").val(),
+                newPrice: $("#createUpdateProductPriceField").val(),
+                newAmount: $("#createUpdateProductAmountField").val(),
+                newBrand: $("#createUpdateProductBrandField").val(),
+                newHot: productHot
+            },
+            success: () =>{
+                $("#createUpdateProductSuccess strong").text("product updated succesfuly!")
+                $("#createUpdateProductSuccess").prop("hidden",false);
+                setTimeout(() => {
+                    $("#createUpdateProductSuccess").prop("hidden",true);
+                },3000);
+                //disable product fields
+                $("#createUpdateProductForm .form-control").each(function(){
+                    $(this).prop("disabled",true);
+                });
+                $("#createUpdateProductHotField").prop("disabled",true);
+                //resets product fields including name select
+                $("#createUpdateProductSelectName").val("0");
+                $("#createUpdateProductSelectName").prop("disabled",true);
+                resetCreateProductFields();
+            },
+            error: () =>{
+                $("#createUpdateProductError").text("An error occurred while trying to update the product");
+                $("#createUpdateProductAlert").prop("hidden",false);
+                setTimeout(() => {
+                    $("#createUpdateProductAlert").prop("hidden",true);
+                },3000);
+            }
+        })
+    }
+
     //checking if name is valid
     function categoryNameValidate(){
         if($("#createUpdateCategoryNameField").val().length === 0){
@@ -526,33 +596,7 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Number is not a whole number");
             return false;
         }
-        var boolean = true;
-        //checking if a product with the same id exists
-        $.ajax({//getting all categorys
-            url: "/adminPage/getCategorys",
-            async: false,//async false because cant continue creating/updating before checking this
-            type: "GET",
-            success: function(data) {
-                data.forEach((category)=>{
-                    $.ajax({//checking for each product of the category
-                        url:"/adminPage/" + category.categoryName + "/" + $("#createUpdateProductIdField").val(),
-                        async: false,//async false because cant continue creating/updating before checking this
-                        type: "GET",
-                        success: (data) => {
-                            //if we are in update mode than need to check if found an id different than the previous id of the product
-                            if(data.id !== parseInt($("#createUpdateProductSelectName").val().split("Id:")[1])){
-                                $("#createUpdateProductError").text("Product with the same id already exists");
-                                boolean = false;//found a product with the same id
-                            }
-                        }
-                    });
-                })
-            },
-            error: function() {
-                alert("An error occurred while trying to fetch categories");
-            }
-        });
-        return boolean;
+        return true;
     }
 
     //checking if product name is valid
