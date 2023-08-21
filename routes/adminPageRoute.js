@@ -21,7 +21,7 @@ router.route('/getAllImages')
 
 //---------------------------------------------------------->
 router.route('/topUsers')
-.get(adminPageController.getTopUsersWithOrderCounts)
+.get(loginController.isAdmin,adminPageController.getTopUsersWithOrderCounts)
 router.route('/profile')
 .get( adminPageController.getUserProfile);
 router.route('/orders')
@@ -29,7 +29,7 @@ router.route('/orders')
 router.route('/allOrders')
 .get( adminPageController.getAllOrders);
 router.route('/users')
-.get( adminPageController.getAllUsernames);
+.get( loginController.isAdmin,adminPageController.getAllUsernames);
 router.route('/orders')
 .get( adminPageController.getAllOrders);
 router.route('/changePassword').post(adminPageController.changePassword);
@@ -42,25 +42,25 @@ router.route('/isCategoryExist/:categoryName')
     .get(adminPageController.isCategoryExist);
 
 router.route('/createCategory')
-    .post(adminPageController.createCategory);
+    .post(loginController.isAdmin,adminPageController.createCategory);
 
 router.route('/createProduct')
-    .post(adminPageController.createProduct);
+    .post(loginController.isAdmin,adminPageController.createProduct);
 
 router.route('/deleteProduct')
-    .delete(adminPageController.deleteProduct);
+    .delete(loginController.isAdmin,adminPageController.deleteProduct);
 
 router.route('/updateCategory/:categoryName')
-    .post(adminPageController.updateCategory);
+    .post(loginController.isAdmin,adminPageController.updateCategory);
 
 router.route('/updateProduct/:categoryName/:id')
-    .post(adminPageController.updateProduct);
+    .post(loginController.isAdmin,adminPageController.updateProduct);
 
 router.route('/addProductAmount/:id')
-    .post(adminPageController.addProductAmount);
+    .post(loginController.isAdmin,adminPageController.addProductAmount);
 
 router.route('/:categoryName')
-    .delete(adminPageController.deleteCategory)
+    .delete(loginController.isAdmin,adminPageController.deleteCategory)
     .get(adminPageController.getCategoryByName);
 
 router.route('/getCategoryDetails/:categoryName')

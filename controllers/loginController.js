@@ -14,6 +14,7 @@ const isLoggedInNav=async(req, res)=>
     if (req.session.username != null)
     {
     var isConnected=req.session.username;
+    
     res.json({isConnected});
     }
     else{
@@ -61,7 +62,6 @@ const login= async(req,res)=>
 
 const logout=async(req, res)=> {
     req.session.destroy(() => {
-      console.log("dw you almoat get it");
       res.redirect('/');
     });
   }

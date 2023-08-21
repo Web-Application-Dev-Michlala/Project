@@ -1,3 +1,4 @@
+const orderService = require('../services/order.js');
 
 const getUserPage = async (req,res) => 
 {
@@ -14,9 +15,17 @@ const getUserPage = async (req,res) =>
         res.sendFile('user.html', { root: 'public/userPage' });
     }
 
-    
+}
+
+const updateOrders=async(req,res)=>
+{
+    const newUserName=req.session.username
+    console.log("NAME IN UPDATE ORDERS "+newUserName);
+    await orderService.updateUsername(newUserName)
+    res.status(200).json({ success: true });
 }
 
 module.exports = {
     getUserPage,
+    updateOrders
 }

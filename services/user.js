@@ -68,6 +68,7 @@ const ChangeProfile = async(userName,newUserName,email,birthday)=>{
         user.birthdate=birthday;
         await user.save();
         console.log("bd:"+user.birthdate);
+       
         return user;
     } catch (err) {
         console.error(err);

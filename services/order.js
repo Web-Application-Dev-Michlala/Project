@@ -1,5 +1,6 @@
 const orderModel = require('../models/order.js');
 const userModel = require('../models/users.js');
+const userService=require('../services/user.js')
 
 const createOrder = async (date, price, userName,products) => {
     try {
@@ -118,6 +119,21 @@ const groupOrders = async()=> {
       return error.message;
     }
   };
+
+  const updateUsername = async(newUserName)=>
+  {
+    const user = await userService.getUserById(newUserName);
+    const username=user.userName
+    console.log('USER IN UPDATE SERVICE: '+username)
+    if(user!=null&&user.purchaseHistory!=null&&user.purchaseHistory.length!=0){
+    for (let i = 0; i < user.purchaseHistory.length; i++) {
+        const orderID = user.purchaseHistory[i];
+        const order = await orderModel.findById(orderID);
+        order.userName = newUserName;
+        await order.save();
+      }
+    }
+  }
 module.exports = {
     createOrder,
     getOrderById,
@@ -125,5 +141,6 @@ module.exports = {
     removeProductFromOrder,
     getAllOrdersByUserName,
     getAllOrders,
-    groupOrders
+    groupOrders,
+    updateUsername
 }

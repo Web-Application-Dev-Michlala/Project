@@ -174,6 +174,7 @@ const isProductExistUpdate = async(req,res) => {
 const getUserProfile = async(req, res) => {
     const user = req.session.username; 
     const schemauser = await userService.getUserById(user);
+    
     res.json({schemauser});
     
   };
@@ -249,16 +250,21 @@ const getAllOrdersByUserName = async(req, res) => {
 
     const ChangeProfile = async(req,res) => {
         try {
-           
-            const username = req.session.username;
             const newUserName=req.body.newName;
-            console.log("adming page controoler username: "+req.body.username)
+           const check= await userService.getUserById(newUserName)
+           
+           if(check!=null)
+                res.status(200).json({ success: false });
+            else{
+            const username = req.session.username;
             req.session.username=newUserName;
             const email=req.body.newEmail;
             const birthday=req.body.newBirthday;
             await userService.ChangeProfile(username,newUserName,email,birthday);
-            res.json({ success: true });
-           
+          
+            req.session.username=newUserName;
+            res.status(200).json({ success: true });
+            }
         } catch (error) {
           console.error('Error in changing the personal details:', error);
           throw error;
