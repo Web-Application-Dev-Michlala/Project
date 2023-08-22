@@ -291,7 +291,8 @@ $(document).ready(function(){
 
     $("#addProductAmountButton").click(function(){//reset add product amount offcanvas
         $("#addAmountCategoryField").val("0");
-        $("#addAmountCategoryField").change()
+        $("#addAmountCategoryField").change();
+        getCategories();
     })
 
     $("#addAmountCategoryField").change(function() {//change category name select of addAmount
@@ -485,7 +486,7 @@ $(document).ready(function(){
                 },3000);
                 resetCreateProductFields();
                 socket.emit('add product',product);//sends message so the server will send everyone about the product
-
+            
             },
             error: () =>{
                 $("#createUpdateProductError").text("An error occurred while trying to create the product");
@@ -539,6 +540,7 @@ $(document).ready(function(){
                 $("#createUpdateProductHotField").prop("disabled",true);
                 //resets product fields including name select
                 $("#createUpdateProductSelectName").val("0");
+                $("#createUpdateProductSelectName").change();
                 $("#createUpdateProductSelectName").prop("disabled",true);
                 resetCreateProductFields();
             },
