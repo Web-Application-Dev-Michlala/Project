@@ -1,7 +1,5 @@
 
-//------------------------------------------------------------------------------------------------------------------------------------->
-
-
+//--------------------------------------------------------------------------------------------------------------->Page Load
 $(document).ready(function(){
   
   $.ajax
@@ -42,11 +40,8 @@ $(document).ready(function(){
         alert("An error occurred while trying to fetch personal information");
     }
 })
-  
- 
-  
 })
-
+//--------------------------------------------------------------------------------------------------------------->Orders
 $(document).ready(function () {
   $.ajax({
     url: "/adminPage/orders",
@@ -105,22 +100,7 @@ $(document).ready(function () {
 });
    
 });
-$(document).ready(function() {
-    $("#submit").click(function(event) {
-       event.preventDefault();
-       const oldPassword = $("#exampleInputPassword1").val();
-       const newPassword = $("#exampleInputPassword2").val();
-       changePassword(oldPassword,newPassword);
-       sessionStorage.removeItem('categories');
-       $.ajax({
-        url:'/login/logout',
-        type:'GET',
-        success: function(){window.location='/login'}
-       })
-      
-
-})});
-  
+//--------------------------------------------------------------------------------------------------------------->Change Profile Details
 
 $(document).ready(function(){
   var cvs = document.getElementById("canvas");
@@ -150,11 +130,11 @@ $(document).ready(function(){
     init();
 
   })
-function ChangeProfile(newName, newEmail, newBirthday) {
-  $.ajax({//check for items validity
+function ChangeProfile(newName, newEmail, newBirthday) {//Change profile details
+  $.ajax({
     contentType: 'application/json',
     data: JSON.stringify({ newName, newEmail, newBirthday }),
-    url:'/adminPage/ChangeProfile',//validates items in purchase
+    url:'/adminPage/ChangeProfile',
     type: 'POST',
     success:function(response)
     {
@@ -162,7 +142,7 @@ function ChangeProfile(newName, newEmail, newBirthday) {
         clearInterval(loadAnimation);
         ctx.clearRect(0, 0, ca, ch);
         console.log('error')
-        alert('Change Profile failed.Error!!');
+        alert('Change Profile failed. Username already taken');
       }
       else
       {
@@ -209,34 +189,9 @@ function init(){//creates loading animation
      ctx.closePath();   
       
   }, 6);
-  
 }
-
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//----------------------------------------------------------------
-
-
-
-
-
-
-  //-------------------------------------------------------------------------->***************************************************************************************************************
-  
-
+//--------------------------------------------------------------------------------------------------------------->Change Password
 function changePassword(oldPassword, newPassword) {
   fetch('/adminPage/changePassword', {
     method: 'POST',
@@ -262,7 +217,21 @@ function changePassword(oldPassword, newPassword) {
   alert('An error occurred while changing the password. Please try again later.');
 });
 }
+$(document).ready(function() {
+  $("#submit").click(function(event) {
+     event.preventDefault();
+     const oldPassword = $("#exampleInputPassword1").val();
+     const newPassword = $("#exampleInputPassword2").val();
+     changePassword(oldPassword,newPassword);
+     sessionStorage.removeItem('categories');
+     $.ajax({
+      url:'/login/logout',
+      type:'GET',
+      success: function(){window.location='/login'}
+     })
+    
 
-//--------------------------------------------------------------------------------------------------------------->
+})});
+
 
 

@@ -1,60 +1,5 @@
 
-//------------------------------------------------------------------------------------------------------------------------------------->
-$(document).ready(function () {
-
-   
-});
-$(document).ready(function(){
-  let categories;
-  let orders;
-        
-  const fetchCategories = $.ajax({
-    url: "/adminPage/getCategorys",
-    type: "GET",
-    success: function (response) {
-      categories = response;
-    },
-    error: function () {
-      console.error("An error occurred while trying to fetch categories");
-    }
-  });
-
-
-  const fetchOrders = $.ajax({
-    url: "/adminPage/allOrders",
-    type: "GET",
-    success: function (response) {
-      orders = response.orders;
-    },
-    error: function () {
-      console.error("An error occurred while trying to fetch orders");
-    }
-  })
-
-  $.when(fetchCategories, fetchOrders).done( () => {
-    const categoryProfits = {};
-
-    // Calculate total profits for each category
-    orders.forEach(order => {
-      order.products.forEach(product => {
-        const category = categories.find(cat => cat.categoryName === product.category);
-        if (category) {
-          if (!categoryProfits[category.categoryName]) {
-            categoryProfits[category.categoryName] = 0;
-          }
-          categoryProfits[category.categoryName] += parseFloat(product.price.$numberDecimal);
-        }
-      });
-    });
-
-    const categoryData = Object.keys(categoryProfits).map(categoryName => ({
-    category: categoryName,
-    totalProfit: categoryProfits[categoryName]
-    }));
-
-    generathGraph(categoryData);
-  });
-});
+//--------------------------------------------------------------------------------------------------------------->Page
 $(document).ready(function(){
   $.ajax
   ({
@@ -100,24 +45,8 @@ $(document).ready(function(){
   
   
 })
-$(document).ready(function() {
-  $.ajax({
-    url: '/adminPage/topUsers',
-    method: 'GET',
-    dataType: 'json',
-    success: function(data) {
-      const pieData = data.map(([username, orderCount]) => ({
-        username: username,
-        totalPurchases: orderCount
-      }));
-      
-      generateGraph3(pieData);
-    },
-    error: function(xhr, status, error) {
-      console.error('An error occurred:', error);
-    }
-  });
-})
+
+//--------------------------------------------------------------------------------------------------------------->Orders
 $(document).ready(function () {
   $.ajax({
     url: "/adminPage/orders",
@@ -192,23 +121,7 @@ $(document).ready(function () {
       }
     });
 });
-$(document).ready(function() {
-    $("#submit").click(function(event) {
-       event.preventDefault();
-       const oldPassword = $("#exampleInputPassword1").val();
-       const newPassword = $("#exampleInputPassword2").val();
-       changePassword(oldPassword,newPassword);
-       sessionStorage.removeItem('categories');
-       $.ajax({
-        url:'/login/logout',
-        type:'GET',
-        success: function(){window.location='/login'}
-       })
-})});
-  
-
-
-
+//--------------------------------------------------------------------------------------------------------------->Graphs
 function toggleGraphsTab() {
   
     var graphsTab = document.getElementById('tab5');
@@ -221,9 +134,6 @@ function toggleGraphsTab() {
         graphsLink.classList.add('active');
       }
     }
-
-
-
 function generathGraph(categoryData) {
   const width = 400;
   const height = 400;
@@ -265,8 +175,6 @@ function generathGraph(categoryData) {
     console.error('An error occurred while generating the graph:', error);
   }
 }
-
-
 function generateGraph3(userData) {
   const width = 1000; // Increase width to accommodate the legend
   const height = 400;
@@ -323,21 +231,76 @@ function generateGraph3(userData) {
     console.error('An error occurred while generating the graph:', error);
   }
 }
+$(document).ready(function() {
+  $.ajax({
+    url: '/adminPage/topUsers',
+    method: 'GET',
+    dataType: 'json',
+    success: function(data) {
+      const pieData = data.map(([username, orderCount]) => ({
+        username: username,
+        totalPurchases: orderCount
+      }));
+      
+      generateGraph3(pieData);
+    },
+    error: function(xhr, status, error) {
+      console.error('An error occurred:', error);
+    }
+  });
+})
+$(document).ready(function(){
+  let categories;
+  let orders;
+        
+  const fetchCategories = $.ajax({
+    url: "/adminPage/getCategorys",
+    type: "GET",
+    success: function (response) {
+      categories = response;
+    },
+    error: function () {
+      console.error("An error occurred while trying to fetch categories");
+    }
+  });
 
 
+  const fetchOrders = $.ajax({
+    url: "/adminPage/allOrders",
+    type: "GET",
+    success: function (response) {
+      orders = response.orders;
+    },
+    error: function () {
+      console.error("An error occurred while trying to fetch orders");
+    }
+  })
 
+  $.when(fetchCategories, fetchOrders).done( () => {
+    const categoryProfits = {};
 
+    // Calculate total profits for each category
+    orders.forEach(order => {
+      order.products.forEach(product => {
+        const category = categories.find(cat => cat.categoryName === product.category);
+        if (category) {
+          if (!categoryProfits[category.categoryName]) {
+            categoryProfits[category.categoryName] = 0;
+          }
+          categoryProfits[category.categoryName] += parseFloat(product.price.$numberDecimal);
+        }
+      });
+    });
 
-//----------------------------------------------------------------
+    const categoryData = Object.keys(categoryProfits).map(categoryName => ({
+    category: categoryName,
+    totalProfit: categoryProfits[categoryName]
+    }));
 
-
-
-
-
-
-  //-------------------------------------------------------------------------->***************************************************************************************************************
-  
-
+    generathGraph(categoryData);
+  });
+});
+//--------------------------------------------------------------------------------------------------------------->Change Password
 function changePassword(oldPassword, newPassword) {
   fetch('/adminPage/changePassword', {
     method: 'POST',
@@ -362,7 +325,20 @@ function changePassword(oldPassword, newPassword) {
   alert('An error occurred while changing the password. Please try again later.');
 });
 }
-//--------------------------------------------------------------------------------------------------------------->
+$(document).ready(function() {
+  $("#submit").click(function(event) {
+     event.preventDefault();
+     const oldPassword = $("#exampleInputPassword1").val();
+     const newPassword = $("#exampleInputPassword2").val();
+     changePassword(oldPassword,newPassword);
+     sessionStorage.removeItem('categories');
+     $.ajax({
+      url:'/login/logout',
+      type:'GET',
+      success: function(){window.location='/login'}
+     })
+})});
+//--------------------------------------------------------------------------------------------------------------->Change Profile Details
 $(document).ready(function(){
   var cvs = document.getElementById("canvas");
   ctx = cvs.getContext("2d");
@@ -392,18 +368,19 @@ $(document).ready(function(){
 
   })
 function ChangeProfile(newName, newEmail, newBirthday) {
-  $.ajax({//check for items validity
+  $.ajax({//Change profile and move all orders to this user
     contentType: 'application/json',
     data: JSON.stringify({ newName, newEmail, newBirthday }),
-    url:'/adminPage/ChangeProfile',//validates items in purchase
+    url:'/adminPage/ChangeProfile',
     type: 'POST',
     success:function(response)
     {
-      if (response.success===false) {
+      if (response.success===false) 
+      {
         clearInterval(loadAnimation);
         ctx.clearRect(0, 0, ca, ch);
         console.log('error')
-        alert('Change Profile failed.Error!!');
+        alert('Change Profile failed. username already taken');
       }
       else 
       {
