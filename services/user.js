@@ -1,5 +1,5 @@
 const usersModel = require('../models/users.js');
-const orderModel = require('../models/order.js');
+const orderService = require('./order.js');
 
 const createUser = async( userName,password,birthdate,email,isAdmin=false,purchaseHistory = []) => {
     try {
@@ -62,6 +62,7 @@ const ChangeProfile = async(userName,newUserName,email,birthday)=>{
         user.userName=newUserName;
         user.email=email;
         user.birthdate=birthday;
+        await orderService.updateUsername2(userName,newUserName);
         await user.save();
        
         return user;

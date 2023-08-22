@@ -405,32 +405,15 @@ function ChangeProfile(newName, newEmail, newBirthday) {
         console.log('error')
         alert('Change Profile failed.Error!!');
       }
-      else{
+      else 
+      {
         $("#changeDetailsDiv").toggleClass("d-none");
         $("#detailsDiv").toggleClass("d-none");
-        const oldUserName=response.oldUserName;
-        $.ajax({
-          contentType: 'application/json',
-          url:'/users/updateOrders',
-          type: 'POST',
-          data: JSON.stringify({oldUserName}),
-          success: function(){ 
-            clearInterval(loadAnimation);
-            ctx.clearRect(0, 0, ca, ch);
-            alert('Profile changed successfully!');
-            location.reload();
-        },
-        error:function()
-        {
-          clearInterval(loadAnimation);
-          ctx.clearRect(0, 0, ca, ch);
-          console.log('error');
-          alert('An error occurred while changing the details');
-        }
-        })
-        
-       
-      } 
+        clearInterval(loadAnimation);
+        ctx.clearRect(0, 0, ca, ch);
+        alert('Profile changed successfully!');
+        location.reload();
+      }
     },
     error:function()
     {

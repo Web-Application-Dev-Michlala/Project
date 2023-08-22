@@ -269,8 +269,8 @@ const getAllOrdersByUserName = async(req, res) => {
             const email=req.body.newEmail;
             const birthday=req.body.newBirthday;
             await userService.ChangeProfile(username,newUserName,email,birthday);
-          
-            req.session.username=newUserName;
+            //req.session.username=newUserName;
+            //await orderService.updateUsername2(oldUserName,newUserName)
             res.status(200).json({ success: true ,oldUserName:username});
             }
         } catch (error) {
