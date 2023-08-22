@@ -77,75 +77,6 @@ $(document).ready(function()
                 })
             });
 
-            //searching products according to the color filter
-            $("#color_submit").click(function(){
-                var colorPicks = [];
-                $("#color_search input").each(function(){//adds all the ticked options of colors
-                    if($(this).is(':checked')){//if the "checked" attribute is true
-                        colorPicks.push($(this).attr('id'));
-                    }
-                })
-                if(colorPicks.length === 0){
-                    alert("No colors were picked");
-                    return;
-                }
-                $.ajax({//gets all products that match any of the colors
-                    url:"/category/getProductsByColors/" + categoryName + "/" + colorPicks,
-                    success: function(data){
-                        curr_products = data;
-                        $("#oldestSorter").click();
-                    },
-                    error: () =>{alert("No products were found");} 
-                })
-            })
-
-            //searching products according to the size filter
-            $("#size_submit").click(function(){
-                var sizePicks = [];
-                $("#size_search input").each(function(){//adds all the ticked options of sizes
-                    if($(this).is(':checked')){//if the "checked" attribute is true
-                        sizePicks.push(parseFloat($(this).attr('id').split(' ')[0]));
-                    }
-                })
-                if(sizePicks.length === 0){
-                    alert("No sizes were picked");
-                    return;
-                }
-                $.ajax({//gets all products that match any of the sizes
-                    url:"/category/getProductsBySizes/" + categoryName + "/" + sizePicks,
-                    success: function(data){
-                        curr_products = data;
-                        $("#oldestSorter").click();
-                    },
-                    error: () =>{alert("No products were found");} 
-                })
-            })
-
-            //searching products according to the brand filter
-            $("#brand_submit").click(function(){
-                var brandPicks = [];
-                $("#brand_search input").each(function(){//adds all the ticked options of brand
-                    if($(this).is(':checked')){//if the "checked" attribute is true
-                        brandPicks.push($(this).attr('id'));
-                    }
-                })
-                if(brandPicks.length === 0){
-                    alert("No brands were picked");
-                    return;
-                }
-                $.ajax({//gets all products that match any of the brands
-                    url:"/category/getProductsByBrands/" + categoryName + "/" + brandPicks,
-                    success: function(data){
-                        curr_products = data;
-                        $("#oldestSorter").click();
-                    },
-                    error: () =>{alert("No products were found");}
-                })
-            })
-
-            
-
-
             //searching products according to the price filter
             $("#price_submit").click(function(){
                 var priceRangePicks = curr_price_range;
@@ -537,6 +468,9 @@ function addProduct(products,i,j){
     '<div class="card-body">' +
     '<h5 class="card-title">' + products[j].name + '</h5>' +
     '<p class="card-text">Id: ' + products[j].id + '</p>' +
+    '<p class="card-text">Color: ' + products[j].color + '</p>' +
+    '<p class="card-text">Size: ' + products[j].size.$numberDecimal + ' Inch</p>' +
+    '<p class="card-text">Brand: ' + products[j].brand + '</p>' +
     '<p class="card-text">' + products[j].description + '</p>' +
     '<p class="card-text">Price: ' + products[j].price.$numberDecimal + '</p>' +
     '</div></div></div>')
@@ -571,6 +505,27 @@ function createColors(){
     $("#color_search").clone().appendTo("#advanced2_color_search");
     //add color search button
     $("#color_search").append('<button type="button" class="btn btn-primary btn-sm" id="color_submit">Search</button>')
+    //searching products according to the color filter
+    $("#color_submit").click(function(){
+        var colorPicks = [];
+        $("#color_search input").each(function(){//adds all the ticked options of colors
+            if($(this).is(':checked')){//if the "checked" attribute is true
+                colorPicks.push($(this).attr('id'));
+            }
+        })
+        if(colorPicks.length === 0){
+            alert("No colors were picked");
+            return;
+        }
+        $.ajax({//gets all products that match any of the colors
+            url:"/category/getProductsByColors/" + categoryName + "/" + colorPicks,
+            success: function(data){
+                curr_products = data;
+                $("#oldestSorter").click();
+            },
+            error: () =>{alert("No products were found");} 
+        })
+    })
 }
 
 //creates size filters
@@ -587,6 +542,27 @@ function createSizes(){
     $("#size_search").clone().appendTo("#advanced1_size_search");
     //add size search button
     $("#size_search").append('<button type="button" class="btn btn-primary btn-sm" id="size_submit">Search</button>')
+    //searching products according to the size filter
+    $("#size_submit").click(function(){
+        var sizePicks = [];
+        $("#size_search input").each(function(){//adds all the ticked options of sizes
+            if($(this).is(':checked')){//if the "checked" attribute is true
+                sizePicks.push(parseFloat($(this).attr('id').split(' ')[0]));
+            }
+        })
+        if(sizePicks.length === 0){
+            alert("No sizes were picked");
+            return;
+        }
+        $.ajax({//gets all products that match any of the sizes
+            url:"/category/getProductsBySizes/" + categoryName + "/" + sizePicks,
+            success: function(data){
+                curr_products = data;
+                $("#oldestSorter").click();
+            },
+            error: () =>{alert("No products were found");} 
+        })
+    })
 }
 
 //creates brand filters
@@ -604,6 +580,27 @@ function createBrands(){
     $("#brand_search").clone().appendTo("#advanced2_brand_search");
     //add brand search button
     $("#brand_search").append('<button type="button" class="btn btn-primary btn-sm" id="brand_submit">Search</button>')
+    //searching products according to the brand filter
+    $("#brand_submit").click(function(){
+        var brandPicks = [];
+        $("#brand_search input").each(function(){//adds all the ticked options of brand
+            if($(this).is(':checked')){//if the "checked" attribute is true
+                brandPicks.push($(this).attr('id'));
+            }
+        })
+        if(brandPicks.length === 0){
+            alert("No brands were picked");
+            return;
+        }
+        $.ajax({//gets all products that match any of the brands
+            url:"/category/getProductsByBrands/" + categoryName + "/" + brandPicks,
+            success: function(data){
+                curr_products = data;
+                $("#oldestSorter").click();
+            },
+            error: () =>{alert("No products were found");}
+        })
+    })
 }
 
 //creates price range
