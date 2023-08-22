@@ -20,8 +20,8 @@ const getUserPage = async (req,res) =>
 const updateOrders=async(req,res)=>
 {
     const newUserName=req.session.username
-    console.log("NAME IN UPDATE ORDERS "+newUserName);
-    await orderService.updateUsername(newUserName)
+    const oldUserName=req.body.oldUserName
+    await orderService.updateUsername2(oldUserName,newUserName)
     res.status(200).json({ success: true });
 }
 

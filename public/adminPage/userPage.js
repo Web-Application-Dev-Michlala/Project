@@ -94,25 +94,10 @@ $(document).ready(function(){
         alert("An error occurred while trying to fetch personal information");
     }
 })
-  const changeDetailsButton = document.getElementById('ChangePersonalDetails');
-  const savePersonalInfoButton = $("#SavePersonalInfo");
 
-  changeDetailsButton.addEventListener('click', function(event) {
-    
-    $("#changeDetailsDiv").toggleClass("d-none");
-    $("#detailsDiv").toggleClass("d-none");
-  });
-  savePersonalInfoButton.on("click",function(event) {
-    event.preventDefault();
-    const newUerName = $("#newUserName").val();
-    const newEmail = $("#newEmail").val();
-    const newBirthday = $("#newBirthday").val();
-    if(newUerName===""||newEmail===""||newBirthday==="")
-      alert('please enter details');
-    ChangeProfile(newUerName,newEmail,newBirthday);
     
 
-  })
+  
   
 })
 $(document).ready(function() {
@@ -221,46 +206,8 @@ $(document).ready(function() {
        })
 })});
   
-function ChangeProfile(newName, newEmail, newBirthday) {
-  $.ajax({//check for items validity
-    contentType: 'application/json',
-    data: JSON.stringify({ newName, newEmail, newBirthday }),
-    url:'/adminPage/ChangeProfile',//validates items in purchase
-    type: 'POST',
-    success:function(response)
-    {
-      if (response.success===false) {
-        console.log('error')
-        alert('Change Profile failed.Error!!');
-      }
-      else{
-        $("#changeDetailsDiv").toggleClass("d-none");
-        $("#detailsDiv").toggleClass("d-none");
-        $.ajax({
-          url:'/users/updateOrders',
-          type: 'GET',
-          success: function(){ 
-            alert('Profile changed successfully!');
-            location.reload();
-        },
-        error:function()
-        {
-          console.log('error');
-          alert('An error occurred while changing the details');
-        }
-        })
-        
-       
-      } 
-    },
-    error:function()
-    {
-      console.log('error');
-      alert('An error occurred while changing the details');
-    }
-})
 
-}
+
 
 function toggleGraphsTab() {
   
@@ -416,5 +363,112 @@ function changePassword(oldPassword, newPassword) {
 });
 }
 //--------------------------------------------------------------------------------------------------------------->
+$(document).ready(function(){
+  var cvs = document.getElementById("canvas");
+  ctx = cvs.getContext("2d");
+  sA = (Math.PI / 180) * 45;
+  sE = (Math.PI / 180) * 90;
+  ca = canvas.width;
+  ch = canvas.height;
+  var loadAnimation
+  const changeDetailsButton = document.getElementById('ChangePersonalDetails');
+  const savePersonalInfoButton = $("#SavePersonalInfo");
 
+  changeDetailsButton.addEventListener('click', function(event) {
+    
+    $("#changeDetailsDiv").toggleClass("d-none");
+    $("#detailsDiv").toggleClass("d-none");
+  });
+  savePersonalInfoButton.on("click",function(event) {
+    event.preventDefault();
+    const newUerName = $("#newUserName").val();
+    const newEmail = $("#newEmail").val();
+    const newBirthday = $("#newBirthday").val();
+    if(newUerName===""||newEmail===""||newBirthday==="")
+      alert('please enter details');
+    
+    ChangeProfile(newUerName,newEmail,newBirthday);
+    init();
+
+  })
+function ChangeProfile(newName, newEmail, newBirthday) {
+  $.ajax({//check for items validity
+    contentType: 'application/json',
+    data: JSON.stringify({ newName, newEmail, newBirthday }),
+    url:'/adminPage/ChangeProfile',//validates items in purchase
+    type: 'POST',
+    success:function(response)
+    {
+      if (response.success===false) {
+        clearInterval(loadAnimation);
+        ctx.clearRect(0, 0, ca, ch);
+        console.log('error')
+        alert('Change Profile failed.Error!!');
+      }
+      else{
+        $("#changeDetailsDiv").toggleClass("d-none");
+        $("#detailsDiv").toggleClass("d-none");
+        const oldUserName=response.oldUserName;
+        $.ajax({
+          contentType: 'application/json',
+          url:'/users/updateOrders',
+          type: 'POST',
+          data: JSON.stringify({oldUserName}),
+          success: function(){ 
+            clearInterval(loadAnimation);
+            ctx.clearRect(0, 0, ca, ch);
+            alert('Profile changed successfully!');
+            location.reload();
+        },
+        error:function()
+        {
+          clearInterval(loadAnimation);
+          ctx.clearRect(0, 0, ca, ch);
+          console.log('error');
+          alert('An error occurred while changing the details');
+        }
+        })
+        
+       
+      } 
+    },
+    error:function()
+    {
+      console.log('error');
+      alert('An error occurred while changing the details');
+    }
+})
+
+}
+function init(){//creates loading animation     
+    
+  loadAnimation= setInterval(function(){
+      
+     ctx.clearRect(0, 0, ca, ch);
+     ctx.lineWidth = 15;
+    
+     ctx.beginPath();
+     ctx.strokeStyle = "#ffffff";     
+     ctx.shadowColor = "#eeeeee";
+     ctx.shadowOffsetX = 2;
+     ctx.shadowOffsetY = 2;
+     ctx.shadowBlur = 5;
+     ctx.arc(50, 50, 25, 0, 360, false);
+     ctx.stroke();
+     ctx.closePath();
+      
+     sE += 0.05; 
+     sA += 0.05;
+              
+     ctx.beginPath();
+     ctx.strokeStyle = "#aaaaaa";
+     ctx.arc(50, 50, 25, sA, sE, false);
+     ctx.stroke();
+     ctx.closePath();   
+      
+  }, 6);
+  
+}
+
+})
 

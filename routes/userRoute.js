@@ -7,5 +7,5 @@ router.route('/')
     .get(loginController.isLoggedIn,userController.getUserPage);
 
     router.route('/updateOrders') 
-    .get(loginController.isLoggedIn,userController.updateOrders);
+    .post(loginController.isLoggedIn,userController.updateOrders);
 module.exports = router;

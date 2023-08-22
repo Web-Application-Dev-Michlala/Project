@@ -271,7 +271,7 @@ const getAllOrdersByUserName = async(req, res) => {
             await userService.ChangeProfile(username,newUserName,email,birthday);
           
             req.session.username=newUserName;
-            res.status(200).json({ success: true });
+            res.status(200).json({ success: true ,oldUserName:username});
             }
         } catch (error) {
           console.error('Error in changing the personal details:', error);

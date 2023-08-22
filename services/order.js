@@ -120,20 +120,21 @@ const groupOrders = async()=> {
     }
   };
 
-  const updateUsername = async(newUserName)=>
-  {
-    const user = await userService.getUserById(newUserName);
-    const username=user.userName
-    console.log('USER IN UPDATE SERVICE: '+username)
-    if(user!=null&&user.purchaseHistory!=null&&user.purchaseHistory.length!=0){
-    for (let i = 0; i < user.purchaseHistory.length; i++) {
-        const orderID = user.purchaseHistory[i];
-        const order = await orderModel.findById(orderID);
-        order.userName = newUserName;
-        await order.save();
-      }
+  const updateUsername2 =async(oldUserName,newUserName)=>
+  {  
+        orders= await getAllOrdersByUserName(oldUserName);
+        if(orders!=null){
+         await Promise.all(orders.map(async (order) => {
+             order.userName = newUserName;
+            await order.save();
+        }));
     }
   }
+
+
+
+
+
 module.exports = {
     createOrder,
     getOrderById,
@@ -142,5 +143,5 @@ module.exports = {
     getAllOrdersByUserName,
     getAllOrders,
     groupOrders,
-    updateUsername
+    updateUsername2
 }

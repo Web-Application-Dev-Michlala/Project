@@ -56,18 +56,13 @@ const ChangeProfile = async(userName,newUserName,email,birthday)=>{
     try {
         const user = await usersModel.findOne({ userName });
         if (!user) {
-            console.error(`User with this username:${userName} not found`);
+           console.error(`User with this username:${userName} not found`);
             return null;
         }
         user.userName=newUserName;
         user.email=email;
-        console.log("bd:"+user.email);
-
-
-        console.log("bd:"+user.birthdate);
         user.birthdate=birthday;
         await user.save();
-        console.log("bd:"+user.birthdate);
        
         return user;
     } catch (err) {
