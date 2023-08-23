@@ -2,6 +2,7 @@ const categoryService = require("../services/category");
 const productService = require("../services/product");
 const userService=require('../services/user')
 const orderService = require('../services/order.js');
+const facebookService= require('../services/facebookApi')
 const path = require('path');
 const fs = require('fs');
 
@@ -311,7 +312,17 @@ const getTopUsersWithOrderCounts = async (req, res) => {
     res.status(500).json({ error: 'An error occurred while processing data' });
   }
 };
-
+const facebookPost=async (req, res) => {
+    const message=req.body.message
+    const image=req.body.image
+    const endImage=req.body.endImage
+    console.log("message is "+message+"image link "+image)
+   const check = await facebookService.postToFb(message,image,endImage);
+   if(check)
+    res.json({success:true})
+    else
+    res.json({success:false})
+}
 
 
 module.exports = 
@@ -341,5 +352,6 @@ module.exports =
     getTopUsersWithOrderCounts,
     getAllImages,
     isProductExistCreate,
-    isProductExistUpdate
+    isProductExistUpdate,
+    facebookPost
 }

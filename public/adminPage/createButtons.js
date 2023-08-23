@@ -458,9 +458,11 @@ $(document).ready(function(){
         var image;
         if($("#createUpdateProductImageField").val() === "0"){
             image = "";
+            endImage="";
         }
         else{
             image ="public/images/" + $("#createUpdateProductImageField").val();
+            endImage=$("#createUpdateProductImageField").val();
         }
         $.ajax({//create product
             url: "/adminPage/createProduct",
@@ -489,7 +491,8 @@ $(document).ready(function(){
                 //------------------------------------------------------------------------------------->
                 const name=product.name;
                 const price=product.price
-                postToFacebook(name,price);
+                const category=product.category;
+                postToFacebook(name,price,category,image,endImage);
                 socket.emit('add product',product);//sends message so the server will send everyone about the product
            
             
@@ -822,28 +825,22 @@ $(document).ready(function(){
     }
 
 
-    function postToFacebook(name, price) {
-        const accessToken = 'EAAJwR1ZAZBJ2oBOZB4lXRGWhMn0iUZCbdJ1JdQtWmVPYGTTZANdPcpixrJycc0659iXl5vfuzPYVIoCmn28Sjra7rfEKdPrPY7TtJUL4cRRkGnD3LoYSes4tsvwAvfyZCv6RkXb4WVyRI20fatk075OeZCywSs3vXZAOwzt751HZCUch6791ZCDvqY1Llwfor2jKvLRse9MUJhh8XAkOgrMEEdOvkZD';
-        const postMessage = `Attention everyone who likes company ${name} televisions, their merchandise is going to sell out 
-        and its now in only ${price.$numberDecimal}`;
-        const pageId = "100885143063120";
-        const apiUrl = 'https://graph.facebook.com/v17.0/100885143063120/feed';
-    
-        const postData = new URLSearchParams({
-            message: postMessage,
-            access_token: accessToken
-        });
-
-    
-        fetch(apiUrl, {
-            method: "POST",
-            body: postData
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("Post successfully sent!");
-        })
-        .catch((error) => {
-            console.log("Post request failed. Error:", error);
-        });
+    function postToFacebook(name,price,category,image,endImage) {
+        
+        const postMessage = `Attention everyone, Introducing ${name} - the latest must-have for anyone looking for ${category}, and it's in only ${price.$numberDecimal}`;
+        $.ajax({
+            url:'/adminPage/facebookPost',
+            method:'POST',
+            data: ({message:postMessage,image:image,endImage:endImage}),
+        success:function(res)
+        {
+        if(res.success)
+            console.log('post to fb complete')
+        else
+            console.log('post to fb incomplete')
+        },
+        error:function(){
+            console.log('error in fb posting')
+        }
+    })
     }

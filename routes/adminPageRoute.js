@@ -32,6 +32,8 @@ router.route('/users')
 .get( loginController.isAdmin,adminPageController.getAllUsernames);
 router.route('/orders')
 .get( adminPageController.getAllOrders);
+router.route('/facebookPost')
+    .post(adminPageController.facebookPost)
 router.route('/changePassword').post(adminPageController.changePassword);
 router.route('/ChangeProfile').post(adminPageController.ChangeProfile,loginController.logout);
 
