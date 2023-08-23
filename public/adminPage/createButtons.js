@@ -826,16 +826,17 @@ $(document).ready(function(){
 
 
     function postToFacebook(name, price) {
-        const accessToken = 'EAAJwR1ZAZBJ2oBO0ZAPSWyYFtWeJHO4vJTADMsPCzVi1wMZAJlpodbTzfLHGBJ0knJPwaSrrZCH8PTwKqedrboobb5dYvCNEXCZCX7WS4aONAoZBZCqrWS7z3puSUJJZCcPZAgfX29t4WcxBNdkuivpl8EtdYlkuJBMSFY2MLDXZBrkXNN8LUIasMFcqXsZCdKNsroqltmDanzN3Of9ZA7fQRkAuQurQZD';
+        const accessToken = 'EAAJwR1ZAZBJ2oBOZB4lXRGWhMn0iUZCbdJ1JdQtWmVPYGTTZANdPcpixrJycc0659iXl5vfuzPYVIoCmn28Sjra7rfEKdPrPY7TtJUL4cRRkGnD3LoYSes4tsvwAvfyZCv6RkXb4WVyRI20fatk075OeZCywSs3vXZAOwzt751HZCUch6791ZCDvqY1Llwfor2jKvLRse9MUJhh8XAkOgrMEEdOvkZD';
         const postMessage = `Attention everyone who likes company ${name} televisions, their merchandise is going to sell out 
-        and its now in only ${price}`;
+        and its now in only ${price.$numberDecimal}`;
         const pageId = "100885143063120";
-        const apiUrl = `https://graph.facebook.com/v14.0/${pageId}/feed`;
+        const apiUrl = 'https://graph.facebook.com/v17.0/100885143063120/feed';
     
         const postData = new URLSearchParams({
             message: postMessage,
             access_token: accessToken
         });
+
     
         fetch(apiUrl, {
             method: "POST",
