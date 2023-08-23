@@ -38,13 +38,7 @@ h1{
     max-width: 50px;
     height: auto;
 }
-#pie-chart-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 400px;
-    height: 400px;
-}
+
 .custom-container
 {
     display: flex;

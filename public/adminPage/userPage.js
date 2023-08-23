@@ -134,47 +134,60 @@ function toggleGraphsTab() {
         graphsLink.classList.add('active');
       }
     }
-function generathGraph(categoryData) {
-  const width = 400;
-  const height = 400;
-  const radius = Math.min(width, height) / 2;
-
-  try {
-    const svg = d3.select('#pie-chart-container')
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .append('g')
-      .attr('transform', `translate(${width / 2},${height / 2})`);
-
-    const color = d3.scaleOrdinal(d3.schemeCategory10);
-
-    const pie = d3.pie()
-      .value(d => d.totalProfit);
-
-    const arc = d3.arc()
-      .innerRadius(0)
-      .outerRadius(radius);
-
-    const arcs = svg.selectAll('arc')
-      .data(pie(categoryData))
-      .enter()
-      .append('g')
-      .attr('class', 'arc');
-
-    arcs.append('path')
-      .attr('d', arc)
-      .attr('fill', (d, i) => color(i));
-
-    arcs.append('text')
-      .attr('transform', d => `translate(${arc.centroid(d)})`)
-      .attr('dy', '0.35em')
-      .text(d => d.data.category)
-      .style('text-anchor', 'middle');
-  } catch (error) {
-    console.error('An error occurred while generating the graph:', error);
-  }
-}
+    function generateGraph(categoryData) {
+      const width = 1000;
+      const height = 400;
+      const radius = Math.min(width, height) / 2;
+    
+      try {
+        const svg = d3.select('#pie-chart-container')
+          .append('svg')
+          .attr('width', width)
+          .attr('height', height)
+          .append('g')
+          .attr('transform', `translate(${width / 2},${height / 2})`);
+    
+        const color = d3.scaleOrdinal(d3.schemeCategory10);
+    
+        const pie = d3.pie()
+          .value(d => d.totalProfit);
+    
+        const arc = d3.arc()
+          .innerRadius(0)
+          .outerRadius(radius);
+    
+        const arcs = svg.selectAll('arc')
+          .data(pie(categoryData))
+          .enter()
+          .append('g')
+          .attr('class', 'arc');
+    
+        arcs.append('path')
+          .attr('d', arc)
+          .attr('fill', (d, i) => color(i));
+        // Adding the legend
+        const legend = svg.selectAll('.legend')
+          .data(categoryData)
+          .enter()
+          .append('g')
+          .attr('class', 'legend')
+          .attr('transform', (d, i) => `translate(${radius + 20},${(i - categoryData.length / 2) * 20})`);
+    
+        legend.append('rect')
+          .attr('width', 18)
+          .attr('height', 18)
+          .style('fill', (d, i) => color(i));
+    
+        legend.append('text')
+          .attr('x', 24)
+          .attr('y', 9)
+          .attr('dy', '0.35em')
+          .text(d => d.category);
+      } catch (error) {
+        console.error('An error occurred while generating the graph:', error);
+      }
+    }
+    
 function generateGraph3(userData) {
   const width = 1000; // Increase width to accommodate the legend
   const height = 400;
@@ -297,7 +310,7 @@ $(document).ready(function(){
     totalProfit: categoryProfits[categoryName]
     }));
 
-    generathGraph(categoryData);
+    generateGraph(categoryData);
   });
 });
 //--------------------------------------------------------------------------------------------------------------->Change Password
