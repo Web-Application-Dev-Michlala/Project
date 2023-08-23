@@ -1,7 +1,7 @@
 const fs = require('fs');
 const keys = require('custom-env');
 keys.env(process.env.NODE_ENV,'./config');
-const fbkey = process.env.FACEBOOK_KEY;
+const fbkey = process.env.FACEBOOK_LONG_KEY;
 
 const postToFb = async (message, imagePath,endImage) => {
     const accessToken = fbkey;
