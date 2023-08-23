@@ -3,20 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script src="https://code.jquery.com/jquery-3.7.0.js" integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js" integrity="sha256-xLD7nhI62fcsEZK2/v8LsBcb4lG7dgULkuXoXB/j91c=" crossorigin="anonymous"></script>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.13.2/themes/base/jquery-ui.min.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-
-  <link rel="stylesheet" type="text/css" href="public/adminPage/userPage.css">
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
-
-  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
-  <script src="public/adminPage/userPage.js"></script>
   <script src="/socket.io/socket.io.js"></script>
   <script src="/public/webSocket/webSocket.js"></script>
   <link rel="stylesheet" href="/public/webSocket/webSocket.css">
+
+  <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="public/userPage/user.css">
+  <script src="public/userPage/user.js"></script>
+ 
  
 
 </head>
@@ -37,26 +36,6 @@
       </li>
       <li class="nav-item">
         <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab3" href="#tab3">Change Password</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab4" href="#tab4">Users</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" href="#" id="graphsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-          Graphs
-        </a>
-        <ul class="dropdown-menu" aria-labelledby="graphsDropdown">
-          <li><a class="dropdown-item" data-bs-toggle="tab" data-bs-target="#tab5" href="#tab5">Graph 1</a></li>
-          <li><a class="dropdown-item" data-bs-toggle="tab" data-bs-target="#tab6" href="#tab6">Graph 2</a></li>
-        
-        </ul>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab7" href="#tab7">create or update</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" data-bs-toggle="tab" data-bs-target="#tab8" href="#tab8">deletion</a>
-
       </li>
     </ul>
     <div class="tab-content mt-12">
@@ -89,7 +68,9 @@
             </div>
             <button id="SavePersonalInfo" type="submit" class="btn btn-primary short-btn">Save Changes</button>
           </form>
+          
         </div>
+        
       </div>
     </div>
       <div class="tab-pane fade" id="tab2" >
@@ -153,54 +134,8 @@
         </form>
        </p>
       </div>
-      <div class="tab-pane fade" id="tab4" >
-        <h3>List Users:</h3>
-        <section >The names of the users:
-             <ul id="userList"></ul>
-        </section>
-      </div>
-      <div class="tab-pane fade" id="tab5">
-        <h3>Profitable Category Analysis</h3>
-        <p>
-          In this comprehensive analysis, we delve into the profitability of different product categories based on the cumulative sum of orders attributed to each category. 
-          The objective is to gain a deeper understanding of which category stands out as the most profitable among all.
-        </p>
-        <p>
-          The data under consideration is a compilation of orders that have been categorized into distinct product categories. 
-          To visually represent the distribution of profitability, we have employed a pie chart, 
-          which offers a concise and intuitive visualization of the insights derived from the data.
-        </p>
-        <br><br>
-        <div id="pie-chart-container"></div>
-      </div>
-        <div class="tab-pane fade" id="tab6">
-        <h3>Top Orders By User</h3>
-        <p>
-          The pie chart illustrates the distribution of orders among our top users.
-          Each slice of the chart corresponds to a user and represents their share of the total orders.
-          The size of each slice is determined by the number of orders placed by that user.
-          </p>
-          <p>
-          The legend provides additional details, including usernames, order counts, and the percentage of total orders attributed to each user.
-          This visualization offers a clear overview of the user engagement and order patterns within our platform.
-        </p>
-        <div class="custom-container">
-              <div id="user-pie">
-              </div>
-        </div>
-      </div>
-    
-      <div class="tab-pane fade" id="tab7">
-        <h3>Create and update buttons:</h3>
-        <p><iframe src="public/adminPage/createButtons.html" width="100%" height="500px"></iframe></p>
-      </div>
-      <div class="tab-pane fade" id="tab8">
-        <h3>Delete buttons:</h3>
-        <p>
-          <iframe src="public/adminPage/deleteButtons.html" width="100%" height="500px"></iframe>
-        </p>
-      </div>
     </div>
+    
   </div>
   <div class="center">
     <canvas id="canvas" width="105" height="105">

@@ -1,5 +1,6 @@
 const orderModel = require('../models/order.js');
 const userModel = require('../models/users.js');
+const userService=require('../services/user.js')
 
 const createOrder = async (date, price, userName,products) => {
     try {
@@ -118,6 +119,22 @@ const groupOrders = async()=> {
       return error.message;
     }
   };
+
+  const updateUsername2 =async(oldUserName,newUserName)=>
+  {  
+        orders= await getAllOrdersByUserName(oldUserName);
+        if(orders!=null){
+         await Promise.all(orders.map(async (order) => {
+             order.userName = newUserName;
+            await order.save();
+        }));
+    }
+  }
+
+
+
+
+
 module.exports = {
     createOrder,
     getOrderById,
@@ -125,5 +142,6 @@ module.exports = {
     removeProductFromOrder,
     getAllOrdersByUserName,
     getAllOrders,
-    groupOrders
+    groupOrders,
+    updateUsername2
 }
