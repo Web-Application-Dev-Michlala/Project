@@ -34,7 +34,9 @@ $(document).ready(function()
         $(window).on("resize", function() {
           adjustAutocompleteDropdown();
         });
-        
+        /**
+         * Sets autocomplete in right place
+         */
         function adjustAutocompleteDropdown() {
           var searchBarWidth = searchbar.outerWidth();
           var searchBarOffset = searchbar.offset();
@@ -59,7 +61,7 @@ $(document).ready(function()
    
 
 
-    document.getElementById("searchbut").addEventListener("click", function(event) {
+    document.getElementById("searchbut").addEventListener("click", function(event) {//products search
         event.preventDefault(); // Prevent the default form submission
         var inputValue = document.getElementById("search-bar").value;
         if(prods[prodname.indexOf(inputValue)]==null)

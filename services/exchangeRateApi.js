@@ -2,7 +2,11 @@ const http = require('http');
 const keys=require('custom-env')
 keys.env(process.env.NODE_ENV,'./config')
 const rateskey=process.env.RATES_KEY;
-//uses exchangeRateApi with http GET request to get data and send it back to controller
+/**
+ * this function will use http get, to get current USD and ILS rates
+ * 
+ * @returns JSON with the USD and ILS rates in base of EUR.
+ */
 const getRates = ()  => {
     return new Promise((resolve) => {
         const apiUrl = rateskey; 

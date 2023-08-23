@@ -274,6 +274,15 @@ $("input[name='flexRadioDefault']").change(function () {//switch in reciept moda
 });
 
 //=============================================================>Functions<=============================================================
+/**
+ * Adds a product to the shopping cart HTML page
+ * 
+ * @param {String} name 
+ * @param {Number} price 
+ * @param {Number} quantity 
+ * @param {String} imageSrc 
+ * @param {String} categoryName 
+ */
 function addItemToCart(name, price, quantity, imageSrc,categoryName)//create HTML item in page
  {
   var cartItems = document.querySelector('.cart-items');
@@ -354,6 +363,10 @@ quantityPlusButtons.forEach(function (button) //add listener to the inc buttons
   });
 });
 }
+/**
+ * creates loading animation
+ * 
+ */
 function init(){//creates loading animation     
     
   loadAnimation= setInterval(function(){
@@ -383,6 +396,9 @@ function init(){//creates loading animation
   }, 6);
   
 }
+/**
+ * Updates total price of all items on page
+ */
 function updateTotalPrice() //goes over all items and sums total price
 {
   var totalPriceElement = document.getElementById('total-price');

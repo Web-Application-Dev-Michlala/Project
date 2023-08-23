@@ -130,6 +130,13 @@ $(document).ready(function(){
     init();
 
   })
+   /**
+   * updates profile details along with name
+   * 
+   * @param {String} newName 
+   * @param {Email} newEmail 
+   * @param {Date} newBirthday 
+   */
 function ChangeProfile(newName, newEmail, newBirthday) {//Change profile details
   $.ajax({
     contentType: 'application/json',
@@ -192,6 +199,12 @@ function init(){//creates loading animation
 }
 })
 //--------------------------------------------------------------------------------------------------------------->Change Password
+/**
+ * Validates old password and updates to new password
+ * 
+ * @param {String} oldPassword 
+ * @param {String} newPassword 
+ */
 function changePassword(oldPassword, newPassword) {
   fetch('/adminPage/changePassword', {
     method: 'POST',

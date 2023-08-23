@@ -2,7 +2,14 @@ const fs = require('fs');
 const keys = require('custom-env');
 keys.env(process.env.NODE_ENV,'./config');
 const fbkey = process.env.FACEBOOK_LONG_KEY;
-
+/**
+ * Posts picture and caption to facebook using graph API
+ * 
+ * @param {string} message 
+ * @param {string} imagePath 
+ * @param {string} endImage 
+ * @returns true on success false on failure
+ */
 const postToFb = async (message, imagePath,endImage) => {
     const accessToken = fbkey;
     const pageId = '100885143063120';

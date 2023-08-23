@@ -134,7 +134,12 @@ function toggleGraphsTab() {
         graphsLink.classList.add('active');
       }
     }
-    function generateGraph(categoryData) {
+/**
+ * generates a graph of most profitable category per user under 'Graph' tab
+ * 
+ * @param {Array} categoryData 
+ */
+function generateGraph(categoryData) {
       const width = 1000;
       const height = 400;
       const radius = Math.min(width, height) / 2;
@@ -186,8 +191,12 @@ function toggleGraphsTab() {
       } catch (error) {
         console.error('An error occurred while generating the graph:', error);
       }
-    }
-    
+}
+/**
+     * Generates a graph showing the top buyers(by order count)
+     * 
+     * @param {Array} userData 
+     */
 function generateGraph3(userData) {
   const width = 1000; // Increase width to accommodate the legend
   const height = 400;
@@ -314,6 +323,12 @@ $(document).ready(function(){
   });
 });
 //--------------------------------------------------------------------------------------------------------------->Change Password
+/**
+ * Validates old password and updates to new password
+ * 
+ * @param {String} oldPassword 
+ * @param {String} newPassword 
+ */
 function changePassword(oldPassword, newPassword) {
   fetch('/adminPage/changePassword', {
     method: 'POST',
@@ -380,6 +395,13 @@ $(document).ready(function(){
     init();
 
   })
+  /**
+   * updates profile details along with name
+   * 
+   * @param {String} newName 
+   * @param {Email} newEmail 
+   * @param {Date} newBirthday 
+   */
 function ChangeProfile(newName, newEmail, newBirthday) {
   $.ajax({//Change profile and move all orders to this user
     contentType: 'application/json',
