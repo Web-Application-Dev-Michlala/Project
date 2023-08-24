@@ -824,7 +824,15 @@ $(document).ready(function(){
         });
     }
 
-
+    /**
+     * Sends request to post a photo and caption through Graph API
+     * 
+     * @param {String} name product name
+     * @param {$numberDecimal} price product price
+     * @param {Category} category product's category
+     * @param {String} image image path
+     * @param {String} endImage image name
+     */
     function postToFacebook(name,price,category,image,endImage) {
         
         const postMessage = `Attention everyone, Introducing ${name} - the latest must-have for anyone looking for ${category}, and it's in only ${price.$numberDecimal}`;
@@ -837,9 +845,13 @@ $(document).ready(function(){
         if(res.success)
             console.log('post to fb complete')
         else
-            console.log('post to fb incomplete')
+        {
+            alert('something went wrong with fb post...')
+            console.log('something went wrong with fb post...')
+        }
         },
         error:function(){
+            alert('error in fb posting')
             console.log('error in fb posting')
         }
     })

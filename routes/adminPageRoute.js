@@ -23,31 +23,29 @@ router.route('/getAllImages')
 router.route('/topUsers')
 .get(loginController.isAdmin,adminPageController.getTopUsersWithOrderCounts)
 router.route('/profile')
-.get( adminPageController.getUserProfile);
+.get( loginController.isLoggedIn,adminPageController.getUserProfile);
 router.route('/orders')
-.get( adminPageController.getAllOrdersByUserName);
+.get( loginController.isLoggedIn,adminPageController.getAllOrdersByUserName);
 router.route('/allOrders')
-.get( adminPageController.getAllOrders);
+.get( loginController.isAdmin,adminPageController.getAllOrders);
 router.route('/users')
 .get( loginController.isAdmin,adminPageController.getAllUsernames);
-router.route('/orders')
-.get( adminPageController.getAllOrders);
 router.route('/facebookPost')
-    .post(adminPageController.facebookPost)
-router.route('/changePassword').post(adminPageController.changePassword);
-router.route('/ChangeProfile').post(adminPageController.ChangeProfile,loginController.logout);
+    .post(loginController.isAdmin,adminPageController.facebookPost)
+router.route('/changePassword').post(loginController.isLoggedIn,adminPageController.changePassword);
+router.route('/ChangeProfile').post(loginController.isLoggedIn,adminPageController.ChangeProfile,loginController.logout);
 
 
 //--------------------------------------------------------->
 
 router.route('/isCategoryExist/:categoryName')
-    .get(adminPageController.isCategoryExist);
+    .get(loginController.isAdmin,adminPageController.isCategoryExist);
 
 router.route('/isProductExistCreate/:Id/:name')
-    .get(adminPageController.isProductExistCreate);
+    .get(loginController.isAdmin,adminPageController.isProductExistCreate);
 
 router.route('/isProductExistUpdate/:Id/:name')
-    .post(adminPageController.isProductExistUpdate);
+    .post(loginController.isAdmin,adminPageController.isProductExistUpdate);
 
 router.route('/createCategory')
     .post(loginController.isAdmin,adminPageController.createCategory);
@@ -72,10 +70,10 @@ router.route('/:categoryName')
     .get(adminPageController.getCategoryByName);
 
 router.route('/getCategoryDetails/:categoryName')
-    .get(adminPageController.getCategoryDetails);
+    .get(loginController.isAdmin,adminPageController.getCategoryDetails);
 
 router.route('/:categoryName/:id')
-    .get(adminPageController.getProductById);
+    .get(loginController.isAdmin,adminPageController.getProductById);
 
 router.route('/:id')
     //.post(adminPageController.createProduct);

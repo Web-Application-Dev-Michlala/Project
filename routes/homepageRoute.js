@@ -31,16 +31,10 @@ router.route('/googleMaps').get((req, res) => {
 
 router.route('/googleMaps/shops')
     .get(homepageController.getAllShops);
-
-
-
-  
 router.route('/getCategorys')
     .get(homepageController.getAllCategorys)
-
 router.route('/isLoggedIn')
-.get(loginController.isLoggedInNav);
-   
+.get(loginController.isLoggedInNav); 
 router.route('/:id')
     .get(homepageController.getCategoryByName)
     .post(homepageController.getProductById)
