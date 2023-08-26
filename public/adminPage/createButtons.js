@@ -569,6 +569,10 @@ $(document).ready(function(){
             $("#createUpdateCategoryError").text("Name field is empty");
             return false;
         }
+        if(!isWord($("#createUpdateCategoryNameField").val())){
+            $("#createUpdateCategoryError").text("Name field is invalid");
+            return false;
+        }
         return true;
     }
 
@@ -615,6 +619,14 @@ $(document).ready(function(){
         if($("#createUpdateProductNameField").val().length === 0){
             $("#createUpdateProductError").text("Name field is empty");
             return false;
+        }
+        var exp = /^[a-zA-Z]+(?:\s?[a-zA-Z0-9]+)*$/ //expression for validating a name
+        //check if it starts with one or more letters '^[a-zA-Z]+' ,
+        //and optional if it has more words than checks if it has max 1 space between them and each of the words containing
+        //letters or numbers '(?:\s?[a-zA-Z0-9]+)*$' and also if it end with a letter or number 
+        if(!exp.test($("#createUpdateProductNameField").val())){
+            $("#createUpdateProductError").text("Name field is invalid");
+            return false;
         }   
         return true;
     }
@@ -632,6 +644,10 @@ $(document).ready(function(){
     function productColorValidate(){
         if($("#createUpdateProductColorField").val().length === 0){
             $("#createUpdateProductError").text("Color field is empty");
+            return false;
+        }
+        if(!isWord($("#createUpdateProductColorField").val())){
+            $("#createUpdateProductError").text("Color field is invalid");
             return false;
         }
         return true;
@@ -655,7 +671,11 @@ $(document).ready(function(){
         if($("#createUpdateProductDescField").val().length === 0){
             $("#createUpdateProductError").text("Description field is empty");
             return false;
-        }   
+        }
+        if(!isWord($("#createUpdateProductDescField").val())){
+            $("#createUpdateProductError").text("Description field is invalid");
+            return false;
+        }
         return true;
     }
 
@@ -699,7 +719,11 @@ $(document).ready(function(){
         if($("#createUpdateProductBrandField").val().length === 0){
             $("#createUpdateProductError").text("Brand field is empty");
             return false;
-        }   
+        }
+        if(!isWord($("#createUpdateProductBrandField").val())){
+            $("#createUpdateProductError").text("Brand field is invalid");
+            return false;
+        }
         return true;
     }
 
@@ -762,10 +786,17 @@ $(document).ready(function(){
         return true;
     }
 
-    //cheking if a value is a number,
+    //checking if a value is a number,
     //check if it starts with a one or more digits '\d+' ,and optional '()' for having a dot '\.' and after one or more digits '\d+'
     function isNumeric(value){
         return /^\d+(\.\d+)?$/.test(value);
+    }
+
+    //checking if a value is a valid word or words
+    //check if it starts with one or more letters '^[a-zA-Z]+' ,
+    //and optional if it has more words than checks if it has max 1 space between them '(?:\s?[a-zA-Z]+)*$' and also if it end with a letter
+    function isWord(value){
+        return /^[a-zA-Z]+(?:\s?[a-zA-Z]+)*$/.test(value);
     }
 
     //gets category and product name field
