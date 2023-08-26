@@ -30,9 +30,19 @@ const postToFb = async (message, imagePath,endImage) => {
         });
 
         const data = await response.json();
-        console.log('Post successfully sent!', data);
-        return true;
-    } catch (error) {
+        if(data.id!=null)
+        {
+            console.log('Post successfully sent!', data);
+            return true;
+        }
+        else
+        {
+            console.log('Post request failed ',data);
+            return false;
+        }
+    } 
+    catch (error) 
+    {
         console.log('Post request failed. Error:', error);
         return false;
     }
