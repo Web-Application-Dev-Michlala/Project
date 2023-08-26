@@ -468,7 +468,7 @@ function addProduct(products,i,j){
     '<div class="card-body">' +
     '<h5 class="card-title">' + products[j].name + '</h5>' +
     '<p class="card-text">Id: ' + products[j].id + '</p>' +
-    '<p class="card-text">Price: ' + products[j].price.$numberDecimal + '</p>' +
+    '<p class="card-text">Price: ' + products[j].price.$numberDecimal + '$</p>' +
     '</div></div></div>')
 }
 
