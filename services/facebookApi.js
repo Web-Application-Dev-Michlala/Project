@@ -6,8 +6,8 @@ const fbkey = process.env.FACEBOOK_LONG_KEY;
  * Posts picture and caption to facebook using graph API
  * 
  * @param {string} message 
- * @param {string} imagePath 
- * @param {string} endImage 
+ * @param {string} imagePath
+ * @param {string} endImage image name
  * @returns true on success false on failure
  */
 const postToFb = async (message, imagePath,endImage) => {
@@ -16,9 +16,9 @@ const postToFb = async (message, imagePath,endImage) => {
     const url = `https://graph.facebook.com/v17.0/${pageId}/photos`;
 
     const imageBuffer = fs.readFileSync(imagePath);
-    const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });
+    const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });//data structure to hold the image
 
-    const formData = new FormData();
+    const formData = new FormData();//represents a form.
     formData.append('access_token', accessToken);
     formData.append('caption', message);
     formData.append('source', imageBlob, endImage);
