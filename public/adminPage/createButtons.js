@@ -1,4 +1,3 @@
-var currCategoryName;
 var socket = io();
 
 $(document).ready(function(){
@@ -61,7 +60,6 @@ $(document).ready(function(){
                 url: "/adminPage/getCategoryDetails/" + $("#createUpdateCategorySelectName").val(),
                 type: "GET",
                 success: function(categoryDetails) {
-                    currCategoryName = categoryDetails.categoryName;
                     fillCategoryFields(categoryDetails);
                 },
                 error: function() {
@@ -87,7 +85,7 @@ $(document).ready(function(){
                     $("#createUpdateCategoryError").text("Category name is already taken");
                     $("#createUpdateCategoryAlert").prop("hidden",false);
                     setTimeout(() => {
-                        $("#createUpdateCategoryAlert").prop("hidden",true);;
+                        $("#createUpdateCategoryAlert").prop("hidden",true);
                     },3000);
                     return;
                 }
@@ -117,7 +115,7 @@ $(document).ready(function(){
                         $("#createUpdateCategoryError").text("Category name is already taken");
                         $("#createUpdateCategoryAlert").prop("hidden",false);
                         setTimeout(() => {
-                            $("#createUpdateCategoryAlert").prop("hidden",true);;
+                            $("#createUpdateCategoryAlert").prop("hidden",true);
                         },3000);
                         return;
                     }
@@ -385,8 +383,7 @@ $(document).ready(function(){
                 categoryName: $("#createUpdateCategoryNameField").val(),
                 image : image
             },
-            success: (category) =>{
-                $(".categoriesList").append(new Option(category.categoryName,category.categoryName));//add category to categories selects on html
+            success: () =>{
                 $("#createUpdateCategorySuccess strong").text("Category created succesfuly!");
                 //reset category fields
                 $("#createUpdateCategorySuccess").prop("hidden",false);
@@ -397,9 +394,9 @@ $(document).ready(function(){
             },
             error: () =>{
                 $("#createUpdateCategoryError").text("An error occurred while trying to create the category");
-                $("#createUpdateCategoryAlert").prop("hidden",false);;
+                $("#createUpdateCategoryAlert").prop("hidden",false);
                 setTimeout(() => {
-                    $("#createUpdateCategoryAlert").prop("hidden",true);;
+                    $("#createUpdateCategoryAlert").prop("hidden",true);
                 },3000);
             }
         })
@@ -440,9 +437,9 @@ $(document).ready(function(){
             },
             error: () => {
                 $("#createUpdateCategoryError").text("An error occurred while trying to update the category");
-                $("#createUpdateCategoryAlert").prop("hidden",false);;
+                $("#createUpdateCategoryAlert").prop("hidden",false);
                 setTimeout(() => {
-                    $("#createUpdateCategoryAlert").prop("hidden",true);;
+                    $("#createUpdateCategoryAlert").prop("hidden",true);
                 },3000);
             }
         })
@@ -610,7 +607,7 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Id is not a number");
             return false;
         }
-        else if(number % 1 != 0){//checking if it is a whole number
+        else if(number % 1 !== 0){//checking if it is a whole number
             $("#createUpdateProductError").text("Number is not a whole number");
             return false;
         }
@@ -706,8 +703,8 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Amount is not a number");
             return false;
         }
-        else if(number % 1 != 0){//checking if it is a whole number
-            $("#createUpdateProductError").text("Number is not a whole number");
+        else if(number % 1 !== 0){//checking if it is a whole number
+            $("#createUpdateProductError").text("Amount is not a whole number");
             return false;
         }
         return true;
@@ -778,7 +775,7 @@ $(document).ready(function(){
             $("#addAmountError").text("Amount is not a number");
             return false;
         }
-        else if(number % 1 != 0){//if not a whole number
+        else if(number % 1 !== 0){//if not a whole number
             $("#addAmountError").text("Amount is not a whole number");
             return false;
         }
