@@ -59,13 +59,13 @@ const updateProduct = async (categoryName,id,newName,newId,newColor,newSize,newI
         }
         const product = category.products[index];
         var type = "";
-        if(product.amount > 0 && newAmount == 0){
+        if(product.amount > 0 && parseInt(newAmount) === 0){
             type = 'out of stock';
         }
-        else if(product.amount > 2 && newAmount <= 2){
+        else if(product.amount > 2 && parseInt(newAmount) <= 2){
             type = 'limited product';
         }
-        else if(product.amount === 0 && newAmount > 0){
+        else if(product.amount === 0 && parseInt(newAmount) > 0){
             type = 'product restock';
         }
         product.name = newName;
