@@ -57,18 +57,29 @@ const updateProduct = async (categoryName,id,newName,newId,newColor,newSize,newI
             console.error(`Product in category ${categoryName} not found`);
             return null;
         }
-        category.products[index].name = newName;
-        category.products[index].id = newId;
-        category.products[index].color = newColor;
-        category.products[index].size = newSize;
-        category.products[index].image = newImage;
-        category.products[index].description = newDescription;
-        category.products[index].price = newPrice;
-        category.products[index].amount = newAmount;
-        category.products[index].brand = newBrand;
-        category.products[index].hot = newHot;
+        const product = category.products[index];
+        var type = "";
+        if(product.amount > 0 && newAmount == 0){
+            type = 'out of stock';
+        }
+        else if(product.amount > 2 && newAmount <= 2){
+            type = 'limited product';
+        }
+        else if(product.amount === 0 && newAmount > 0){
+            type = 'product restock';
+        }
+        product.name = newName;
+        product.id = newId;
+        product.color = newColor;
+        product.size = newSize;
+        product.image = newImage;
+        product.description = newDescription;
+        product.price = newPrice;
+        product.amount = newAmount;
+        product.brand = newBrand;
+        product.hot = newHot;
         category.save();
-        return category.products[index];
+        return {product,type};
    } catch(err){
     console.error(err);
     return null;
