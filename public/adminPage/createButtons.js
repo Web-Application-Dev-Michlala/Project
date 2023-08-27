@@ -493,6 +493,7 @@ $(document).ready(function(){
                 const price=product.price
                 const category=product.category;
                 postToFacebook(name,price,category,image,endImage);
+                //postToFacebook(name,price);
                 socket.emit('add product',product);//sends message so the server will send everyone about the product
            
             
@@ -853,35 +854,28 @@ $(document).ready(function(){
         });
     }
 
-    /**
-     * Sends request to post a photo and caption through Graph API
-     * 
-     * @param {String} name product name
-     * @param {$numberDecimal} price product price
-     * @param {Category} category product's category
-     * @param {String} image image path
-     * @param {String} endImage image name
-     */
-    function postToFacebook(name,price,category,image,endImage) {
-        
-        const postMessage = `Attention everyone, Introducing ${name} - the latest must-have for anyone looking for ${category}, and it's in only ${price.$numberDecimal}`;
-        $.ajax({
-            url:'/adminPage/facebookPost',
-            method:'POST',
-            data: ({message:postMessage,image:image,endImage:endImage}),
-        success:function(res)
-        {
-        if(res.success)
-            console.log('post to fb complete')
-        else
-        {
-            alert('something went wrong with fb post...')
-            console.log('something went wrong with fb post...')
-        }
-        },
-        error:function(){
-            alert('error in fb posting')
-            console.log('error in fb posting')
-        }
-    })
+
+    function postToFacebook(name, price) {
+        const accessToken = 'EAAJwR1ZAZBJ2oBO0ZAPSWyYFtWeJHO4vJTADMsPCzVi1wMZAJlpodbTzfLHGBJ0knJPwaSrrZCH8PTwKqedrboobb5dYvCNEXCZCX7WS4aONAoZBZCqrWS7z3puSUJJZCcPZAgfX29t4WcxBNdkuivpl8EtdYlkuJBMSFY2MLDXZBrkXNN8LUIasMFcqXsZCdKNsroqltmDanzN3Of9ZA7fQRkAuQurQZD';
+        const postMessage = `Attention everyone who likes company ${name} televisions, their merchandise is going to sell out 
+        and its now in only ${price}`;
+        const pageId = "100885143063120";
+        const apiUrl = `https://graph.facebook.com/v14.0/${pageId}/feed`;
+    
+        const postData = new URLSearchParams({
+            message: postMessage,
+            access_token: accessToken
+        });
+    
+        fetch(apiUrl, {
+            method: "POST",
+            body: postData
+        })
+        .then((response) => response.json())
+        .then((data) => {
+            console.log("Post successfully sent!");
+        })
+        .catch((error) => {
+            console.log("Post request failed. Error:", error);
+        });
     }
