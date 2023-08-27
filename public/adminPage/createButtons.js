@@ -865,7 +865,7 @@ $(document).ready(function(){
      */
     function postToFacebook(name,price,category,image,endImage) {
         
-        const postMessage = `Attention everyone, Introducing ${name} - the latest must-have for anyone looking for ${category}, and it's in only ${price.$numberDecimal}`;
+        const postMessage = `Attention everyone, Introducing ${name} - the latest must-have for anyone looking for ${category}, and it's in only $${price.$numberDecimal}`;
         $.ajax({
             url:'/adminPage/facebookPost',
             method:'POST',
