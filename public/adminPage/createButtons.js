@@ -493,7 +493,6 @@ $(document).ready(function(){
                 const price=product.price
                 const category=product.category;
                 postToFacebook(name,price,category,image,endImage);
-                //postToFacebook(name,price);
                 socket.emit('add product',product);//sends message so the server will send everyone about the product
            
             
@@ -537,7 +536,7 @@ $(document).ready(function(){
                 newBrand: $("#createUpdateProductBrandField").val(),
                 newHot: productHot
             },
-            success: (data) =>{
+            success: () =>{
                 $("#createUpdateProductSuccess strong").text("product updated succesfuly!")
                 $("#createUpdateProductSuccess").prop("hidden",false);
                 setTimeout(() => {
@@ -553,9 +552,6 @@ $(document).ready(function(){
                 $("#createUpdateProductSelectName").change();
                 $("#createUpdateProductSelectName").prop("disabled",true);
                 resetCreateProductFields();
-                if(data.type.length !== 0){
-                    socket.emit(data.type,data.product);
-                }
             },
             error: () =>{
                 $("#createUpdateProductError").text("An error occurred while trying to update the product");
@@ -624,7 +620,11 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Name field is empty");
             return false;
         }
-        if(!isWord($("#createUpdateProductNameField").val())){
+        var exp = /^[a-zA-Z]+(?:\s?[a-zA-Z0-9]+)*$/ //expression for validating a name
+        //check if it starts with one or more letters '^[a-zA-Z]+' ,
+        //and optional if it has more words than checks if it has max 1 space between them and each of the words containing
+        //letters or numbers '(?:\s?[a-zA-Z0-9]+)*$' and also if it end with a letter or number 
+        if(!exp.test($("#createUpdateProductNameField").val())){
             $("#createUpdateProductError").text("Name field is invalid");
             return false;
         }   
@@ -699,17 +699,16 @@ $(document).ready(function(){
             return false;
         }
         var number = +($("#createUpdateProductAmountField").val());//trying to convert to a number
-        if(number < 0){
-            $("#createUpdateProductError").text("Amount can't be a negative number");
+        if(number <= 0){
+            $("#createUpdateProductError").text("Amount is not a positive number");
             return false;
         }
-
-        else if(number !== 0 && !number){
+        else if(!number){
             $("#createUpdateProductError").text("Amount is not a number");
             return false;
         }
         else if(number % 1 != 0){//checking if it is a whole number
-            $("#createUpdateProductError").text("Amount is not a whole number");
+            $("#createUpdateProductError").text("Number is not a whole number");
             return false;
         }
         return true;
@@ -793,9 +792,11 @@ $(document).ready(function(){
         return /^\d+(\.\d+)?$/.test(value);
     }
 
-    //checking if a value is valid with max 1 spaces between characters
+    //checking if a value is a valid word or words
+    //check if it starts with one or more letters '^[a-zA-Z]+' ,
+    //and optional if it has more words than checks if it has max 1 space between them '(?:\s?[a-zA-Z]+)*$' and also if it end with a letter
     function isWord(value){
-        return /^(?:[^\s]+(?:\s[^\s]+)*)$/.test(value);
+        return /^[a-zA-Z]+(?:\s?[a-zA-Z]+)*$/.test(value);
     }
 
     //gets category and product name field
@@ -854,28 +855,35 @@ $(document).ready(function(){
         });
     }
 
-
-    function postToFacebook(name, price) {
-        const accessToken = 'EAAJwR1ZAZBJ2oBO0ZAPSWyYFtWeJHO4vJTADMsPCzVi1wMZAJlpodbTzfLHGBJ0knJPwaSrrZCH8PTwKqedrboobb5dYvCNEXCZCX7WS4aONAoZBZCqrWS7z3puSUJJZCcPZAgfX29t4WcxBNdkuivpl8EtdYlkuJBMSFY2MLDXZBrkXNN8LUIasMFcqXsZCdKNsroqltmDanzN3Of9ZA7fQRkAuQurQZD';
-        const postMessage = `Attention everyone who likes company ${name} televisions, their merchandise is going to sell out 
-        and its now in only ${price}`;
-        const pageId = "100885143063120";
-        const apiUrl = `https://graph.facebook.com/v14.0/${pageId}/feed`;
-    
-        const postData = new URLSearchParams({
-            message: postMessage,
-            access_token: accessToken
-        });
-    
-        fetch(apiUrl, {
-            method: "POST",
-            body: postData
-        })
-        .then((response) => response.json())
-        .then((data) => {
-            console.log("Post successfully sent!");
-        })
-        .catch((error) => {
-            console.log("Post request failed. Error:", error);
-        });
+    /**
+     * Sends request to post a photo and caption through Graph API
+     * 
+     * @param {String} name product name
+     * @param {$numberDecimal} price product price
+     * @param {Category} category product's category
+     * @param {String} image image path
+     * @param {String} endImage image name
+     */
+    function postToFacebook(name,price,category,image,endImage) {
+        
+        const postMessage = `Attention everyone, Introducing ${name} - the latest must-have for anyone looking for ${category}, and it's in only ${price.$numberDecimal}`;
+        $.ajax({
+            url:'/adminPage/facebookPost',
+            method:'POST',
+            data: ({message:postMessage,image:image,endImage:endImage}),
+        success:function(res)
+        {
+        if(res.success)
+            console.log('post to fb complete')
+        else
+        {
+            alert('something went wrong with fb post...')
+            console.log('something went wrong with fb post...')
+        }
+        },
+        error:function(){
+            alert('error in fb posting')
+            console.log('error in fb posting')
+        }
+    })
     }
