@@ -536,7 +536,7 @@ $(document).ready(function(){
                 newBrand: $("#createUpdateProductBrandField").val(),
                 newHot: productHot
             },
-            success: () =>{
+            success: (data) =>{
                 $("#createUpdateProductSuccess strong").text("product updated succesfuly!")
                 $("#createUpdateProductSuccess").prop("hidden",false);
                 setTimeout(() => {
@@ -552,6 +552,9 @@ $(document).ready(function(){
                 $("#createUpdateProductSelectName").change();
                 $("#createUpdateProductSelectName").prop("disabled",true);
                 resetCreateProductFields();
+                if(data.type.length !== 0){
+                    socket.emit(data.type,data.product);
+                }
             },
             error: () =>{
                 $("#createUpdateProductError").text("An error occurred while trying to update the product");
@@ -699,16 +702,17 @@ $(document).ready(function(){
             return false;
         }
         var number = +($("#createUpdateProductAmountField").val());//trying to convert to a number
-        if(number <= 0){
-            $("#createUpdateProductError").text("Amount is not a positive number");
+        if(number < 0){
+            $("#createUpdateProductError").text("Amount can't be a negative number");
             return false;
         }
-        else if(!number){
+
+        else if(number !== 0 && !number){
             $("#createUpdateProductError").text("Amount is not a number");
             return false;
         }
         else if(number % 1 != 0){//checking if it is a whole number
-            $("#createUpdateProductError").text("Number is not a whole number");
+            $("#createUpdateProductError").text("Amount is not a whole number");
             return false;
         }
         return true;
