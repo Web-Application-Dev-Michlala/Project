@@ -5,6 +5,10 @@
     width: 300px; 
     object-fit: fill; 
     margin: auto;
+    transition: transform 0.3s ease-in-out;
+}
+.c-img:hover{
+    transform: scale(1.1);
 }
 .c-slide
 {
@@ -17,10 +21,14 @@
 
 h5
 {
-    color:white;
-    -webkit-text-stroke: 2px black; 
+    color: white;
+    -webkit-text-stroke: 2px black;
     font-size: x-large;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
+
 
 .carousel-control-prev-icon {
     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
@@ -59,10 +67,24 @@ h5
     justify-content: start;    
     display: flex;
     justify-content: space-between;
+    transition: transform 0.3s ease-in-out;
+   }
+   .col:hover{
+    transform: scale(1.05);
    }
    .justify-content-center{
     justify-content: start!important;
    }
+   .c-item {
+    position: relative;
+}
+.card-img-top
+{
+    cursor: pointer;
+   
+
+}
+
       
    
     

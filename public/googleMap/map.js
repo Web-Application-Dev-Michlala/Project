@@ -9,6 +9,9 @@ $(document).ready(function() {//gets api key
     
   })
 });
+/**
+ * Creates map and sets our shops markers
+ */
 function createMarkers() {//creates map and sets our shops markers
   const mapElement = $('#map')[0]; // Get the actual DOM element
   const map = new google.maps.Map(mapElement, {

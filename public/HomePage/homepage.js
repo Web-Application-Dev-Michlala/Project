@@ -91,9 +91,10 @@ function createAndloadHotCarouselsFromDB(hotItems, carouselnum)//loading the car
             caritem+='<div class="carousel-item c-item">'+
             '<a href="/public/ProductsPage/index.html?id='+hotItems[i].id+'&name='+hotItems[i].category+'">'+
             '<img src="/'+hotItems[i].image+'" class="d-block  c-img">'+
+            
             '</a>'+
             '<div class="carousel-caption d-none d-md-block" id="title">'+
-                '<h5>'+hotItems[i].name+'</h5>'+//<!--TODO PULL hot product name-->
+            '<h5>'+hotItems[i].name+'</h5>'+ //<!--TODO PULL hot product name-->
             '</div>'+
           '</div>';
         }

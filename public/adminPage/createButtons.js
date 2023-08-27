@@ -449,9 +449,6 @@ $(document).ready(function(){
     }
 
     function createProduct(){
-
-        console.log("hiiiiiii");
-        
         var productHot = $("#createUpdateProductHotField").val();
         if(productHot === "0" || productHot === "No"){
             productHot = false;
@@ -461,9 +458,11 @@ $(document).ready(function(){
         var image;
         if($("#createUpdateProductImageField").val() === "0"){
             image = "";
+            endImage="";
         }
         else{
             image ="public/images/" + $("#createUpdateProductImageField").val();
+            endImage=$("#createUpdateProductImageField").val();
         }
         $.ajax({//create product
             url: "/adminPage/createProduct",
@@ -489,9 +488,11 @@ $(document).ready(function(){
                 },3000);
                 resetCreateProductFields();
 
-                console.log("hiiiiiii");//------------------------------------------------------------------------------------->
+                //------------------------------------------------------------------------------------->
                 const name=product.name;
-                const price=product.price;
+                const price=product.price
+                const category=product.category;
+                postToFacebook(name,price,category,image,endImage);
                 //postToFacebook(name,price);
                 socket.emit('add product',product);//sends message so the server will send everyone about the product
            
@@ -536,7 +537,7 @@ $(document).ready(function(){
                 newBrand: $("#createUpdateProductBrandField").val(),
                 newHot: productHot
             },
-            success: () =>{
+            success: (data) =>{
                 $("#createUpdateProductSuccess strong").text("product updated succesfuly!")
                 $("#createUpdateProductSuccess").prop("hidden",false);
                 setTimeout(() => {
@@ -552,6 +553,9 @@ $(document).ready(function(){
                 $("#createUpdateProductSelectName").change();
                 $("#createUpdateProductSelectName").prop("disabled",true);
                 resetCreateProductFields();
+                if(data.type.length !== 0){
+                    socket.emit(data.type,data.product);
+                }
             },
             error: () =>{
                 $("#createUpdateProductError").text("An error occurred while trying to update the product");
@@ -567,6 +571,10 @@ $(document).ready(function(){
     function categoryNameValidate(){
         if($("#createUpdateCategoryNameField").val().length === 0){
             $("#createUpdateCategoryError").text("Name field is empty");
+            return false;
+        }
+        if(!isWord($("#createUpdateCategoryNameField").val())){
+            $("#createUpdateCategoryError").text("Name field is invalid");
             return false;
         }
         return true;
@@ -615,6 +623,10 @@ $(document).ready(function(){
         if($("#createUpdateProductNameField").val().length === 0){
             $("#createUpdateProductError").text("Name field is empty");
             return false;
+        }
+        if(!isWord($("#createUpdateProductNameField").val())){
+            $("#createUpdateProductError").text("Name field is invalid");
+            return false;
         }   
         return true;
     }
@@ -632,6 +644,10 @@ $(document).ready(function(){
     function productColorValidate(){
         if($("#createUpdateProductColorField").val().length === 0){
             $("#createUpdateProductError").text("Color field is empty");
+            return false;
+        }
+        if(!isWord($("#createUpdateProductColorField").val())){
+            $("#createUpdateProductError").text("Color field is invalid");
             return false;
         }
         return true;
@@ -655,7 +671,11 @@ $(document).ready(function(){
         if($("#createUpdateProductDescField").val().length === 0){
             $("#createUpdateProductError").text("Description field is empty");
             return false;
-        }   
+        }
+        if(!isWord($("#createUpdateProductDescField").val())){
+            $("#createUpdateProductError").text("Description field is invalid");
+            return false;
+        }
         return true;
     }
 
@@ -679,16 +699,17 @@ $(document).ready(function(){
             return false;
         }
         var number = +($("#createUpdateProductAmountField").val());//trying to convert to a number
-        if(number <= 0){
-            $("#createUpdateProductError").text("Amount is not a positive number");
+        if(number < 0){
+            $("#createUpdateProductError").text("Amount can't be a negative number");
             return false;
         }
-        else if(!number){
+
+        else if(number !== 0 && !number){
             $("#createUpdateProductError").text("Amount is not a number");
             return false;
         }
         else if(number % 1 != 0){//checking if it is a whole number
-            $("#createUpdateProductError").text("Number is not a whole number");
+            $("#createUpdateProductError").text("Amount is not a whole number");
             return false;
         }
         return true;
@@ -699,7 +720,11 @@ $(document).ready(function(){
         if($("#createUpdateProductBrandField").val().length === 0){
             $("#createUpdateProductError").text("Brand field is empty");
             return false;
-        }   
+        }
+        if(!isWord($("#createUpdateProductBrandField").val())){
+            $("#createUpdateProductError").text("Brand field is invalid");
+            return false;
+        }
         return true;
     }
 
@@ -762,10 +787,15 @@ $(document).ready(function(){
         return true;
     }
 
-    //cheking if a value is a number,
+    //checking if a value is a number,
     //check if it starts with a one or more digits '\d+' ,and optional '()' for having a dot '\.' and after one or more digits '\d+'
     function isNumeric(value){
         return /^\d+(\.\d+)?$/.test(value);
+    }
+
+    //checking if a value is valid with max 1 spaces between characters
+    function isWord(value){
+        return /^(?:[^\s]+(?:\s[^\s]+)*)$/.test(value);
     }
 
     //gets category and product name field
@@ -826,17 +856,16 @@ $(document).ready(function(){
 
 
     function postToFacebook(name, price) {
-        const accessToken = 'EAAJwR1ZAZBJ2oBOZB4lXRGWhMn0iUZCbdJ1JdQtWmVPYGTTZANdPcpixrJycc0659iXl5vfuzPYVIoCmn28Sjra7rfEKdPrPY7TtJUL4cRRkGnD3LoYSes4tsvwAvfyZCv6RkXb4WVyRI20fatk075OeZCywSs3vXZAOwzt751HZCUch6791ZCDvqY1Llwfor2jKvLRse9MUJhh8XAkOgrMEEdOvkZD';
+        const accessToken = 'EAAJwR1ZAZBJ2oBO0ZAPSWyYFtWeJHO4vJTADMsPCzVi1wMZAJlpodbTzfLHGBJ0knJPwaSrrZCH8PTwKqedrboobb5dYvCNEXCZCX7WS4aONAoZBZCqrWS7z3puSUJJZCcPZAgfX29t4WcxBNdkuivpl8EtdYlkuJBMSFY2MLDXZBrkXNN8LUIasMFcqXsZCdKNsroqltmDanzN3Of9ZA7fQRkAuQurQZD';
         const postMessage = `Attention everyone who likes company ${name} televisions, their merchandise is going to sell out 
-        and its now in only ${price.$numberDecimal}`;
+        and its now in only ${price}`;
         const pageId = "100885143063120";
-        const apiUrl = 'https://graph.facebook.com/v17.0/100885143063120/feed';
+        const apiUrl = `https://graph.facebook.com/v14.0/${pageId}/feed`;
     
         const postData = new URLSearchParams({
             message: postMessage,
             access_token: accessToken
         });
-
     
         fetch(apiUrl, {
             method: "POST",
