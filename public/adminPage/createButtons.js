@@ -623,11 +623,7 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Name field is empty");
             return false;
         }
-        var exp = /^[a-zA-Z]+(?:\s?[a-zA-Z0-9]+)*$/ //expression for validating a name
-        //check if it starts with one or more letters '^[a-zA-Z]+' ,
-        //and optional if it has more words than checks if it has max 1 space between them and each of the words containing
-        //letters or numbers '(?:\s?[a-zA-Z0-9]+)*$' and also if it end with a letter or number 
-        if(!exp.test($("#createUpdateProductNameField").val())){
+        if(!isWord($("#createUpdateProductNameField").val())){
             $("#createUpdateProductError").text("Name field is invalid");
             return false;
         }   
@@ -796,11 +792,9 @@ $(document).ready(function(){
         return /^\d+(\.\d+)?$/.test(value);
     }
 
-    //checking if a value is a valid word or words
-    //check if it starts with one or more letters '^[a-zA-Z]+' ,
-    //and optional if it has more words than checks if it has max 1 space between them '(?:\s?[a-zA-Z]+)*$' and also if it end with a letter
+    //checking if a value is valid with max 1 spaces between characters
     function isWord(value){
-        return /^[a-zA-Z]+(?:\s?[a-zA-Z]+)*$/.test(value);
+        return /^(?:[^\s]+(?:\s[^\s]+)*)$/.test(value);
     }
 
     //gets category and product name field
