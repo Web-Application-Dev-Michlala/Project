@@ -21,19 +21,21 @@ router.route('/getAllImages')
 
 //---------------------------------------------------------->
 router.route('/topUsers')
-.get(loginController.isAdmin,adminPageController.getTopUsersWithOrderCounts)
+    .get(loginController.isAdmin,adminPageController.getTopUsersWithOrderCounts)
 router.route('/profile')
-.get( loginController.isLoggedIn,adminPageController.getUserProfile);
+    .get( loginController.isLoggedIn,adminPageController.getUserProfile);
 router.route('/orders')
-.get( loginController.isLoggedIn,adminPageController.getAllOrdersByUserName);
+    .get( loginController.isLoggedIn,adminPageController.getAllOrdersByUserName);
 router.route('/allOrders')
-.get( loginController.isAdmin,adminPageController.getAllOrders);
+    .get( loginController.isAdmin,adminPageController.getAllOrders);
 router.route('/users')
-.get( loginController.isAdmin,adminPageController.getAllUsernames);
+    .get( loginController.isAdmin,adminPageController.getAllUsernames);
 router.route('/facebookPost')
     .post(loginController.isAdmin,adminPageController.facebookPost)
-router.route('/changePassword').post(loginController.isLoggedIn,adminPageController.changePassword);
-router.route('/ChangeProfile').post(loginController.isLoggedIn,adminPageController.ChangeProfile,loginController.logout);
+router.route('/changePassword')
+    .post(loginController.isLoggedIn,adminPageController.changePassword);
+router.route('/ChangeProfile')
+    .post(loginController.isLoggedIn,adminPageController.ChangeProfile,loginController.logout);
 
 
 //--------------------------------------------------------->
