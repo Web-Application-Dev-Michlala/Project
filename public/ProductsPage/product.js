@@ -38,6 +38,7 @@ var decimalprice=null
             $('#productColor').text(data.color);
             $('#productDescription').html("<strong>Description:</strong><br>"+data.description);
             $('#productPrice').text(data.price.$numberDecimal+'$');
+            $('#productBrand').text(data.brand);
             
             const carouselInner = $('.carousel-inner');
             carouselInner.empty(); 
