@@ -49,7 +49,7 @@ sA = (Math.PI / 180) * 45;
 sE = (Math.PI / 180) * 90;
 ca = canvas.width;
 ch = canvas.height;
-var loadAnimation
+var loadAnimation;
 const JSONedcart=sessionStorage.getItem('categories');
 if(JSONedcart!=null)//load items from sessionStorage into page
     {
@@ -190,7 +190,7 @@ purchaseButton.addEventListener('click', function() {//add logic to purchase but
           {
             if(item.amount===0)
             {
-              itemsString+="removed"+item.name+'\n'
+              itemsString+="removed "+item.name+'\n'
               noSpacesName = item.name.replace(/ /g, '');//removes spaces
               var productDiv = document.getElementById(noSpacesName);
               var rowDiv = productDiv.parentElement

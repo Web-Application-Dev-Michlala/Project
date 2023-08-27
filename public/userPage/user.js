@@ -27,6 +27,11 @@ $(document).ready(function(){
     url: "/adminPage/profile",
     type: "GET",
     success: function (fullUserProfile) {
+      const formattedDate = new Date(fullUserProfile.schemauser.birthdate).toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
        const nameValueElement=$('#namevalue');
        nameValueElement.text(fullUserProfile.schemauser.userName);
 
@@ -34,7 +39,7 @@ $(document).ready(function(){
        emailValueElement.text(fullUserProfile.schemauser.email);
 
        const birthdayValueElement=$('#birthdayvalue');
-       birthdayValueElement.text(fullUserProfile.schemauser.birthdate);
+       birthdayValueElement.text(formattedDate);
     },
     error: function () {
         alert("An error occurred while trying to fetch personal information");

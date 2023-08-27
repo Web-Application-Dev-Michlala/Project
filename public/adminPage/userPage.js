@@ -26,6 +26,11 @@ $(document).ready(function(){
     url: "/adminPage/profile",
     type: "GET",
     success: function (fullUserProfile) {
+      const formattedDate = new Date(fullUserProfile.schemauser.birthdate).toLocaleString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+      });
        const nameValueElement=$('#namevalue');
        nameValueElement.text(fullUserProfile.schemauser.userName);
 
@@ -33,7 +38,7 @@ $(document).ready(function(){
        emailValueElement.text(fullUserProfile.schemauser.email);
 
        const birthdayValueElement=$('#birthdayvalue');
-       birthdayValueElement.text(fullUserProfile.schemauser.birthdate);
+       birthdayValueElement.text(formattedDate);
     },
     error: function () {
         alert("An error occurred while trying to fetch personal information");
@@ -338,14 +343,14 @@ function changePassword(oldPassword, newPassword) {
     body: JSON.stringify({ oldPassword, newPassword})
   }).then(response => {
     if (!response.ok) {
-    throw new Error('Password change failed. Incorrect old password1111.');
+    alert('Password change failed. Incorrect old password.');
   }
    return response.json();
 }).then(responseData => {
   if (responseData.success) {
    alert('Password change successful!');
   } else {
-   alert('Password change failed. Incorrect old password2222.');
+   alert('Password change failed. Incorrect old password.');
   }
 })
 .catch(error => {
@@ -429,6 +434,8 @@ function ChangeProfile(newName, newEmail, newBirthday) {
     },
     error:function()
     {
+      clearInterval(loadAnimation);
+      ctx.clearRect(0, 0, ca, ch);
       console.log('error');
       alert('An error occurred while changing the details');
     }
