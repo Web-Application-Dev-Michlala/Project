@@ -624,10 +624,10 @@ $(document).ready(function(){
         //check if it starts with one or more letters '^[a-zA-Z]+' ,
         //and optional if it has more words than checks if it has max 1 space between them and each of the words containing
         //letters or numbers '(?:\s?[a-zA-Z0-9]+)*$' and also if it end with a letter or number 
-        if(!exp.test($("#createUpdateProductNameField").val())){
+        /*if(!exp.test($("#createUpdateProductNameField").val())){
             $("#createUpdateProductError").text("Name field is invalid");
             return false;
-        }   
+        }   */
         return true;
     }
 
@@ -834,7 +834,7 @@ $(document).ready(function(){
             })
         })
     }
-
+    
     function getCategories(){
         $.ajax({
             url: "/adminPage/getCategorys",

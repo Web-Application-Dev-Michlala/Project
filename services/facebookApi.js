@@ -13,9 +13,9 @@ const fbkey = process.env.FACEBOOK_LONG_KEY;
 const postToFb = async (message, imagePath,endImage) => {
     const accessToken = fbkey;
     const pageId = '100885143063120';
-    const url = `https://graph.facebook.com/v17.0/${pageId}/photos`;
+    const url = `https://graph.facebook.com/v17.0/${pageId}/photos`;  
 
-    const imageBuffer = fs.readFileSync(imagePath);
+    const imageBuffer = fs.readFileSync(imagePath); 
     const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });//data structure to hold the image
 
     const formData = new FormData();//represents a form.
