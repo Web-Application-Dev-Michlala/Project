@@ -536,7 +536,7 @@ $(document).ready(function(){
                 newBrand: $("#createUpdateProductBrandField").val(),
                 newHot: productHot
             },
-            success: () =>{
+            success: (data) =>{
                 $("#createUpdateProductSuccess strong").text("product updated succesfuly!")
                 $("#createUpdateProductSuccess").prop("hidden",false);
                 setTimeout(() => {
@@ -551,6 +551,9 @@ $(document).ready(function(){
                 $("#createUpdateProductSelectName").val("0");
                 $("#createUpdateProductSelectName").change();
                 $("#createUpdateProductSelectName").prop("disabled",true);
+                if(data.type.length !== 0){
+                    socket.emit(data.type,data.product);
+                }
                 resetCreateProductFields();
             },
             error: () =>{
@@ -619,12 +622,8 @@ $(document).ready(function(){
         if($("#createUpdateProductNameField").val().length === 0){
             $("#createUpdateProductError").text("Name field is empty");
             return false;
-        }
-        var exp = /^[a-zA-Z]+(?:\s?[a-zA-Z0-9]+)*$/ //expression for validating a name
-        //check if it starts with one or more letters '^[a-zA-Z]+' ,
-        //and optional if it has more words than checks if it has max 1 space between them and each of the words containing
-        //letters or numbers '(?:\s?[a-zA-Z0-9]+)*$' and also if it end with a letter or number 
-        if(!exp.test($("#createUpdateProductNameField").val())){
+        } 
+        if(!isWord($("#createUpdateProductNameField").val())){
             $("#createUpdateProductError").text("Name field is invalid");
             return false;
         }   
@@ -699,11 +698,11 @@ $(document).ready(function(){
             return false;
         }
         var number = +($("#createUpdateProductAmountField").val());//trying to convert to a number
-        if(number <= 0){
+        if(number < 0){
             $("#createUpdateProductError").text("Amount is not a positive number");
             return false;
         }
-        else if(!number){
+        else if(number !== 0 && !number){
             $("#createUpdateProductError").text("Amount is not a number");
             return false;
         }
@@ -796,7 +795,7 @@ $(document).ready(function(){
     //check if it starts with one or more letters '^[a-zA-Z]+' ,
     //and optional if it has more words than checks if it has max 1 space between them '(?:\s?[a-zA-Z]+)*$' and also if it end with a letter
     function isWord(value){
-        return /^[a-zA-Z]+(?:\s?[a-zA-Z]+)*$/.test(value);
+        return /^(?:[^\s]+(?:\s[^\s]+)*)$/.test(value);
     }
 
     //gets category and product name field
