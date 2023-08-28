@@ -274,17 +274,6 @@ $(document).ready(function()
             curr_sorter = $(this);//updating the current sorting tag
             sortByMostExpensive();
         })
-        
-        //changing the accordion section to be the only open one
-        $(".accordion-button").click(function(){
-            if(current_accord === this)//if closing the current accordion then no accrodion section is open
-                current_accord = null;
-            else{
-                if(current_accord !== null)//if opening new accordion section then close the current and set the current to new
-                    current_accord.click();
-                current_accord = this;
-            }
-        })
 })
 
 //function that gets all information from the given data
