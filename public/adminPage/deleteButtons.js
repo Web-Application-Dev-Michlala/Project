@@ -40,6 +40,7 @@ $(document).ready(function() {
             url: "/adminPage/" + selectedCategory,
             type: "DELETE",
             success: function() {
+                
                 $("#deletionSuccessText").html("Category <strong>" + selectedCategory + "</strong> has been deleted!");
                 $("#deletionSuccessMessage").removeClass("d-none");
                 $("#confirmationSection").addClass("d-none");
@@ -55,7 +56,7 @@ $(document).ready(function() {
     //================== Product deletion =============================
     $("#productSelect").change(function() {
         var selectedProduct = $(this).val();
-        
+        $("#productDeletionSuccessText").empty();
         if (selectedProduct === "") {
             $("#productDeleteConfirmationSection").addClass("d-none");
         } else {
@@ -122,6 +123,7 @@ function fetchCategoryDetails(categoryName) {
             categoryDetails.products.forEach(product=>{
                 productsName += product.name+", ";
             })
+           
             $("#confirmationText").html("Are you sure you want to delete the category: <strong>" + categoryName + "</strong>?<br>"
                 + "<u>Number of Products:</u> " + categoryDetails.products.length + "<br>"
                 + "<u>Products:</u> " + productsName);

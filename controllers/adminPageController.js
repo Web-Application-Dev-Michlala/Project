@@ -72,11 +72,14 @@ const updateCategory = async (req,res) =>{
 
 const updateProduct = async (req,res) => {
     const {newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot} = await req.body;
-    const {product,type} = await productService.updateProduct(req.params.categoryName,req.params.id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot);
+    const product = await productService.updateProduct(req.params.categoryName,req.params.id,newName,newId,newColor,newSize,newImage,newDescription,newPrice,newAmount,newBrand,newHot);
+    
     if(!product){
         return res.status(404).json({errors:['An error occurred while trying to update the product']});
     } else {
-        res.json({product,type});
+        const prod=product.product;
+        const type=product.type;
+        res.json({prod,type});
     }
 }
 
@@ -191,7 +194,7 @@ const getUserProfile = async(req, res) => {
 const getAllOrders = async(req, res) => {
 try {
     const username = req.session.username; 
-    const orders= await orderService.getAllOrdersByUserName(username);
+    const orders= await orderService.getAllOrders();
     res.json({orders});
 } catch (error) {
     console.error('Error fetching orders:', error);

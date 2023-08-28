@@ -873,8 +873,8 @@ $(document).ready(function(){
             console.log('post to fb complete')
         else
         {
-            alert('something went wrong with fb post...')
-            console.log('something went wrong with fb post...')
+            alert('access token expired...')
+            console.log('access token expired...')
         }
         },
         error:function(){
