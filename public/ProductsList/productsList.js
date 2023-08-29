@@ -519,7 +519,7 @@ function createSizes(){
     sizes.forEach(size => {
         //add each size the the color filter as option
         $("#size_search").append('<div class="form-check">' +
-        '<label for="' + size + '" class="form-label">'+ size + ' Inch</label>' +
+        '<label for="' + size + ' Inch" class="form-label">'+ size + ' Inch</label>' +
         '<input type="checkbox" class="form-check-input" id="' + size + ' Inch">' +
         '</div>');
     })

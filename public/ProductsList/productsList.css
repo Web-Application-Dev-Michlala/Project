@@ -1,3 +1,11 @@
+body{
+    background-color:aliceblue;  
+}
+
+.content > *{
+    background-color:aliceblue;
+}
+
 aside{
 	position:sticky;
     top: 60px;
@@ -33,16 +41,13 @@ option{
 }
 
 #sorter{
-    background-color: #f8f9fa;  /* Choose the color you prefer */
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);  /* Optional: Add a subtle shadow */
+    background-color: aliceblue;
 }
 
 .content {
-    background-color: #f8f9fa;  /* Choose the color you prefer */
     padding: 20px;
     margin-top: 10px;
 	width: auto;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);  /* Optional: Add a subtle shadow */
 }
 
 
