@@ -28,8 +28,12 @@ var decimalprice=null
         ({
             url:'/ProductsPage/'+categoryName+"/"+productId,
           
-        }).done(function(data)
+        success:(function(data)
         {
+            if(data===null)
+            {
+                window.location('/category?name='+categoryName);
+            }
             imgpath=data.image
             decimalprice=data.price.$numberDecimal;
             $('#productName').text(data.name);
@@ -61,7 +65,11 @@ var decimalprice=null
                 carouselIndicators.append(carouselInd);
             });
             
-        })
+        }),
+        error:function(){
+            window.location.href ='/category?name='+categoryName;
+        }
+    })
     
         $('#button-increase').click(function(){
             var value = parseInt($('#productQuantity').val());
