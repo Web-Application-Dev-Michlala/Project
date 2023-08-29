@@ -393,7 +393,7 @@ $(document).ready(function(){
                 resetCategoryFields();
             },
             error: () =>{
-                $("#createUpdateCategoryError").text("An error occurred while trying to create the category");
+                $("#createUpdateCategoryError").text("Cant create 2 empty categories. please fill with items");
                 $("#createUpdateCategoryAlert").prop("hidden",false);
                 setTimeout(() => {
                     $("#createUpdateCategoryAlert").prop("hidden",true);
