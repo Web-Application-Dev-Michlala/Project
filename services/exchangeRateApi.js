@@ -18,7 +18,6 @@ const getRates = ()  => {
             });
 
             apiResponse.on('end', () => {
-                console.log(data);
                 resolve(data);
             });
         });
