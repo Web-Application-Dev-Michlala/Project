@@ -90,14 +90,14 @@ var decimalprice=null
             
             const prodname=$('#productName').text();
             var prodamount=parseInt($('#productQuantity').val());
-            const categoryName= $('#productCategory').text();
+            const categoryname= $('#productCategory').text();
             const price= decimalprice
             const imageSrc=imgpath;
             const JSONedcart=sessionStorage.getItem('categories');
             if(JSONedcart===null)
             {
              const categoriesArray=[ {
-                    category:categoryName,
+                    category:categoryname,
                     items:
                     [
                         {name:prodname,amount:prodamount,price:price,imageSrc:imageSrc}
@@ -113,11 +113,11 @@ var decimalprice=null
             else
            {
             cart=JSON.parse(JSONedcart);
-            const existingCategoryIndex = cart.findIndex((item) => item.category === categoryName);
+            const existingCategoryIndex = cart.findIndex((item) => item.category === categoryname);
             if (existingCategoryIndex === -1) {
                 // Category doesn't exist, so create a new category with the name-amount pair
                 const newCategory = {
-                  category:categoryName,
+                  category:categoryname,
                   items: [{ name:prodname,amount:prodamount,price:price,imageSrc:imageSrc }],
                 };
                 
@@ -140,7 +140,7 @@ var decimalprice=null
         }
         };
        var dataToSend={
-        categoryName:categoryName,
+        categoryName:categoryname,
         name:prodname,
         amount:prodamount,
         price:price,
