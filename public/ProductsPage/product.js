@@ -67,6 +67,7 @@ var decimalprice=null
             
         }),
         error:function(){
+            alert('Product couldnt be found.')
             window.location.href ='/category?name='+categoryName;
         }
     })
