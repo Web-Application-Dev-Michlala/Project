@@ -659,6 +659,10 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Size field is invalid");
             return false;
         }
+        if(parseFloat($("#createUpdateProductSizeField").val()) === 0){
+            $("#createUpdateProductError").text("Size can't be 0");
+            return false;
+        }
         return true;
     }
 
@@ -685,6 +689,10 @@ $(document).ready(function(){
             $("#createUpdateProductError").text("Price field is invalid");
             return false;
         }
+        if(parseFloat($("#createUpdateProductPriceField").val()) === 0){
+            $("#createUpdateProductError").text("Price can't be 0");
+            return false;
+        }
         return true;
     }
 
@@ -695,7 +703,7 @@ $(document).ready(function(){
             return false;
         }
         var number = +($("#createUpdateProductAmountField").val());//trying to convert to a number
-        if(number < 0){
+        if(number <= 0){
             $("#createUpdateProductError").text("Amount is not a positive number");
             return false;
         }
