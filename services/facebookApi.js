@@ -14,17 +14,34 @@ const longLiveUserToken=process.env.LONG_LIVE_USER_ACCESS_TOKEN_FB;
  */
 const postToFb = async (message, imagePath,endImage) => {
     const pageId = '100885143063120';
+    var imageBlob
+    var formData
+    var imageBuffer;
     const url = `https://graph.facebook.com/v17.0/${pageId}/photos`;  
     const token=await getPageToken();
     if(token===null)
         return false;
-    const imageBuffer = fs.readFileSync(imagePath); 
-    const imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });//data structure to hold the image
-
-    const formData = new FormData();//represents a form.
-    formData.append('access_token', token);
-    formData.append('caption', message);
-    formData.append('source', imageBlob, endImage);
+    if(imagePath!=="")
+    {
+        console.log(imagePath);
+        imageBuffer = fs.readFileSync(imagePath); 
+        imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });//data structure to hold the image
+        formData = new FormData();//represents a form.
+        formData.append('access_token', token);
+        formData.append('caption', message);
+        formData.append('source', imageBlob, endImage);
+    }
+    else
+    {    
+        console.log(imagePath);
+        imageBuffer = fs.readFileSync('public/images/logo.jpg'); 
+        imageBlob = new Blob([imageBuffer], { type: 'image/jpeg' });//data structure to hold the image
+        formData = new FormData();//represents a form.
+        formData.append('access_token', token);
+        formData.append('caption', message);
+        formData.append('source', imageBlob, 'logo.jpg');
+    }
+    
 
     try {
         const response = await fetch(url, {
